@@ -19,19 +19,16 @@ export class AuthService {
   ) {}
 
   async signUp(createUserDTO: CreateUserDTO) {
-    const { username, email, password } = createUserDTO;
-
+    const { email, password } = createUserDTO;
     const exist = await this.userService.findUserbyEmail(email);
+
     if (exist) {
       throw new BadRequestException('email already taken');
     }
-    const user = new User();
-    user.email = email;
-    user.username = username;
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(password, user.salt);
-    await this.userService.saveUser(user);
-    return user;
+
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await this.hashPassword(password, salt);
+    return this.userService.createUser(createUserDTO, salt, hashPassword);
   }
 
   async signIn(authUserDTO: AuthCredentialsDto, hashed: boolean = false) {

@@ -26,6 +26,21 @@ export class UserController {
       .filter(u => u.id !== user.id);
   }
 
+  @Get('/me')
+  @UseGuards(AuthGuard('jwt'))
+  getLogUser(
+    @GetUser() user: User,
+  ): User {
+    console.log('get me ', user);
+    // delete user.password;
+    // delete user.salt;
+    console.log(user);
+    delete user.salt;
+    delete user.password;
+    delete user._id;
+    return user;
+  }
+
   @Get('/online')
   async getOnlineUsers(): Promise<User[]> {
     return this.userService.getOnlineUsers();

@@ -4,9 +4,13 @@ import { PassportModule } from '@nestjs/passport';
 import { jwtConstants } from '../config/jwt.config';
 import { ChatController } from './chat.controller';
 import { ChatGateway } from './chat.gateway';
+import { ChatService } from './chat.service';
+import { Conversation } from './conversation.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Conversation]),
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -15,7 +19,7 @@ import { ChatGateway } from './chat.gateway';
       signOptions: jwtConstants.signOptions,
     }),
   ],
-  providers: [ChatGateway],
+  providers: [ChatGateway, ChatService],
   controllers: [ChatController]
 })
 export class ChatModule {}

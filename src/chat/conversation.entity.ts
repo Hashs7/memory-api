@@ -10,7 +10,6 @@ export class Conversation {
   id: string;
 
   @ManyToMany(() => User)
-  @JoinTable()
   users: User[];
 
   @Column(() => Message)
