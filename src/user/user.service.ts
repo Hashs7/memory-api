@@ -34,4 +34,9 @@ export class UserService {
   async getUsers(filter: FilterUserDTO): Promise<User[]> {
     return this.userRepository.getUsers(filter);
   }
+
+  async getOnlineUsers(): Promise<User[]> {
+    // TODO filter by online props
+    return this.userRepository.find();
+  }
 }

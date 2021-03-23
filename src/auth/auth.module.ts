@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { User } from '../user/user.entity';
 import { UserModule } from '../user/user.module';
 import { AuthService } from './auth.service';
+import { jwtConstants } from '../config/jwt.config';
 
 @Module({
   imports: [
@@ -15,10 +16,8 @@ import { AuthService } from './auth.service';
       defaultStrategy: 'jwt',
     }),
     JwtModule.register({
-      secret: 'topSecret31',
-      signOptions: {
-        expiresIn: 3600,
-      },
+      secret: jwtConstants.secret,
+      signOptions: jwtConstants.signOptions,
     }),
     TypeOrmModule.forFeature([User])
   ],

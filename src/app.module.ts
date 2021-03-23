@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UserModule } from './user/user.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from './user/user.module';
       dest: './uploads',
     }),
     UserModule,
+    ChatModule,
     /*GraphQLModule.forRoot({
       autoSchemaFile: true,
     }),*/

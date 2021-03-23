@@ -25,4 +25,9 @@ export class UserController {
       })
       .filter(u => u.id !== user.id);
   }
+
+  @Get('/online')
+  async getOnlineUsers(): Promise<User[]> {
+    return this.userService.getOnlineUsers();
+  }
 }

@@ -14,7 +14,7 @@ const rDecodeOptions: DecodeOptions = {
 };
 
 export const jwtConstants = {
-  secret: 'JWT-SECRET',
+  secret: 'topSecret31',
   signOptions,
   rSignOptions,
   rDecodeOptions,
