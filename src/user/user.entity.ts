@@ -13,15 +13,17 @@ export class User {
   username: string;
 
   @Column()
+  email: string;
+
+  @Column()
   password: string;
 
   @Column()
   salt: string;
+
+  async validatePassword(password: string): Promise<boolean> {
+    const hash = await bcrypt.hash(password, this.salt);
+    console.log(hash, this.password, hash === this.password);
+    return hash === this.password;
+  };
 }
-
-
-export const validatePassword = async (password: string, userPassword: string, userSalt: string): Promise<boolean> => {
-  const hash = await bcrypt.hash(password, userSalt);
-  console.log(hash, userPassword, hash === userPassword);
-  return hash === userPassword;
-};

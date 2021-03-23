@@ -6,6 +6,7 @@ import { InstrumentModule } from './instrument/instrument.module';
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MulterModule } from '@nestjs/platform-express';
     MulterModule.register({
       dest: './uploads',
     }),
+    UserModule,
     /*GraphQLModule.forRoot({
       autoSchemaFile: true,
     }),*/
