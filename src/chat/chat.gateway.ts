@@ -28,14 +28,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (!user) {
       socket.disconnect();
       this.logger.error('authentication failed ' + socket.id);
-    } else {
-      this.logger.warn(user);
-      this.logger.warn(
-        'authentication success! ' + user.username + ' - id:' + user.id,
-      );
-      this.onlineUsers.add(user.id);
-      this.dispatchUsersOnline();
+      return;
     }
+    this.logger.warn(user);
+    this.logger.warn(
+      'authentication success! ' + user.username + ' - id:' + user.id,
+    );
+    this.onlineUsers.add(user.id);
+    this.dispatchUsersOnline();
   }
 
   handleDisconnect(socket: Socket) {
