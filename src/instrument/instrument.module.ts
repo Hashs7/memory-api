@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { InstrumentService } from './instrument.service';
 import { InstrumentController } from './instrument.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NestjsQueryGraphQLModule } from '@nestjs-query/query-graphql';
-import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { Instrument } from './entities/instrument.entity';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 
