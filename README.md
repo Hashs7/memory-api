@@ -7,7 +7,7 @@
 ```
 brew services start mongodb-community
 mongo
-use parse
+use memorymotel
 ```
 
 ### Setup project
