@@ -11,9 +11,9 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
   useFactory: (configService: ConfigService) => ({
     type: 'mongodb',
-    host: configService.get('MONGO_HOST'),
-    port: configService.get('MONGO_PORT'),
-    database: configService.get('MONGO_DB'),
+    host: configService.get('TYPEORM_HOST'),
+    port: configService.get('TYPEORM_PORT'),
+    database: configService.get('TYPEORM_DATABASE'),
     // username: configService.get('MONGO_USER'),
     // password: configService.get('MONGO_PASSWORD'),
     entities: [
