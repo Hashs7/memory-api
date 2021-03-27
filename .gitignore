@@ -4,6 +4,7 @@
 /node_modules
 /uploads/*
 .env
+.env.prod
 
 # Logs
 logs
