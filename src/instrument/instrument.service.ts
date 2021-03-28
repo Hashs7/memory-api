@@ -22,9 +22,9 @@ export class InstrumentService {
       ...createInstrumentDto,
       id,
     });
-    const url: String = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
+    const url: string = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
     console.log(url);
-    const img: String = await qrcode.toDataURL(url);
+    const img: string = await qrcode.toDataURL(url);
     const base64Data = img.split(';base64,').pop();
 
     fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, (e) => {
