@@ -13,9 +13,11 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
     type: 'mongodb',
     host: configService.get('TYPEORM_HOST'),
     port: configService.get('TYPEORM_PORT'),
+    url: configService.get('TYPEORM_URL'),
     database: configService.get('TYPEORM_DATABASE'),
-    // username: configService.get('MONGO_USER'),
-    // password: configService.get('MONGO_PASSWORD'),
+    ...configService.get('TYPEORM_URL') && { url: configService.get('TYPEORM_URL') },
+    // username: configService.get('TYPEORM_USERNAME'),
+    // password: configService.get('TYPEORM_PASSWORD'),
     entities: [
       Instrument,
       User,
@@ -25,5 +27,5 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
     ],
     useUnifiedTopology: true,
     synchronize: true,
-  })
+  }),
 };
