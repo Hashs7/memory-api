@@ -6,6 +6,7 @@ import { Instrument } from './entities/instrument.entity';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
+import * as shortid from 'shortid';
 
 @Injectable()
 export class InstrumentService {
@@ -17,6 +18,7 @@ export class InstrumentService {
     const instrument = await this.instrumentRepository.create({
       // id: uuid(),
       ...createInstrumentDto,
+      id: shortid.generate(),
     });
 
     const img: String = await qrcode.toDataURL('https://google.com');
@@ -34,7 +36,7 @@ export class InstrumentService {
   }
 
   findOne(id: string) {
-    return this.instrumentRepository.findOne(id);
+    return this.instrumentRepository.findOne({ id });
   }
 
   update(id: string, updateInstrumentDto: UpdateInstrumentDto) {

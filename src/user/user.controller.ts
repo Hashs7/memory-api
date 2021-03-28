@@ -31,10 +31,6 @@ export class UserController {
   getLogUser(
     @GetUser() user: User,
   ): User {
-    console.log('get me ', user);
-    // delete user.password;
-    // delete user.salt;
-    console.log(user);
     delete user.salt;
     delete user.password;
     delete user._id;
