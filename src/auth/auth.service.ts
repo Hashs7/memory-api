@@ -28,7 +28,8 @@ export class AuthService {
 
     const salt = await bcrypt.genSalt();
     const hashPassword = await this.hashPassword(password, salt);
-    return this.userService.createUser(createUserDTO, salt, hashPassword);
+    const user = await this.userService.createUser(createUserDTO, salt, hashPassword);
+    return this.generateAuthSuccessResponse(user);
   }
 
   async signIn(authUserDTO: AuthCredentialsDto, hashed: boolean = false) {
