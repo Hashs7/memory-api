@@ -7,24 +7,27 @@ import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class InstrumentService {
   constructor(
-    @InjectRepository(Instrument) private instrumentRepository: Repository<Instrument>
+    private configService: ConfigService,
+    @InjectRepository(Instrument) private instrumentRepository: Repository<Instrument>,
   ) {}
 
   async create(createInstrumentDto: CreateInstrumentDto) {
+    const id = shortid.generate();
     const instrument = await this.instrumentRepository.create({
-      // id: uuid(),
       ...createInstrumentDto,
-      id: shortid.generate(),
+      id,
     });
-
-    const img: String = await qrcode.toDataURL('https://google.com');
+    const url: String = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
+    console.log(url);
+    const img: String = await qrcode.toDataURL(url);
     const base64Data = img.split(';base64,').pop();
+
     fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, (e) => {
-      console.log(e);
       console.log('qrcode img created');
     });
 
