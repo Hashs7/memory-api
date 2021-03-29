@@ -7,11 +7,13 @@ import { Message } from './message.entity';
 import {User} from "../user/user.entity";
 import {UserService} from "../user/user.service";
 import {SendMessageDto} from "./dto/send-message.dto";
+import { ChatGateway } from './chat.gateway';
 
 @Injectable()
 export class ChatService {
   constructor(
     private userService: UserService,
+    private chatGateway: ChatGateway,
     @InjectRepository(Conversation) private conversationRepo: Repository<Conversation>,
   ) {}
 
@@ -42,7 +44,12 @@ export class ChatService {
     if (!conversation.messages) {
       conversation.messages = [];
     }
-    conversation.messages.push(new Message(userId, sendMessageDto.text));
+    const message: Message = new Message(userId, sendMessageDto.text);
+    conversation.messages.push(message);
+    this.chatGateway.wss.emit('newMessage', {
+      conversation: conversation._id,
+      message
+    });
     return this.conversationRepo.update(conversation._id, conversation);
   }
 }
