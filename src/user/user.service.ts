@@ -22,7 +22,11 @@ export class UserService {
     return usersaved;
   }
 
-  async createUser(createUserDTO: CreateUserDTO, salt: string, hashPassword: string) {
+  async createUser(
+    createUserDTO: CreateUserDTO,
+    salt: string,
+    hashPassword: string,
+  ) {
     const { email, username } = createUserDTO;
 
     const user = new User();
@@ -38,12 +42,9 @@ export class UserService {
   async findByUsernameOrEmail(username: string): Promise<User> {
     return this.userRepository.findOne({
       where: {
-        $or: [
-          { username },
-          { email: username },
-        ]
-      }
-    })
+        $or: [{ username }, { email: username }],
+      },
+    });
   }
 
   async getUsers(filter: FilterUserDTO): Promise<User[]> {

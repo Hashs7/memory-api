@@ -25,5 +25,5 @@ export class User {
     const hash = await bcrypt.hash(password, this.salt);
     console.log(hash, this.password, hash === this.password);
     return hash === this.password;
-  };
+  }
 }
