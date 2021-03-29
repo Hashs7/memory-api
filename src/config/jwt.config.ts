@@ -1,7 +1,7 @@
 import { SignOptions, DecodeOptions } from 'jsonwebtoken';
 
 const signOptions: SignOptions = {
-  expiresIn: 3600,
+  expiresIn: 36000,
 };
 
 const rSignOptions: SignOptions = {

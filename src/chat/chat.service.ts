@@ -28,13 +28,12 @@ export class ChatService {
   }
 
   async createConversation(sender: ObjectID, userIds: string[]) {
-    const users = await this.userService.getUsers(userIds);
-    console.log(userIds, users);
+    const users = await this.userService.getUsersByIds(userIds);
+    const ids = users.map(({ _id }) => _id);
     const conversation = this.conversationRepo.create({
-      users: [sender, users],
+      users: [sender, ...ids],
       messages: [],
     });
-    console.log(conversation);
     return this.conversationRepo.save(conversation);
   }
 
@@ -44,6 +43,6 @@ export class ChatService {
       conversation.messages = [];
     }
     conversation.messages.push(new Message(userId, sendMessageDto.text));
-    return this.conversationRepo.save(conversation);
+    return this.conversationRepo.update(conversation._id, conversation);
   }
 }

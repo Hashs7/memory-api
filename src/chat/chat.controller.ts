@@ -23,17 +23,18 @@ export class ChatController {
   @Post('/conversation')
   @UseGuards(AuthGuard('jwt'))
   createConversation(
-      @GetUser() user: User,
-      @Body() createConversationDto: CreateConversationDto,
+    @GetUser() user: User,
+    @Body() createConversationDto: CreateConversationDto,
   ) {
+    console.log(user);
     return this.chatService.createConversation(user._id, createConversationDto.users);
   }
 
   @Post('/message')
   @UseGuards(AuthGuard('jwt'))
   sendMessage(
-      @GetUser() user: User,
-      @Body() sendMessageDto: SendMessageDto,
+    @GetUser() user: User,
+    @Body() sendMessageDto: SendMessageDto,
   ) {
     return this.chatService.sendMessage(user._id, sendMessageDto);
   }

@@ -5,7 +5,7 @@ import { User } from './user.entity';
 import { FilterUserDTO } from './dto/filter-user.dto';
 import * as shortid from 'shortid';
 import { CreateUserDTO } from '../auth/dto/create-user.dto';
-import {In} from "typeorm";
+import { ObjectID } from "mongodb";
 
 @Injectable()
 export class UserService {
@@ -17,9 +17,9 @@ export class UserService {
     return await this.userRepository.findOne({ email });
   }
 
-  getUsers(ids: string[]): Promise<User[]> {
-    return this.userRepository.find({ where: { _id: In(ids) }});
-    // return this.userRepository.findByIds(ids);
+  getUsersByIds(ids: string[]): Promise<User[]> {
+    const objectIds = ids.map((i) => new ObjectID(i));
+    return this.userRepository.find({ where: { _id: { $in: objectIds }}});
   }
 
   async saveUser(user: User) {
@@ -53,9 +53,9 @@ export class UserService {
     });
   }
 
-/*  async getUsers(filter: FilterUserDTO): Promise<User[]> {
+  async getUsers(filter: FilterUserDTO): Promise<User[]> {
     return this.userRepository.getUsers(filter);
-  }*/
+  }
 
   async getOnlineUsers(): Promise<User[]> {
     // TODO filter by online props

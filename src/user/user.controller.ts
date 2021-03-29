@@ -14,20 +14,17 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   async getUsers(
     @GetUser() user: User,
-    @Body('users') userIds: string[]
-    // @Query() filter: FilterUserDTO,
+    @Query() filter: FilterUserDTO,
   ): Promise<User[]> {
-    const users: User[] = await this.userService.getUsers(userIds);
+    const users: User[] = await this.userService.getUsers(filter);
     console.log(users);
-    // const users: User[] = await this.userService.getUsers(filter);
     return users
-/*    return users
       .map(u => {
         delete u.password;
         delete u.salt;
         return u;
       })
-      .filter(u => u.id !== user.id);*/
+      .filter(u => u.id !== user.id);
   }
 
   @Get('/me')
