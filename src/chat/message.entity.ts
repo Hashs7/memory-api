@@ -1,9 +1,11 @@
-import { Column, Entity, ManyToMany, ObjectIdColumn } from 'typeorm';
-import { User } from '../user/user.entity';
+import { Column, ObjectID, ObjectIdColumn } from 'typeorm';
 
 export class Message {
+  @ObjectIdColumn()
+  id: ObjectID;
+
   @Column()
-  sender: User;
+  sender: string;
 
   @Column()
   text: string;

@@ -1,5 +1,6 @@
-import { Column, Entity, ObjectID, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import {Column, Entity, JoinTable, ManyToMany, ObjectID, ObjectIdColumn, PrimaryColumn} from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import {Conversation} from "../chat/conversation.entity";
 
 @Entity()
 export class User {

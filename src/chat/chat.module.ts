@@ -7,10 +7,13 @@ import { ChatGateway } from './chat.gateway';
 import { ChatService } from './chat.service';
 import { Conversation } from './conversation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {UserService} from "../user/user.service";
+import {UserModule} from "../user/user.module";
+import {User} from "../user/user.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Conversation]),
+    TypeOrmModule.forFeature([Conversation, User]),
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -18,8 +21,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       secret: jwtConstants.secret,
       signOptions: jwtConstants.signOptions,
     }),
+    UserModule,
   ],
-  providers: [ChatGateway, ChatService],
+  providers: [ChatGateway, ChatService, UserService],
   controllers: [ChatController]
 })
 export class ChatModule {}
