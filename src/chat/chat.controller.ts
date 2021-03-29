@@ -12,7 +12,7 @@ export class ChatController {
     private readonly chatService: ChatService
   ) {}
 
-  @Get('/')
+  @Get('/conversation')
   @UseGuards(AuthGuard('jwt'))
   getConversations(
     @GetUser() user: User,
@@ -26,7 +26,6 @@ export class ChatController {
     @GetUser() user: User,
     @Body() createConversationDto: CreateConversationDto,
   ) {
-    console.log(user);
     return this.chatService.createConversation(user._id, createConversationDto.users);
   }
 
