@@ -1,11 +1,12 @@
 import { Column, ObjectID, ObjectIdColumn } from 'typeorm';
+import { User } from '../user/user.entity';
 
 export class Message {
   @ObjectIdColumn()
   id: ObjectID;
 
-  @Column()
-  sender: string;
+  @Column(() => User)
+  sender: User;
 
   @Column()
   text: string;

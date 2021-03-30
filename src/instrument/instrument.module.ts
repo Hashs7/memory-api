@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
 import { InstrumentService } from './instrument.service';
 import { InstrumentController } from './instrument.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Instrument } from './entities/instrument.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Instrument, InstrumentSchema } from './instrument.schema';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Instrument]),
+    // TypeOrmModule.forFeature([Instrument]),
+    MongooseModule.forFeature([
+      { name: Instrument.name, schema: InstrumentSchema },
+    ]),
   ],
   controllers: [InstrumentController],
-  providers: [InstrumentService]
+  providers: [InstrumentService],
 })
 export class InstrumentModule {}

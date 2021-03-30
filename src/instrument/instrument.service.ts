@@ -1,54 +1,57 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
+import { Model } from 'mongoose';
+import { Instrument, InstrumentDocument } from './instrument.schema';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
-import { Instrument } from './entities/instrument.entity';
-import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class InstrumentService {
   constructor(
     private configService: ConfigService,
-    @InjectRepository(Instrument) private instrumentRepository: Repository<Instrument>,
+    @InjectModel(Instrument.name) private instrumentModel: Model<InstrumentDocument>
   ) {}
 
   async create(createInstrumentDto: CreateInstrumentDto) {
     const id = shortid.generate();
-    const instrument = await this.instrumentRepository.create({
+    const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
       id,
     });
-    const url: string = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
+    const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
     console.log(url);
     const img: string = await qrcode.toDataURL(url);
     const base64Data = img.split(';base64,').pop();
 
-    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, (e) => {
-      console.log('qrcode img created');
-    });
+    fs.writeFile(
+      '.tmp/qrcode.png',
+      base64Data,
+      { encoding: 'base64' },
+      () => {},
+    );
 
-    return this.instrumentRepository.save(instrument);
+    return instrument;
   }
 
   findAll() {
-    return this.instrumentRepository.find();
+    return this.instrumentModel.find();
   }
 
   findOne(id: string) {
-    return this.instrumentRepository.findOne({ id });
+    return this.instrumentModel.findOne({ id });
   }
 
   update(id: string, updateInstrumentDto: UpdateInstrumentDto) {
-    return this.instrumentRepository.update(id, {
-      ...updateInstrumentDto,
-    });
+    return this.instrumentModel
+      .findByIdAndUpdate(id, updateInstrumentDto, { new: true })
+      .exec();
   }
 
   remove(id: string) {
-    return this.instrumentRepository.delete(id);
+    return this.instrumentModel.deleteOne({ _id: id });
   }
 }

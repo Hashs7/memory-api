@@ -1,25 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Conversation } from './conversation.entity';
-import {ObjectID, Repository} from 'typeorm';
-import { CreateConversationDto } from './dto/create-conversation.dto';
+import { ObjectID, Repository } from 'typeorm';
 import { Message } from './message.entity';
-import {User} from "../user/user.entity";
-import {UserService} from "../user/user.service";
-import {SendMessageDto} from "./dto/send-message.dto";
+import { UserService } from '../user/user.service';
+import { SendMessageDto } from './dto/send-message.dto';
 
 @Injectable()
 export class ChatService {
   constructor(
     private userService: UserService,
-    @InjectRepository(Conversation) private conversationRepo: Repository<Conversation>,
+    @InjectRepository(Conversation)
+    private conversationRepo: Repository<Conversation>,
   ) {}
 
   getUserConversations(userId: ObjectID) {
     return this.conversationRepo.find({
       where: {
         users: { $in: [userId] },
-      }
+      },
     });
   }
 
@@ -31,7 +30,7 @@ export class ChatService {
     const users = await this.userService.getUsers(userIds);
     console.log(userIds, users);
     const conversation = this.conversationRepo.create({
-      users: [sender, users],
+      // users: [sender, users],
       messages: [],
     });
     console.log(conversation);
@@ -39,7 +38,9 @@ export class ChatService {
   }
 
   async sendMessage(userId: ObjectID, sendMessageDto: SendMessageDto) {
-    const conversation = await this.getConversation(sendMessageDto.conversation);
+    const conversation = await this.getConversation(
+      sendMessageDto.conversation,
+    );
     if (!conversation.messages) {
       conversation.messages = [];
     }
