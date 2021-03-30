@@ -16,17 +16,15 @@ export class ChatService {
     private messageModel: Model<Message>,
   ) {}
 
-  // getUserConversations(userId: Schema.Types.ObjectId): Promise<Conversation[]> {
   getUserConversations(userId: Schema.Types.ObjectId) {
-    return this.conversationModel.find({ users: userId });
-    // return this.conversationModel.find({ users: userId });
+    return this.conversationModel.find({ users: userId }).populate('users', 'username');
   }
 
-  getConversation(id: string) {
-    return this.conversationModel.findById(id);
+  getConversation(id: string): Promise<Conversation> {
+    return this.conversationModel.findById(id).exec();
   }
 
-  async createConversation(sender: Schema.Types.ObjectId, userIds: string[]) {
+  async createConversation(sender: Schema.Types.ObjectId, userIds: string[]): Promise<Conversation> {
     const users = await this.userService.getUsers(userIds);
     const validUserIds = users.map(({ _id }) => _id);
     const conversation = await this.conversationModel.create({
@@ -36,10 +34,16 @@ export class ChatService {
     return conversation.save();
   }
 
+  /**
+   * Create new message to conversation
+   * Send to websocket channel
+   * @param userId
+   * @param sendMessageDto
+   */
   async sendMessage(
     userId: Schema.Types.ObjectId,
     sendMessageDto: SendMessageDto,
-  ) {
+  ): Promise<Conversation> {
     const conversation = await this.getConversation(
       sendMessageDto.conversation,
     );
