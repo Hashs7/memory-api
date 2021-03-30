@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.schema';
 import { FilterUserDTO } from './dto/filter-user.dto';
 import * as shortid from 'shortid';

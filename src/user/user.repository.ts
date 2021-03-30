@@ -1,7 +1,7 @@
-import { Repository, EntityRepository } from 'typeorm';
 import { FilterUserDTO } from './dto/filter-user.dto';
 import { User } from "./user.schema";
 
+/*
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   getUsers(filter: FilterUserDTO): User[] | PromiseLike<User[]> {
@@ -26,3 +26,4 @@ export class UserRepository extends Repository<User> {
     return query.getMany();
   }
 }
+*/
