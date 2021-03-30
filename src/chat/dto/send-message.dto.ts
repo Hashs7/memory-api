@@ -1,9 +1,8 @@
-import {IsNotEmpty} from 'class-validator';
-import {ObjectID} from "typeorm";
+import { IsNotEmpty } from 'class-validator';
 
 export class SendMessageDto {
   @IsNotEmpty()
-  conversation: ObjectID;
+  conversation: string;
 
   @IsNotEmpty()
   text: string;

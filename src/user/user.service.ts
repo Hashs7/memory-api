@@ -1,29 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from './user.repository';
-import { User } from './user.entity';
+import { User, UserDocument } from './user.schema';
 import { FilterUserDTO } from './dto/filter-user.dto';
 import * as shortid from 'shortid';
 import { CreateUserDTO } from '../auth/dto/create-user.dto';
-import {In} from "typeorm";
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(UserRepository) private userRepository: UserRepository
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async findUserbyEmail(email: string) {
-    return await this.userRepository.findOne({ email });
+  async findUserbyEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ email });
   }
 
   getUsers(ids: string[]): Promise<User[]> {
-    return this.userRepository.find({ where: { _id: In(ids) }});
-    // return this.userRepository.findByIds(ids);
+    return this.userModel.find({ _id: { $in: ids } }).exec();
   }
 
-  async saveUser(user: User) {
-    const usersaved: User = await this.userRepository.save(user);
+  async saveUser(user: User): Promise<User> {
+    const usersaved: User = await this.userModel.create(user);
     // this.chatGateway.wss.emit('users/new', usersaved);
     return usersaved;
   }
@@ -35,30 +32,28 @@ export class UserService {
   ) {
     const { email, username } = createUserDTO;
 
-    const user = new User();
+    const user = new this.userModel();
     user.id = shortid.generate();
     user.email = email;
     user.username = username;
     user.salt = salt;
     user.password = hashPassword;
 
-    return this.userRepository.save(user);
+    return user.save();
   }
 
   async findByUsernameOrEmail(username: string): Promise<User> {
-    return this.userRepository.findOne({
-      where: {
-        $or: [{ username }, { email: username }],
-      },
+    return this.userModel.findOne({
+      $or: [{ username }, { email: username }],
     });
   }
 
-/*  async getUsers(filter: FilterUserDTO): Promise<User[]> {
-    return this.userRepository.getUsers(filter);
+  /*  async getUsers(filter: FilterUserDTO): Promise<User[]> {
+    return this.userModel.getUsers(filter);
   }*/
 
   async getOnlineUsers(): Promise<User[]> {
     // TODO filter by online props
-    return this.userRepository.find();
+    return this.userModel.find();
   }
 }

@@ -1,6 +1,6 @@
 import { Repository, EntityRepository } from 'typeorm';
-import { User } from './user.entity';
 import { FilterUserDTO } from './dto/filter-user.dto';
+import { User } from "./user.schema";
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

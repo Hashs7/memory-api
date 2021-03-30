@@ -9,7 +9,7 @@ import { Conversation } from './conversation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {UserService} from "../user/user.service";
 import {UserModule} from "../user/user.module";
-import {User} from "../user/user.entity";
+import {User} from "../user/user.schema";
 
 @Module({
   imports: [

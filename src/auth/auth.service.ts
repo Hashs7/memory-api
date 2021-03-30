@@ -6,10 +6,10 @@ import {
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { jwtConstants } from '../config/jwt.config';
 import { CreateUserDTO } from './dto/create-user.dto';
+import { User } from '../user/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -28,14 +28,19 @@ export class AuthService {
 
     const salt = await bcrypt.genSalt();
     const hashPassword = await this.hashPassword(password, salt);
-    const user = await this.userService.createUser(createUserDTO, salt, hashPassword);
+    const user = await this.userService.createUser(
+      createUserDTO,
+      salt,
+      hashPassword,
+    );
     return this.generateAuthSuccessResponse(user);
   }
 
-  async signIn(authUserDTO: AuthCredentialsDto, hashed: boolean = false) {
+  async signIn(authUserDTO: AuthCredentialsDto, hashed = false) {
     const user: User = await this.userService.findByUsernameOrEmail(
       authUserDTO.username,
     );
+    console.log(user)
     if (!user) {
       throw new UnauthorizedException('user not found');
     }
@@ -61,13 +66,13 @@ export class AuthService {
     return this.jwtService.decode(accessToken);
   }
 
-  async generateAuthSuccessResponse(user: User, isRefresh: boolean = false) {
+  async generateAuthSuccessResponse(user: User, isRefresh = false) {
     console.log(`refresh token `, isRefresh);
     console.log(`authService `, user);
     const payload = {
       username: user.username,
       email: user.email,
-      id: user.id,
+      // id: user.id,
     };
     const accessToken = await this.jwtService.sign(payload);
     const refreshToken = await this.jwtService.sign(

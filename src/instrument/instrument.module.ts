@@ -6,7 +6,6 @@ import { Instrument, InstrumentSchema } from './instrument.schema';
 
 @Module({
   imports: [
-    // TypeOrmModule.forFeature([Instrument]),
     MongooseModule.forFeature([
       { name: Instrument.name, schema: InstrumentSchema },
     ]),

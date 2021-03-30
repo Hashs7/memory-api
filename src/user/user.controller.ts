@@ -1,27 +1,33 @@
 import {Body, Controller, Get, UseGuards} from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from '../auth/get-user.decorator';
-import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Query } from '@nestjs/common/decorators/http/route-params.decorator';
 import { FilterUserDTO } from './dto/filter-user.dto';
+import {User} from "./user.schema";
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  /**
+   * TODO Fix
+   * @param user
+   * @param userIds
+   */
   @Get()
   @UseGuards(AuthGuard('jwt'))
   async getUsers(
     @GetUser() user: User,
-    @Body('users') userIds: string[]
+    @Body('users') userIds: string[],
     // @Query() filter: FilterUserDTO,
   ): Promise<User[]> {
     const users: User[] = await this.userService.getUsers(userIds);
     console.log(users);
     // const users: User[] = await this.userService.getUsers(filter);
-    return users
-/*    return users
+    return users;
+    /*
+  return users
       .map(u => {
         delete u.password;
         delete u.salt;
@@ -32,12 +38,9 @@ export class UserController {
 
   @Get('/me')
   @UseGuards(AuthGuard('jwt'))
-  getLogUser(
-    @GetUser() user: User,
-  ): User {
+  getLogUser(@GetUser() user: User): User {
     delete user.salt;
     delete user.password;
-    // delete user._id;
     return user;
   }
 

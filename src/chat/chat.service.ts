@@ -5,6 +5,7 @@ import { ObjectID, Repository } from 'typeorm';
 import { Message } from './message.entity';
 import { UserService } from '../user/user.service';
 import { SendMessageDto } from './dto/send-message.dto';
+import { Schema } from 'mongoose';
 
 @Injectable()
 export class ChatService {
@@ -14,7 +15,7 @@ export class ChatService {
     private conversationRepo: Repository<Conversation>,
   ) {}
 
-  getUserConversations(userId: ObjectID) {
+  getUserConversations(userId: Schema.Types.ObjectId) {
     return this.conversationRepo.find({
       where: {
         users: { $in: [userId] },
@@ -22,11 +23,11 @@ export class ChatService {
     });
   }
 
-  getConversation(id: ObjectID) {
+  getConversation(id: string) {
     return this.conversationRepo.findOne(id);
   }
 
-  async createConversation(sender: ObjectID, userIds: string[]) {
+  async createConversation(sender: Schema.Types.ObjectId, userIds: string[]) {
     const users = await this.userService.getUsers(userIds);
     console.log(userIds, users);
     const conversation = this.conversationRepo.create({
@@ -37,7 +38,10 @@ export class ChatService {
     return this.conversationRepo.save(conversation);
   }
 
-  async sendMessage(userId: ObjectID, sendMessageDto: SendMessageDto) {
+  async sendMessage(
+    userId: Schema.Types.ObjectId,
+    sendMessageDto: SendMessageDto,
+  ) {
     const conversation = await this.getConversation(
       sendMessageDto.conversation,
     );

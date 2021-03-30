@@ -6,23 +6,21 @@ import { mongooseConfig } from './config/mongoose.config';
 import { InstrumentModule } from './instrument/instrument.module';
 import { FilesModule } from './files/files.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    // TypeOrmModule.forRootAsync(typeOrmConfig),
     MongooseModule.forRootAsync(mongooseConfig),
-    // AuthModule,
+    AuthModule,
     InstrumentModule,
     FilesModule,
     MulterModule.register({
       dest: './uploads',
     }),
-    /*UserModule,
-    ChatModule,*/
-    /*GraphQLModule.forRoot({
-      autoSchemaFile: true,
-    }),*/
+    UserModule,
+    /*ChatModule,*/
   ],
   controllers: [AppController],
   providers: [],

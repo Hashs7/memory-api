@@ -1,6 +1,6 @@
 import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
-import { User } from '../user/user.entity';
 import { Message } from './message.entity';
+import {User} from "../user/user.schema";
 
 @Entity()
 export class Conversation {

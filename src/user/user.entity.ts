@@ -1,6 +1,6 @@
+/*
 import {Column, Entity, JoinTable, ManyToMany, ObjectID, ObjectIdColumn, PrimaryColumn} from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import {Conversation} from "../chat/conversation.entity";
 
 @Entity()
 export class User {
@@ -28,3 +28,4 @@ export class User {
     return hash === this.password;
   }
 }
+*/
