@@ -10,7 +10,7 @@ import { User } from '../user/user.schema';
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  @Get('/')
+  @Get('/conversation')
   @UseGuards(AuthGuard('jwt'))
   getConversations(@GetUser() user: User) {
     return this.chatService.getUserConversations(user._id);

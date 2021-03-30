@@ -5,15 +5,19 @@ import { jwtConstants } from '../config/jwt.config';
 import { ChatController } from './chat.controller';
 import { ChatGateway } from './chat.gateway';
 import { ChatService } from './chat.service';
-import { Conversation } from './conversation.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import {UserService} from "../user/user.service";
-import {UserModule} from "../user/user.module";
-import {User} from "../user/user.schema";
+import { UserService } from '../user/user.service';
+import { UserModule } from '../user/user.module';
+import { User, UserSchema } from '../user/user.schema';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Conversation, ConversationSchema } from './conversation.schema';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Conversation, User]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Conversation.name, schema: ConversationSchema },
+    ]),
+
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -24,6 +28,6 @@ import {User} from "../user/user.schema";
     UserModule,
   ],
   providers: [ChatGateway, ChatService, UserService],
-  controllers: [ChatController]
+  controllers: [ChatController],
 })
 export class ChatModule {}

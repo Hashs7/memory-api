@@ -1,10 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document } from 'mongoose';
 
 @Schema()
-export class Instrument {
-  _id: MongooseSchema.Types.ObjectId;
-
+export class Instrument extends Document {
   @Prop({ required: true })
   id: string;
 
@@ -17,7 +15,5 @@ export class Instrument {
   @Prop()
   specification: string;
 }
-
-export type InstrumentDocument = Instrument & Document;
 
 export const InstrumentSchema = SchemaFactory.createForClass(Instrument);

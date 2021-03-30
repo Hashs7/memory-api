@@ -1,13 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 type ValidatePasswordFunction<T> = (password: string) => T;
 
 @Schema()
 export class User extends Document {
-  _id: MongooseSchema.Types.ObjectId;
-
   @Prop({ required: true })
   email: string;
 
@@ -22,8 +20,6 @@ export class User extends Document {
 
   validatePassword: ValidatePasswordFunction<boolean>;
 }
-
-export type UserDocument = User & Document;
 
 export const UserSchema = SchemaFactory.createForClass(User);
 

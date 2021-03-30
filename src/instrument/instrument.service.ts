@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
-import { Instrument, InstrumentDocument } from './instrument.schema';
+import { Instrument } from './instrument.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
@@ -13,7 +13,7 @@ import * as shortid from 'shortid';
 export class InstrumentService {
   constructor(
     private configService: ConfigService,
-    @InjectModel(Instrument.name) private instrumentModel: Model<InstrumentDocument>
+    @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
   async create(createInstrumentDto: CreateInstrumentDto) {

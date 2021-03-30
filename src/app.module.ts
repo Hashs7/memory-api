@@ -8,6 +8,7 @@ import { FilesModule } from './files/files.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
       dest: './uploads',
     }),
     UserModule,
-    /*ChatModule,*/
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [],
