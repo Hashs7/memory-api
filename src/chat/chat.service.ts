@@ -5,10 +5,12 @@ import { Model, Schema, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Conversation } from './conversation.schema';
 import { Message } from './message.schema';
+import { ChatGateway } from './chat.gateway';
 
 @Injectable()
 export class ChatService {
   constructor(
+    private chatGateway: ChatGateway,
     private userService: UserService,
     @InjectModel(Conversation.name)
     private conversationModel: Model<Conversation>,
@@ -17,14 +19,18 @@ export class ChatService {
   ) {}
 
   getUserConversations(userId: Schema.Types.ObjectId) {
-    return this.conversationModel.find({ users: userId }).populate('users', 'username');
+    return this.conversationModel.find({ users: userId })
+      .populate('users', 'username');
   }
 
   getConversation(id: string): Promise<Conversation> {
     return this.conversationModel.findById(id).exec();
   }
 
-  async createConversation(sender: Schema.Types.ObjectId, userIds: string[]): Promise<Conversation> {
+  async createConversation(
+    sender: Schema.Types.ObjectId,
+    userIds: string[]
+  ): Promise<Conversation> {
     const users = await this.userService.getUsers(userIds);
     const validUserIds = users.map(({ _id }) => _id);
     const conversation = await this.conversationModel.create({
@@ -55,8 +61,14 @@ export class ChatService {
       text: sendMessageDto.text,
       createdAt: new Date(Date.now()),
     });
+
     conversation.messages.push(message);
     conversation.markModified('messages');
-    return conversation.save();
+    await conversation.save();
+    this.chatGateway.wss.emit('newMessage', {
+      conversation: conversation._id,
+      message
+    });
+    return conversation;
   }
 }

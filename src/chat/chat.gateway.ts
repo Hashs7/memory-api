@@ -9,8 +9,10 @@ import { Socket, Server } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { Logger } from '@nestjs/common';
 import { jwtConstants } from '../config/jwt.config';
+import { User } from '../user/user.entity';
 
-@WebSocketGateway({ namespace: 'chat' })
+// @WebSocketGateway({ namespace: 'chat' })
+@WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   logger = new Logger('ChatGateway');
   onlineUsers = new Set();
@@ -33,15 +35,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.warn(
       'authentication success! ' + user.username + ' - id:' + user.id,
     );
-    this.onlineUsers.add(user.id);
-    this.dispatchUsersOnline();
+    // this.onlineUsers.add(user.id);
+    // this.dispatchUsersOnline();
   }
 
   handleDisconnect(socket: Socket) {
-    const user: any = this.getUser(socket);
-    this.onlineUsers.delete(user.id);
-    this.logger.warn('user disconnected ' + user.username + ' - id:' + user.id);
-    this.dispatchUsersOnline();
+    // const user: any = this.getUser(socket);
+    // this.onlineUsers.delete(user.id);
+    this.logger.warn('user disconnected ');
+    // this.logger.warn('user disconnected ' + user.username + ' - id:' + user.id);
+    // this.dispatchUsersOnline();
   }
 
   @SubscribeMessage('message')
@@ -55,9 +58,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.wss.emit('users/online', Array.from(this.onlineUsers));
   }
 
-  private getUser(socket: Socket) {
-    const token = socket.handshake.query.token;
-    const user: any = this.jwtService.decode(token[0]);
-    return user;
+  private getUser(socket: Socket): any {
+    const token = socket.handshake.query.token as string;
+    return this.jwtService.decode(token);
   }
 }
