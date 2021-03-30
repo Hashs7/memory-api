@@ -10,11 +10,13 @@ import { UserModule } from '../user/user.module';
 import { User, UserSchema } from '../user/user.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Conversation, ConversationSchema } from './conversation.schema';
+import { Message, MessageSchema } from './message.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
+      { name: Message.name, schema: MessageSchema },
       { name: Conversation.name, schema: ConversationSchema },
     ]),
 

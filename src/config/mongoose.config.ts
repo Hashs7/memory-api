@@ -7,6 +7,6 @@ export const mongooseConfig: MongooseModuleAsyncOptions = {
   useFactory: (configService: ConfigService) => ({
     uri: configService.get('TYPEORM_URL'),
     useUnifiedTopology: true,
-    // synchronize: true,
+    useNewUrlParser: true,
   }),
 };

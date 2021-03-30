@@ -12,6 +12,8 @@ export class ChatService {
     private userService: UserService,
     @InjectModel(Conversation.name)
     private conversationModel: Model<Conversation>,
+    @InjectModel(Message.name)
+    private messageModel: Model<Message>,
   ) {}
 
   // getUserConversations(userId: Schema.Types.ObjectId): Promise<Conversation[]> {
@@ -27,12 +29,10 @@ export class ChatService {
   async createConversation(sender: Schema.Types.ObjectId, userIds: string[]) {
     const users = await this.userService.getUsers(userIds);
     const validUserIds = users.map(({ _id }) => _id);
-    console.log([sender, ...validUserIds]);
     const conversation = await this.conversationModel.create({
       users: [sender, ...validUserIds],
       messages: [],
     });
-    console.log(conversation);
     return conversation.save();
   }
 
@@ -46,7 +46,13 @@ export class ChatService {
     if (!conversation.messages) {
       conversation.messages = [];
     }
-    conversation.messages.push(new Message(userId, sendMessageDto.text));
+    const message = await this.messageModel.create({
+      sender: userId,
+      text: sendMessageDto.text,
+      createdAt: new Date(Date.now()),
+    });
+    conversation.messages.push(message);
+    conversation.markModified('messages');
     return conversation.save();
   }
 }
