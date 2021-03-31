@@ -1,15 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
 import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
+import { AuthGuard } from "@nestjs/passport";
+import { GetUser } from "../auth/get-user.decorator";
+import { User } from "../user/user.schema";
 
 @Controller('instrument')
 export class InstrumentController {
   constructor(private readonly instrumentService: InstrumentService) {}
 
   @Post()
-  create(@Body() createInstrumentDto: CreateInstrumentDto) {
-    return this.instrumentService.create(createInstrumentDto);
+  @UseGuards(AuthGuard('jwt'))
+  create(
+      @GetUser() user: User,
+      @Body() createInstrumentDto: CreateInstrumentDto
+  ) {
+    return this.instrumentService.create(user, createInstrumentDto);
+  }
+
+  @Get('/user')
+  @UseGuards(AuthGuard('jwt'))
+  findForUser(
+      @GetUser() user: User,
+  ) {
+    return this.instrumentService.findForUser(user);
   }
 
   @Get()
