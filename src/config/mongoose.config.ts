@@ -11,11 +11,7 @@ export const mongooseConfig: MongooseModuleAsyncOptions = {
     if (user && password) {
       uri += `${user}:${password}@`;
     }
-    if (user && password) {
-      uri += `${user}:${password}@`;
-    }
     uri += `${configService.get('MONGO_HOST')}/${configService.get('MONGO_DATABASE')}`;
-
     return {
       uri,
       useUnifiedTopology: true,
