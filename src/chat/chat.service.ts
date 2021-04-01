@@ -3,8 +3,8 @@ import { UserService } from '../user/user.service';
 import { SendMessageDto } from './dto/send-message.dto';
 import { Model, Schema, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Conversation } from './conversation.schema';
-import { Message } from './message.schema';
+import { Conversation } from './schema/conversation.schema';
+import { Message } from './schema/message.schema';
 import { ChatGateway } from './chat.gateway';
 
 @Injectable()
@@ -18,9 +18,9 @@ export class ChatService {
     private messageModel: Model<Message>,
   ) {}
 
-  getUserConversations(userId: Schema.Types.ObjectId) {
+  getUserConversations(userId: Schema.Types.ObjectId): Promise<Conversation[]> {
     return this.conversationModel.find({ users: userId })
-      .populate('users', 'username');
+      .populate('users', 'username').exec();
   }
 
   getConversation(id: string): Promise<Conversation> {

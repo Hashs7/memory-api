@@ -9,8 +9,8 @@ import { UserService } from '../user/user.service';
 import { UserModule } from '../user/user.module';
 import { User, UserSchema } from '../user/user.schema';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Conversation, ConversationSchema } from './conversation.schema';
-import { Message, MessageSchema } from './message.schema';
+import { Conversation, ConversationSchema } from './schema/conversation.schema';
+import { Message, MessageSchema } from './schema/message.schema';
 
 @Module({
   imports: [

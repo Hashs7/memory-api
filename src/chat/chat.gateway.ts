@@ -8,8 +8,6 @@ import {
 import { Socket, Server } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { Logger } from '@nestjs/common';
-import { jwtConstants } from '../config/jwt.config';
-import { User } from '../user/user.entity';
 
 // @WebSocketGateway({ namespace: 'chat' })
 @WebSocketGateway()
