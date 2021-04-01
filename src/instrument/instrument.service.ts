@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
 import { User } from "../user/user.schema";
+import { Memory } from '../memory/memory.schema';
 
 @Injectable()
 export class InstrumentService {
@@ -36,6 +37,7 @@ export class InstrumentService {
       id,
       image: filename,
       owner: user._id,
+      memories: [],
     });
 
     const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
@@ -72,6 +74,17 @@ export class InstrumentService {
     return this.instrumentModel
       .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
       .exec();
+  }
+
+  async addMemory(
+    id: string,
+    memory: Memory
+  ) {
+    const instrument = await this.findOne(id);
+    instrument.memories.push(memory);
+    instrument.markModified('memories');
+
+    return instrument.save();
   }
 
   remove(id: string) {

@@ -14,7 +14,7 @@ export class Conversation extends Document {
   @ApiProperty()
   users: MongooseSchema.Types.ObjectId[];
 
-  @Prop({ type: Message })
+  @Prop([Message])
   @ApiProperty({
     type: [Message]
   })

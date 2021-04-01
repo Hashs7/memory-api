@@ -16,20 +16,33 @@ export class ChatService {
     private conversationModel: Model<Conversation>,
   ) {}
 
+  /**
+   *
+   * @param userId
+   */
   getUserConversations(userId: Schema.Types.ObjectId): Promise<Conversation[]> {
     return this.conversationModel.find({ users: userId })
       .populate('users', 'username').exec();
   }
 
+  /**
+   *
+   * @param id
+   */
   getConversation(id: string): Promise<Conversation> {
     return this.conversationModel.findById(id).exec();
   }
 
+  /**
+   * TODO check if conversation already exist
+   * @param sender
+   * @param userIds
+   */
   async createConversation(
     sender: Schema.Types.ObjectId,
     userIds: string[]
   ): Promise<Conversation> {
-    const users = await this.userService.getUsers(userIds);
+    const users = await this.userService.findUsers(userIds);
     const validUserIds = users.map(({ _id }) => _id);
     const conversation = await this.conversationModel.create({
       users: [sender, ...validUserIds],
@@ -51,9 +64,6 @@ export class ChatService {
     const conversation = await this.getConversation(
       sendMessageDto.conversation,
     );
-    if (!conversation.messages) {
-      conversation.messages = [];
-    }
     const message = new Message(userId, sendMessageDto.text);
     conversation.messages.push(message);
     conversation.markModified('messages');

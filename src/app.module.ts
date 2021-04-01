@@ -8,6 +8,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
+import { MemoryModule } from './memory/memory.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ChatModule } from './chat/chat.module';
     }),
     UserModule,
     ChatModule,
+    MemoryModule,
   ],
   controllers: [],
   providers: [],

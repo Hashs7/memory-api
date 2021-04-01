@@ -2,6 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { User } from "../user/user.schema";
 import { ApiProperty } from '@nestjs/swagger';
+import { Memory } from '../memory/memory.schema';
+import { IsArray } from 'class-validator';
 
 @Schema()
 export class Instrument extends Document {
@@ -74,6 +76,13 @@ export class Instrument extends Document {
   })
   @ApiProperty({ type: [User] })
   oldOwners: MongooseSchema.Types.ObjectId[];
+
+  @IsArray()
+  @Prop([Memory])
+  @ApiProperty({
+    type: [Memory]
+  })
+  memories: Memory[];
 }
 
 export const InstrumentSchema = SchemaFactory.createForClass(Instrument);

@@ -16,11 +16,11 @@ export class UserController {
     status: 200,
     type: [User],
   })
-  async getUsers(
+  async findUsers(
     @GetUser() user: User,
     @Body('users') userIds: string[],
   ): Promise<User[]> {
-    const users = await this.userService.getUsers(userIds);
+    const users = await this.userService.findUsers(userIds);
     return users
       .map(u => {
         delete u.password;
