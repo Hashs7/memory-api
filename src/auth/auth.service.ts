@@ -10,11 +10,13 @@ import { UserService } from '../user/user.service';
 import { jwtConstants } from '../config/jwt.config';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { User } from '../user/user.schema';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
+    private mailService: MailService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -33,6 +35,10 @@ export class AuthService {
       salt,
       hashPassword,
     );
+
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    await this.mailService.sendUserConfirmation(user, token);
+
     return this.generateAuthSuccessResponse(user);
   }
 

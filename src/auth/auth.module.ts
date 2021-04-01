@@ -8,10 +8,13 @@ import { AuthService } from './auth.service';
 import { jwtConstants } from '../config/jwt.config';
 import { User, UserSchema } from '../user/user.schema';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MailModule } from 'src/mail/mail.module';
+import { MailService } from 'src/mail/mail.service';
 
 @Module({
   imports: [
     UserModule,
+    MailModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -22,7 +25,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AuthController],
-  providers: [JwtStrategy, AuthService],
+  providers: [JwtStrategy, AuthService, MailService],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

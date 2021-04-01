@@ -14,15 +14,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
                 transport: {
-                    host: 'smtp-relay.sendinblue.com',
+                    host: configService.get('MAIL_HOST'),
                     secure: false,
                     auth: {
-                        user: configService.get('SENDINBLUE_USER'),
-                        pass: configService.get('SENDINBLUE_PASSWORD'),
+                        user: configService.get('MAIL_USER'),
+                        pass: configService.get('MAIL_PASSWORD'),
                     },
                 },
                 defaults: {
-                    from: '"No Reply" <contact@sebhernoux.me>',
+                    from: `"No Reply" <${configService.get('MAIL_FROM')}>`,
                 },
                 template: {
                     dir: join(__dirname, 'templates'),
