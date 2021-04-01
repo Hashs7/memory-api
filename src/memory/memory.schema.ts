@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from '../user/user.schema';
 import { ApiProperty } from '@nestjs/swagger';
-import { Schema as MongooseSchema, Types } from 'mongoose';
+import { Schema as MongooseSchema, Types, Document } from 'mongoose';
 import { CreateMemoryDto } from './dto/create-memory.dto';
 
 export enum MemoryType {
@@ -9,9 +9,10 @@ export enum MemoryType {
   Rehearsal = 'Rehearsal',
 }
 
-@Schema({ timestamps: true, _id: false })
-// @ts-ignore
-export class Memory extends Types.Subdocument  {
+// @Schema({ timestamps: true, _id: false })
+@Schema()
+export class Memory extends Document  {
+// export class Memory extends Types.Subdocument  {
   @Prop()
   @ApiProperty()
   name: string;
@@ -84,5 +85,4 @@ export class Memory extends Types.Subdocument  {
   }
 }
 
-// @ts-ignore
 export const MemorySchema = SchemaFactory.createForClass(Memory);

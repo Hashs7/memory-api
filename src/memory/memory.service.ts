@@ -4,25 +4,36 @@ import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
 import { InstrumentService } from '../instrument/instrument.service';
 import { UserService } from '../user/user.service';
-import { Schema as MongooseSchema } from "mongoose";
+import { Model, Schema } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class MemoryService {
   constructor(
     private instrumentService: InstrumentService,
     private userService: UserService,
+    @InjectModel(Memory.name) private memoryModel: Model<Memory>
   ) {}
 
   async create(
-    userId: MongooseSchema.Types.ObjectId,
+    userId: Schema.Types.ObjectId,
     createMemoryDto: CreateMemoryDto
   ): Promise<Memory> {
     const { instrument, withUsers } = createMemoryDto;
+    console.log(instrument);
     const users = (await this.userService.findUsers(withUsers))
       .map((u) => u._id);
+    console.log(users);
 
-    const memory = new Memory(createMemoryDto, userId, users);
+    // TODO Fix Subdocument
+    // const memory = new Memory(createMemoryDto, userId, users);
+    const memory = await this.memoryModel.create({
+      ...createMemoryDto,
+      createdBy: userId,
+      withUsers: users
+    });
     console.log(memory);
+    // await memory.save();
     await this.instrumentService.addMemory(instrument, memory);
 
     return memory;
