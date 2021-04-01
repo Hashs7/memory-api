@@ -14,8 +14,6 @@ export class ChatService {
     private userService: UserService,
     @InjectModel(Conversation.name)
     private conversationModel: Model<Conversation>,
-    @InjectModel(Message.name)
-    private messageModel: Model<Message>,
   ) {}
 
   getUserConversations(userId: Schema.Types.ObjectId): Promise<Conversation[]> {
@@ -56,15 +54,11 @@ export class ChatService {
     if (!conversation.messages) {
       conversation.messages = [];
     }
-    const message = await this.messageModel.create({
-      sender: userId,
-      text: sendMessageDto.text,
-      createdAt: new Date(Date.now()),
-    });
-
+    const message = new Message(userId, sendMessageDto.text);
     conversation.messages.push(message);
     conversation.markModified('messages');
     await conversation.save();
+
     this.chatGateway.wss.emit('newMessage', {
       conversation: conversation._id,
       message

@@ -40,18 +40,17 @@ export class AuthService {
     const user: User = await this.userService.findByUsernameOrEmail(
       authUserDTO.username,
     );
-    console.log(user)
-    if (!user) {
-      throw new UnauthorizedException('user not found');
-    }
 
+    if (!user) {
+      throw new UnauthorizedException('Utilisateur non trouvé');
+    }
     if (hashed === false) {
       if (!(await user.validatePassword(authUserDTO.password))) {
-        throw new UnauthorizedException('Password Mismatch');
+        throw new UnauthorizedException('Le mot de passe ne correspond pas');
       }
     } else {
       if (user.password !== authUserDTO.password) {
-        throw new UnauthorizedException('Password Mismatch');
+        throw new UnauthorizedException('Le mot de passe ne correspond pas');
       }
     }
 

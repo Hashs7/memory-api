@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { Instrument } from './instrument.schema';
@@ -17,11 +17,24 @@ export class InstrumentService {
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
-  async create(user: User, createInstrumentDto: CreateInstrumentDto) {
+  findAll() {
+    return this.instrumentModel.find();
+  }
+
+  findOne(id: string) {
+    return this.instrumentModel.findOne({ id });
+  }
+
+  findForUser(user: User) {
+    return this.instrumentModel.find({ owner: user._id });
+  }
+
+  async create(user: User, createInstrumentDto: CreateInstrumentDto, filename: string) {
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
       id,
+      image: filename,
       owner: user._id,
     });
 
@@ -39,25 +52,29 @@ export class InstrumentService {
     return instrument;
   }
 
-  findForUser(user: User) {
-    return this.instrumentModel.find({ owner: user._id });
-  }
-
-  findAll() {
-    return this.instrumentModel.find();
-  }
-
-  findOne(id: string) {
-    return this.instrumentModel.findOne({ id });
-  }
-
-  update(id: string, updateInstrumentDto: UpdateInstrumentDto) {
+  async update(
+    id: string,
+    user: User,
+    updateInstrumentDto: UpdateInstrumentDto,
+    file?: Express.Multer.File
+  ) {
+    const instrument = await this.findOne(id);
+    if (!instrument) {
+      throw new NotFoundException("L'instrument n'existe pas");
+    }
+    // @ts-ignore
+    if (!instrument.owner.equals(user._id)) {
+      throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
+    }
+    if (file) {
+      updateInstrumentDto.image = file.filename;
+    }
     return this.instrumentModel
-      .findByIdAndUpdate(id, updateInstrumentDto, { new: true })
+      .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
       .exec();
   }
 
   remove(id: string) {
-    return this.instrumentModel.deleteOne({ _id: id });
+    return this.instrumentModel.findOneAndDelete({ id });
   }
 }

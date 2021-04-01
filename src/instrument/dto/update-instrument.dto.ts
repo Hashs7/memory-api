@@ -1,5 +1,3 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateInstrumentDto } from './create-instrument.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateInstrumentDto {
@@ -10,8 +8,23 @@ export class UpdateInstrumentDto {
   name?: string;
 
   @ApiPropertyOptional()
+  description?: string;
+
+  @ApiPropertyOptional()
+  image?: string;
+
+  @ApiPropertyOptional()
   type?: string;
 
   @ApiPropertyOptional()
+  brand?: string;
+
+  @ApiPropertyOptional()
+  modelName?: string;
+
+  @ApiPropertyOptional()
   specification?: string;
+
+  @ApiPropertyOptional()
+  buyDate?: Date;
 }

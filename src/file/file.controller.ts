@@ -10,8 +10,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { editFileName, imageFileFilter } from '../utils/file-upload.utils';
+import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('file')
@@ -23,13 +22,7 @@ export class FileController {
    */
   @Post()
   @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: editFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
+    FileInterceptor('image', fileInterceptorOptions),
   )
   async uploadedFile(@UploadedFile() file) {
     const response = {
@@ -50,13 +43,7 @@ export class FileController {
    */
   @Post('multiple')
   @UseInterceptors(
-    FilesInterceptor('image', 10, {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: editFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
+    FilesInterceptor('image', 10, fileInterceptorOptions),
   )
   async uploadMultipleFiles(@UploadedFiles() files) {
     const response = [];

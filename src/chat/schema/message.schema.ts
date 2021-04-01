@@ -1,10 +1,10 @@
-import { Document } from 'mongoose';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { User } from '../user/user.schema';
+import { Prop, Schema } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from '../../user/user.schema';
+import { Types } from 'mongoose';
 
-@Schema()
-export class Message extends Document {
+@Schema({ timestamps: true, _id: false })
+export class Message extends Types.Subdocument  {
   @Prop({ type: User, required: true })
   @ApiProperty({
     title: 'User ObjectId',
@@ -36,7 +36,6 @@ export class Message extends Document {
   }
 }
 
-export const MessageSchema = SchemaFactory.createForClass(Message);
 
 /*
 MessageSchema.static({
