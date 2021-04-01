@@ -1,5 +1,8 @@
 # Memory api
 
+[API Documentation](https://memory-api.azurewebsites.net/docs)
+
+
 ## Installation
 [Install MongoDB](https://docs.mongodb.com/manual/administration/install-community/) 
 
