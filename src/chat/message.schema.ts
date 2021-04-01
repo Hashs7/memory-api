@@ -1,13 +1,19 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from '../user/user.schema';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Schema()
 export class Message extends Document {
   @Prop({ type: User, required: true })
+  @ApiProperty({
+    title: 'User ObjectId',
+    type: String,
+  })
   sender: User;
 
   @Prop({ required: true })
+  @ApiProperty()
   text: string;
 
   @Prop({ type: Date, required: true })
@@ -24,7 +30,6 @@ export class Message extends Document {
 
   constructor(sender, text) {
     super();
-    console.log('c super');
     this.sender = sender;
     this.text = text;
     this.createdAt = new Date(Date.now());

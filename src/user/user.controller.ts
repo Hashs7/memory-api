@@ -5,7 +5,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { Query } from '@nestjs/common/decorators/http/route-params.decorator';
 import { FilterUserDTO } from './dto/filter-user.dto';
 import {User} from "./user.schema";
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

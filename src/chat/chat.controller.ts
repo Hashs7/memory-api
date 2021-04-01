@@ -5,7 +5,9 @@ import { GetUser } from '../auth/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { SendMessageDto } from './dto/send-message.dto';
 import { User } from '../user/user.schema';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('chat')
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
