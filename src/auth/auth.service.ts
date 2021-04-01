@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { jwtConstants } from '../config/jwt.config';
-import { CreateUserDTO } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../user/user.schema';
 
 @Injectable()
@@ -18,8 +18,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(createUserDTO: CreateUserDTO) {
-    const { email, password } = createUserDTO;
+  async signUp(createUserDto: CreateUserDto) {
+    const { email, password } = createUserDto;
     const exist = await this.userService.findUserbyEmail(email);
 
     if (exist) {
@@ -29,7 +29,7 @@ export class AuthService {
     const salt = await bcrypt.genSalt();
     const hashPassword = await this.hashPassword(password, salt);
     const user = await this.userService.createUser(
-      createUserDTO,
+      createUserDto,
       salt,
       hashPassword,
     );

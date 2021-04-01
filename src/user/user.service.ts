@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import { FilterUserDTO } from './dto/filter-user.dto';
 import * as shortid from 'shortid';
-import { CreateUserDTO } from '../auth/dto/create-user.dto';
+import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -25,7 +25,7 @@ export class UserService {
   }
 
   async createUser(
-    createUserDTO: CreateUserDTO,
+    createUserDTO: CreateUserDto,
     salt: string,
     hashPassword: string,
   ) {
