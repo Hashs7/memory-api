@@ -65,12 +65,14 @@ export class Instrument extends Document {
     ref: User.name,
     required: true,
   })
+  @ApiProperty({ type: User })
   owner: MongooseSchema.Types.ObjectId;
 
   @Prop({
     type: [MongooseSchema.Types.ObjectId],
     ref: User.name,
   })
+  @ApiProperty({ type: [User] })
   oldOwners: MongooseSchema.Types.ObjectId[];
 }
 

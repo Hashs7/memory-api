@@ -19,6 +19,7 @@ import { User } from "../user/user.schema";
 import { ApiResponse, ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
+import { Instrument } from './instrument.schema';
 
 @ApiTags('instrument')
 @Controller('instrument')
@@ -27,11 +28,19 @@ export class InstrumentController {
 
   @Get()
   @ApiOperation({ summary: 'All public instruments' })
+  @ApiResponse({
+    status: 200,
+    type: [Instrument],
+  })
   findAll() {
     return this.instrumentService.findAll();
   }
 
   @Get(':id')
+  @ApiResponse({
+    status: 200,
+    type: Instrument,
+  })
   findOne(@Param('id') id: string) {
     return this.instrumentService.findOne(id);
   }
@@ -40,8 +49,7 @@ export class InstrumentController {
   @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
-    description: 'The found record',
-    type: User,
+    type: [Instrument],
   })
   findForUser(
       @GetUser() user: User,
@@ -51,11 +59,16 @@ export class InstrumentController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create instrument' })
   @UseInterceptors(
     FileInterceptor('image', fileInterceptorOptions),
   )
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create instrument' })
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: Instrument,
+  })
   create(
       @GetUser() user: User,
       @Body() createInstrumentDto: CreateInstrumentDto,
@@ -66,11 +79,16 @@ export class InstrumentController {
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update instrument with shortId' })
   @UseInterceptors(
     FileInterceptor('image', fileInterceptorOptions),
   )
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update instrument with shortId' })
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: Instrument,
+  })
   update(
     @Param('id') id: string,
     @GetUser() user: User,

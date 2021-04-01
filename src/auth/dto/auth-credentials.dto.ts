@@ -8,6 +8,8 @@ export class AuthCredentialsDto {
   @ApiProperty({
     minimum: 4,
     maximum: 20,
+    title: 'Username or email',
+    example: 'user@example.com',
   })
   username: string;
 

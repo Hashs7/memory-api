@@ -9,11 +9,15 @@ type ValidatePasswordFunction<T> = (password: string) => T;
 @Schema()
 export class User extends Document {
   @Prop({ required: true })
-  @ApiProperty()
+  @ApiProperty({
+    example: 'user@example.com',
+  })
   email: string;
 
   @Prop()
-  @ApiProperty()
+  @ApiProperty({
+    example: 'azerty123'
+  })
   @Exclude()
   password: string;
 
