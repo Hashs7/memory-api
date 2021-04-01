@@ -5,14 +5,11 @@ export const mongooseConfig: MongooseModuleAsyncOptions = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (configService: ConfigService) => {
-    let uri = 'mongodb://';
     const user = configService.get('MONGO_USER');
     const password = configService.get('MONGO_PASSWORD');
+    let uri = 'mongodb://';
     if (user && password) {
-      uri += `${user}:${password}@`;
-    }
-    if (user && password) {
-      uri += `${user}:${password}@`;
+      uri = `mongodb+srv://${user}:${password}@`;
     }
     uri += `${configService.get('MONGO_HOST')}/${configService.get('MONGO_DATABASE')}`;
 

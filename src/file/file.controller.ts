@@ -12,9 +12,11 @@ import {
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from '../utils/file-upload.utils';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('files')
-export class FilesController {
+@ApiTags('file')
+@Controller('file')
+export class FileController {
   /**
    * Upload single file
    * @param file

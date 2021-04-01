@@ -8,6 +8,7 @@ import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
+import { User } from "../user/user.schema";
 
 @Injectable()
 export class InstrumentService {
@@ -16,14 +17,15 @@ export class InstrumentService {
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
-  async create(createInstrumentDto: CreateInstrumentDto) {
+  async create(user: User, createInstrumentDto: CreateInstrumentDto) {
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
       id,
+      owner: user._id,
     });
+
     const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
-    console.log(url);
     const img: string = await qrcode.toDataURL(url);
     const base64Data = img.split(';base64,').pop();
 
@@ -35,6 +37,10 @@ export class InstrumentService {
     );
 
     return instrument;
+  }
+
+  findForUser(user: User) {
+    return this.instrumentModel.find({ owner: user._id });
   }
 
   findAll() {

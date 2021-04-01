@@ -8,15 +8,17 @@ import {
 } from '@nestjs/common';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AuthService } from './auth.service';
-import { CreateUserDTO } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
   async signUp(
-    @Body(ValidationPipe) createUserDTO: CreateUserDTO,
+    @Body(ValidationPipe) createUserDTO: CreateUserDto,
   ): Promise<{ accessToken: string }> {
     return await this.authService.signUp(createUserDTO);
   }
