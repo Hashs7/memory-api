@@ -18,7 +18,7 @@ export class MemoryController {
     status: 200,
     type: [Memory],
   })
-  findAll() {
+  findAll(): Promise<Memory[]> {
     return this.memoryService.findAll();
   }
 
@@ -27,16 +27,16 @@ export class MemoryController {
     status: 200,
     type: Memory,
   })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): Promise<Memory> {
     return this.memoryService.findOne(id);
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
     type: Memory,
   })
-  @UseGuards(AuthGuard('jwt'))
   create(
     @GetUser() user: User,
     @Body() createMemoryDto: CreateMemoryDto,
@@ -49,8 +49,12 @@ export class MemoryController {
     status: 200,
     type: Memory,
   })
-  update(@Param('id') id: string, @Body() updateMemoryDto: UpdateMemoryDto) {
-    return this.memoryService.update(id, updateMemoryDto);
+  update(
+    @Param('id') id: string,
+    @GetUser() user: User,
+    @Body() updateMemoryDto: UpdateMemoryDto
+  ): Promise<Memory> {
+    return this.memoryService.update(id, user, updateMemoryDto);
   }
 
   @Delete(':id')

@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MemoryType } from '../memory.schema';
 import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateMemoryDto {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateMemoryDto } from './dto/create-memory.dto';
 import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
@@ -6,6 +6,8 @@ import { InstrumentService } from '../instrument/instrument.service';
 import { UserService } from '../user/user.service';
 import { Model, Schema } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { User } from '../user/user.schema';
+import { UpdateInstrumentDto } from '../instrument/dto/update-instrument.dto';
 
 @Injectable()
 export class MemoryService {
@@ -39,19 +41,42 @@ export class MemoryService {
     return memory;
   }
 
-  findAll() {
-    return `This action returns all memory`;
+  findAll(): Promise<Memory[]> {
+    return this.memoryModel.find().exec();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} memory`;
+  findOne(id: string): Promise<Memory> {
+    return this.memoryModel.findOne({ id }).exec();
   }
 
-  update(id: string, updateMemoryDto: UpdateMemoryDto) {
-    return `This action updates a #${id} memory`;
+  async update(
+    id: string,
+    user: User,
+    updateMemoryDto: UpdateMemoryDto
+  ): Promise<Memory> {
+    const memory = await this.findOne(id);
+    const instrument = await this.instrumentService.findOne(id);
+    const withUsers = (await this.userService.findUsers(updateMemoryDto.withUsers))
+      .map((u) => u._id);
+    if (!memory) {
+      throw new NotFoundException("L'instrument n'existe pas");
+    }
+    // @ts-ignore
+    if (!instrument.owner.equals(user._id)) {
+      throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
+    }
+
+    delete updateMemoryDto.withUsers;
+
+    return this.memoryModel
+      .findOneAndUpdate({ id }, {
+        ...updateMemoryDto,
+        withUsers,
+      }, { new: true })
+      .exec();
   }
 
   remove(id: string) {
-    return `This action removes a #${id} memory`;
+    return this.memoryModel.findOneAndDelete({ id });
   }
 }

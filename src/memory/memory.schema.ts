@@ -10,7 +10,7 @@ export enum MemoryType {
 }
 
 // @Schema({ timestamps: true, _id: false })
-@Schema()
+// @Schema()
 export class Memory extends Document  {
 // export class Memory extends Types.Subdocument  {
   @Prop()
