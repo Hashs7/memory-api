@@ -6,9 +6,8 @@ import { InstrumentModule } from './instrument/instrument.module';
 import { FileModule } from './file/file.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './user/auth/auth.module';
 import { ChatModule } from './chat/chat.module';
-import { MemoryModule } from './memory/memory.module';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { MemoryModule } from './memory/memory.module';
     }),
     UserModule,
     ChatModule,
-    MemoryModule,
   ],
   controllers: [],
   providers: [],

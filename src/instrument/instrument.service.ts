@@ -9,7 +9,7 @@ import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
 import { User } from "../user/user.schema";
-import { Memory } from '../memory/memory.schema';
+import { Memory } from './memory/memory.schema';
 
 @Injectable()
 export class InstrumentService {

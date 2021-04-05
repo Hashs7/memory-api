@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { User } from '../user/user.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Schema as MongooseSchema, Types, Document } from 'mongoose';
 import { CreateMemoryDto } from './dto/create-memory.dto';
+import { User } from '../../user/user.schema';
 
 export enum MemoryType {
   Concert = 'Concert',
@@ -75,6 +75,8 @@ export class Memory extends Document  {
     super();
     this.name = createMemoryDto.name;
     this.description = createMemoryDto.description;
+    console.log(createMemoryDto.name);
+    console.log('dtooo', createMemoryDto);
     this.date = createMemoryDto.date;
     this.type = createMemoryDto.type;
     this.createdBy = createdBy;

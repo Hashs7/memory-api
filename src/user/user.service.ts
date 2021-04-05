@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import * as shortid from 'shortid';
-import { CreateUserDto } from '../auth/dto/create-user.dto';
+import { CreateUserDto } from './auth/dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 

@@ -2,14 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateMemoryDto {
-  @IsString()
-  @ApiProperty({
-    title: 'Instrument shortId',
-    example: '7GGGh00K',
-    type: String,
-  })
-  instrument: string;
-
   @IsNotEmpty()
   @IsString()
   @ApiProperty()

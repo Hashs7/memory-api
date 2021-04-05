@@ -2,12 +2,11 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { CreateMemoryDto } from './dto/create-memory.dto';
 import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
-import { InstrumentService } from '../instrument/instrument.service';
-import { UserService } from '../user/user.service';
+import { InstrumentService } from '../instrument.service';
+import { UserService } from '../../user/user.service';
 import { Model, Schema } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../user/user.schema';
-import { UpdateInstrumentDto } from '../instrument/dto/update-instrument.dto';
+import { User } from '../../user/user.schema';
 
 @Injectable()
 export class MemoryService {
@@ -19,13 +18,13 @@ export class MemoryService {
 
   async create(
     userId: Schema.Types.ObjectId,
+    instrument: string,
     createMemoryDto: CreateMemoryDto
   ): Promise<Memory> {
-    const { instrument, withUsers } = createMemoryDto;
-    console.log(instrument);
+    const { withUsers } = createMemoryDto;
     const users = (await this.userService.findUsers(withUsers))
       .map((u) => u._id);
-    console.log(users);
+    console.log('this.memoryModel', this.memoryModel);
 
     // TODO Fix Subdocument
     // const memory = new Memory(createMemoryDto, userId, users);
@@ -35,7 +34,6 @@ export class MemoryService {
       withUsers: users
     });
     console.log(memory);
-    // await memory.save();
     await this.instrumentService.addMemory(instrument, memory);
 
     return memory;
@@ -76,7 +74,22 @@ export class MemoryService {
       .exec();
   }
 
-  remove(id: string) {
+  /**
+   * Remove from instrument array
+   * @param id
+   * @param instrument
+   */
+  async remove(id: string, instrumentId: string) {
+    const instrument = await this.instrumentService.findOne(instrumentId);
+    console.log(instrument);
+    console.log(instrument.memories);
+
+    const index = instrument.memories.findIndex((m) => m._id.equals(id));
+    console.log(index);
+    instrument.memories.splice(index, 1);
+    instrument.markModified('memories');
+    await instrument.save();
+
     return this.memoryModel.findOneAndDelete({ id });
   }
 }

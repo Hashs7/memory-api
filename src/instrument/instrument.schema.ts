@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { User } from "../user/user.schema";
 import { ApiProperty } from '@nestjs/swagger';
-import { Memory } from '../memory/memory.schema';
+import { Memory } from './memory/memory.schema';
 import { IsArray } from 'class-validator';
 
 @Schema()

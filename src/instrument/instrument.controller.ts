@@ -14,7 +14,7 @@ import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import { AuthGuard } from "@nestjs/passport";
-import { GetUser } from "../auth/get-user.decorator";
+import { GetUser } from "../user/auth/get-user.decorator";
 import { User } from "../user/user.schema";
 import { ApiResponse, ApiOperation, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';

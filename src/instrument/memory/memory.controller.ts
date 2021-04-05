@@ -4,16 +4,16 @@ import { CreateMemoryDto } from './dto/create-memory.dto';
 import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GetUser } from '../auth/get-user.decorator';
-import { User } from '../user/user.schema';
+import { GetUser } from '../../user/auth/get-user.decorator';
+import { User } from '../../user/user.schema';
 import { AuthGuard } from '@nestjs/passport';
 
-@ApiTags('memory')
-@Controller('memory')
+@ApiTags('instrument/memory')
+@Controller('instrument/:instrument')
 export class MemoryController {
   constructor(private readonly memoryService: MemoryService) {}
 
-  @Get()
+  @Get('memory')
   @ApiResponse({
     status: 200,
     type: [Memory],
@@ -22,7 +22,7 @@ export class MemoryController {
     return this.memoryService.findAll();
   }
 
-  @Get(':id')
+  @Get('memory/:id')
   @ApiResponse({
     status: 200,
     type: Memory,
@@ -31,7 +31,7 @@ export class MemoryController {
     return this.memoryService.findOne(id);
   }
 
-  @Post()
+  @Post('memory')
   @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
@@ -39,12 +39,13 @@ export class MemoryController {
   })
   create(
     @GetUser() user: User,
+    @Param('instrument') instrument: string,
     @Body() createMemoryDto: CreateMemoryDto,
   ): Promise<Memory> {
-    return this.memoryService.create(user._id, createMemoryDto);
+    return this.memoryService.create(user._id, instrument, createMemoryDto);
   }
 
-  @Patch(':id')
+  @Patch('memory/:id')
   @ApiResponse({
     status: 200,
     type: Memory,
@@ -57,8 +58,11 @@ export class MemoryController {
     return this.memoryService.update(id, user, updateMemoryDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.memoryService.remove(id);
+  @Delete('memory/:id')
+  remove(
+    @Param('instrument') instrument: string,
+    @Param('id') id: string
+  ) {
+    return this.memoryService.remove(id, instrument);
   }
 }
