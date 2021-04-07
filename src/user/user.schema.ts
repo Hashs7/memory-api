@@ -29,6 +29,14 @@ export class User extends Document {
   @Exclude()
   salt: string;
 
+  @Prop()
+  @Exclude()
+  resetPasswordToken: string;
+
+  @Prop()
+  @Exclude()
+  resetPasswordExpire: Date;
+
   validatePassword: ValidatePasswordFunction<boolean>;
 }
 
