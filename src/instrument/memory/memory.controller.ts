@@ -62,9 +62,10 @@ export class MemoryController {
 
   @Delete('memory/:id')
   remove(
+    @GetUser() user: User,
+    @Param('id') id: string,
     @Param('instrument') instrument: string,
-    @Param('id') id: string
-  ) {
-    return this.memoryService.remove(id, instrument);
+) {
+    return this.memoryService.remove(user, id, instrument);
   }
 }
