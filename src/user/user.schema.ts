@@ -31,7 +31,11 @@ export class User extends Document {
 
   @Prop()
   @Exclude()
-  resetToken: string;
+  resetPasswordToken: string;
+
+  @Prop()
+  @Exclude()
+  resetPasswordExpire: Date;
 
   validatePassword: ValidatePasswordFunction<boolean>;
 }

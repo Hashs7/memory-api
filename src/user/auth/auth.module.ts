@@ -5,14 +5,12 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
-<<<<<<< HEAD:src/user/auth/auth.module.ts
 import { jwtConstants } from '../../config/jwt.config';
 import { UserModule } from '../user.module';
 import { User, UserSchema } from '../user.schema';
-=======
-import { MailModule } from 'src/mail/mail.module';
-import { MailService } from 'src/mail/mail.service';
->>>>>>> feature/mail:src/auth/auth.module.ts
+import { MailModule } from '../../mail/mail.module';
+import { MailService } from '../../mail/mail.service';
+
 
 @Module({
   imports: [

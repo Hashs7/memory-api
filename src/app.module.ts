@@ -25,11 +25,7 @@ import { MailService } from './mail/mail.service';
     ChatModule,
     MailModule,
   ],
-<<<<<<< HEAD
   controllers: [],
   providers: [],
-=======
-  controllers: [AppController],
->>>>>>> feature/mail
 })
 export class AppModule {}

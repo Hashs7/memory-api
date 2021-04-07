@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthResetDto } from './dto/auth-reset.dto';
+import { AuthForgotDto } from './dto/auth-forgot.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -31,17 +32,17 @@ export class AuthController {
     return await this.authService.signIn(authCredentialsDto);
   }
 
-  @Post('/ask-reset')
-  async askReset(
-    @Body(ValidationPipe) authResetDto: AuthResetDto,
+  @Post('/forgot-password')
+  async forgotPassword(
+    @Body(ValidationPipe) authForgotDto: AuthForgotDto,
   ): Promise<{ response: string }> {
-    return await this.authService.askResetPassword(authResetDto);
+    return await this.authService.askResetPassword(authForgotDto);
   }
 
   @Post('/reset')
   async reset(
-    @Body('token') token: string,
+    @Body(ValidationPipe) authResetDto: AuthResetDto,
   ): Promise<{ accessToken: string }> {
-    return await this.authService.resetPassword(token);
+    return await this.authService.resetPassword(authResetDto);
   }
 }

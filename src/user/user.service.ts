@@ -17,6 +17,10 @@ export class UserService {
     return this.userModel.findOne({ _id: id }) ;
   }
 
+  async findUserWithResetToken(resetPasswordToken: string): Promise<User> {
+    return this.userModel.findOne({ resetPasswordToken }) ;
+  }
+
   findUsers(ids: string[]): Promise<User[]> {
     return this.userModel.find({ _id: { $in: ids } }).exec();
   }

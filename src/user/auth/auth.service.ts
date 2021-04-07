@@ -1,6 +1,6 @@
 import {
   BadRequestException,
-  Injectable,
+  Injectable, NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -12,6 +12,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../user.schema';
 import { MailService } from 'src/mail/mail.service';
 import { AuthResetDto } from './dto/auth-reset.dto';
+import { randomBytes } from 'crypto';
+import { AuthForgotDto } from './dto/auth-forgot.dto';
+
+// TODO create interface for auth response
 
 @Injectable()
 export class AuthService {
@@ -73,19 +77,23 @@ export class AuthService {
     return this.generateAuthSuccessResponse(user);
   }
 
-  async askResetPassword(authResetDto: AuthResetDto) {
+  async askResetPassword(authForgotDto: AuthForgotDto) {
     const user = await this.userService.findByUsernameOrEmail(
-      authResetDto.username,
+      authForgotDto.username,
     );
 
     if (!user) {
-      throw new UnauthorizedException('Utilisateur non trouvé');
+      throw new NotFoundException('Utilisateur non trouvé');
     }
 
-    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    const token = randomBytes(32).toString('hex');
+    console.log(user, token);
     await this.mailService.sendResetPassword(user, token);
 
-    user.resetToken = token;
+    user.resetPasswordToken = token;
+    const expire = new Date();
+    expire.setHours( expire.getHours() + 1 );
+    user.resetPasswordExpire = expire;
 
     await user.save();
 
@@ -94,8 +102,21 @@ export class AuthService {
     }
   }
 
-  async resetPassword(token: string) {
+  async resetPassword(authResetDto: AuthResetDto) {
+    const user = await this.userService.findUserWithResetToken(authResetDto.token);
+    if (!user) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+    if (new Date() > user.resetPasswordExpire) {
+      throw new UnauthorizedException('Le token a expiré');
+    }
 
+    const hashPassword = await this.hashPassword(authResetDto.password, user.salt);
+    user.password = hashPassword;
+    user.markModified('password');
+    await user.save();
+
+    return this.generateAuthSuccessResponse(user);
   }
 
   /**
