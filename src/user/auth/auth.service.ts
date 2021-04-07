@@ -86,7 +86,7 @@ export class AuthService {
       throw new NotFoundException('Utilisateur non trouvé');
     }
 
-    const token = randomBytes(32).toString('hex');
+    const token = randomBytes(20).toString('hex');
     console.log(user, token);
     await this.mailService.sendResetPassword(user, token);
 
