@@ -8,7 +8,7 @@ import { GetUser } from '../../user/auth/get-user.decorator';
 import { User } from '../../user/user.schema';
 import { AuthGuard } from '@nestjs/passport';
 
-@ApiTags('instrument/memory')
+@ApiTags('instrument/{id}/memory')
 @Controller('instrument/:instrument')
 export class MemoryController {
   constructor(private readonly memoryService: MemoryService) {}

@@ -81,8 +81,6 @@ export class MemoryService {
    */
   async remove(id: string, instrumentId: string) {
     const instrument = await this.instrumentService.findOne(instrumentId);
-    console.log(instrument);
-    console.log(instrument.memories);
 
     const index = instrument.memories.findIndex((m) => m._id.equals(id));
     console.log(index);
