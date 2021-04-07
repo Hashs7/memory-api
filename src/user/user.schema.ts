@@ -29,6 +29,10 @@ export class User extends Document {
   @Exclude()
   salt: string;
 
+  @Prop()
+  @Exclude()
+  resetToken: string;
+
   validatePassword: ValidatePasswordFunction<boolean>;
 }
 
