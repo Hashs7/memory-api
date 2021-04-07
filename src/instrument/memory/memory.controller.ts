@@ -18,8 +18,10 @@ export class MemoryController {
     status: 200,
     type: [Memory],
   })
-  findAll(): Promise<Memory[]> {
-    return this.memoryService.findAll();
+  findAll(
+    @Param('instrument') instrument: string,
+  ): Promise<Memory[]> {
+    return this.memoryService.findAll(instrument);
   }
 
   @Get('memory/:id')

@@ -24,7 +24,7 @@ export class MemoryService {
     const { withUsers } = createMemoryDto;
     const users = (await this.userService.findUsers(withUsers))
       .map((u) => u._id);
-    console.log('this.memoryModel', this.memoryModel);
+    console.log('this.memoryModel', this.memoryModel, createMemoryDto);
 
     // TODO Fix Subdocument
     // const memory = new Memory(createMemoryDto, userId, users);
@@ -39,8 +39,9 @@ export class MemoryService {
     return memory;
   }
 
-  findAll(): Promise<Memory[]> {
-    return this.memoryModel.find().exec();
+  async findAll(instrumentId: string): Promise<Memory[]> {
+    const instrument = await this.instrumentService.findOne(instrumentId);
+    return instrument.memories;
   }
 
   findOne(id: string): Promise<Memory> {

@@ -9,10 +9,11 @@ export enum MemoryType {
   Rehearsal = 'Rehearsal',
 }
 
-// @Schema({ timestamps: true, _id: false })
 // @Schema()
-export class Memory extends Document  {
-// export class Memory extends Types.Subdocument  {
+// export class Memory extends Document  {
+// @Schema({ timestamps: true, _id: false })
+@Schema({ timestamps: true })
+export class Memory extends Types.Subdocument  {
   @Prop()
   @ApiProperty()
   name: string;

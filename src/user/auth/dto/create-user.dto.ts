@@ -4,10 +4,10 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateUserDto {
   @IsString()
   @MinLength(4)
-  @MaxLength(20)
+  @MaxLength(32)
   @ApiProperty({
     minimum: 4,
-    maximum: 20,
+    maximum: 32,
   })
   username: string;
 
