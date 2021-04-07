@@ -113,7 +113,10 @@ export class AuthService {
 
     const hashPassword = await this.hashPassword(authResetDto.password, user.salt);
     user.password = hashPassword;
-    user.markModified('password');
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    ['password', 'resetPasswordToken', 'resetPasswordExpire']
+      .forEach((item) => user.markModified(item));
     await user.save();
 
     return this.generateAuthSuccessResponse(user);
