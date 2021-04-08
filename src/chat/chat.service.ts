@@ -69,8 +69,7 @@ export class ChatService {
     conversation.markModified('messages');
     await conversation.save();
 
-    this.chatGateway.wss.emit('newMessage', {
-      conversation: conversation._id,
+    this.chatGateway.wss.to(conversation._id).emit('newMessage', {
       message
     });
     return conversation;
