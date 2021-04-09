@@ -8,7 +8,7 @@ import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
-import { User } from "../user/user.schema";
+import { User } from '../user/user.schema';
 import { Memory } from './memory/memory.schema';
 
 @Injectable()
@@ -16,7 +16,8 @@ export class InstrumentService {
   constructor(
     private configService: ConfigService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
-  ) {}
+  ) {
+  }
 
   findAll() {
     return this.instrumentModel.find();
@@ -48,7 +49,8 @@ export class InstrumentService {
       '.tmp/qrcode.png',
       base64Data,
       { encoding: 'base64' },
-      () => {},
+      () => {
+      },
     );
 
     return instrument;
@@ -58,15 +60,15 @@ export class InstrumentService {
     id: string,
     user: User,
     updateInstrumentDto: UpdateInstrumentDto,
-    file?: Express.Multer.File
+    file?: Express.Multer.File,
   ) {
     const instrument = await this.findOne(id);
     if (!instrument) {
-      throw new NotFoundException("L'instrument n'existe pas");
+      throw new NotFoundException('L\'instrument n\'existe pas');
     }
     // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
-      throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
+      throw new UnauthorizedException('Utilisateur n\'est pas propriétaire');
     }
     if (file) {
       updateInstrumentDto.image = file.filename;
@@ -78,7 +80,7 @@ export class InstrumentService {
 
   async addMemory(
     id: string,
-    memory: Memory
+    memory: Memory,
   ) {
     const instrument = await this.findOne(id);
     instrument.memories.push(memory);
