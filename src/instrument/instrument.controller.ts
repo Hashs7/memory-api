@@ -72,9 +72,9 @@ export class InstrumentController {
   create(
       @GetUser() user: User,
       @Body() createInstrumentDto: CreateInstrumentDto,
-      @UploadedFile() file: Express.Multer.File
+      @UploadedFile() file?: Express.Multer.File
   ) {
-    return this.instrumentService.create(user, createInstrumentDto, file.filename);
+    return this.instrumentService.create(user, createInstrumentDto, file?.filename);
   }
 
   @Patch(':id')

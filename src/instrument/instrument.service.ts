@@ -30,12 +30,12 @@ export class InstrumentService {
     return this.instrumentModel.find({ owner: user._id });
   }
 
-  async create(user: User, createInstrumentDto: CreateInstrumentDto, filename: string) {
+  async create(user: User, createInstrumentDto: CreateInstrumentDto, filename?: string) {
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
+      ...filename && { image: filename },
       id,
-      image: filename,
       owner: user._id,
       memories: [],
     });
