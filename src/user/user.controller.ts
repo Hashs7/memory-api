@@ -42,10 +42,8 @@ export class UserController {
     return user;
   }
 
-  /*
   @Get('/online')
   async getOnlineUsers(): Promise<User[]> {
     return this.userService.getOnlineUsers();
   }
-  */
 }

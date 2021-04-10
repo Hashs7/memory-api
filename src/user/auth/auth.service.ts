@@ -29,7 +29,7 @@ export class AuthService {
    * Create new user
    * @param createUserDto
    */
-  async signUp(createUserDto: CreateUserDto) {
+  async signUp(createUserDto: CreateUserDto, fileName: string) {
     const { email, password } = createUserDto;
     const exist = await this.userService.findUserbyEmail(email);
 
@@ -41,6 +41,7 @@ export class AuthService {
     const hashPassword = await this.hashPassword(password, salt);
     const user = await this.userService.createUser(
       createUserDto,
+      fileName,
       salt,
       hashPassword,
     );
