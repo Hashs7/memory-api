@@ -6,10 +6,7 @@ import { Types } from 'mongoose';
 @Schema({ timestamps: true, _id: false })
 export class Message extends Types.Subdocument  {
   @Prop({ type: User, required: true })
-  @ApiProperty({
-    title: 'User ObjectId',
-    type: String,
-  })
+  @ApiProperty({ type: User })
   sender: User;
 
   @Prop({ required: true })
@@ -17,6 +14,7 @@ export class Message extends Types.Subdocument  {
   text: string;
 
   @Prop({ type: Date, required: true })
+  @ApiProperty()
   createdAt: Date;
 
   /*
@@ -35,16 +33,3 @@ export class Message extends Types.Subdocument  {
     this.createdAt = new Date(Date.now());
   }
 }
-
-
-/*
-MessageSchema.static({
-  createCollection({ sender, text }, callback) {
-    console.log('ccc')
-    this.sender = sender;
-    this.text = text;
-    this.createdAd = new Date(Date.now());
-    callback(null, collection);
-  }
-});
-*/

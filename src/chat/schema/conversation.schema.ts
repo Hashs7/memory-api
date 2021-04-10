@@ -11,9 +11,13 @@ export class Conversation extends Document {
     ref: User.name,
     required: true,
   })
+  @ApiProperty()
   users: MongooseSchema.Types.ObjectId[];
 
-  @Prop({ type: Message })
+  @Prop([Message])
+  @ApiProperty({
+    type: [Message]
+  })
   messages: Message[];
 }
 

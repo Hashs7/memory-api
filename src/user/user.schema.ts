@@ -10,11 +10,15 @@ type ValidatePasswordFunction<T> = (password: string) => T;
 @Schema()
 export class User extends Document {
     @Prop({required: true})
-    @ApiProperty()
+    @ApiProperty({
+        example: 'user@example.com',
+    })
     email: string;
 
     @Prop()
-    @ApiProperty()
+    @ApiProperty({
+        example: 'azerty123'
+    })
     @Exclude()
     password: string;
 
@@ -36,7 +40,7 @@ export class User extends Document {
 
     @Prop()
     @ApiProperty()
-    isOnline:boolean;
+    isOnline: boolean;
 
     @Prop()
     lastConnection: Date;
@@ -51,6 +55,14 @@ export class User extends Document {
     @Prop()
     @Exclude()
     salt: string;
+
+    @Prop()
+    @Exclude()
+    resetPasswordToken: string;
+
+    @Prop()
+    @Exclude()
+    resetPasswordExpire: Date;
 
     validatePassword: ValidatePasswordFunction<boolean>;
 }

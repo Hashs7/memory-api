@@ -6,8 +6,10 @@ import { InstrumentModule } from './instrument/instrument.module';
 import { FileModule } from './file/file.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './user/auth/auth.module';
 import { ChatModule } from './chat/chat.module';
+import { MailModule } from './mail/mail.module';
+import { MailService } from './mail/mail.service';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { ChatModule } from './chat/chat.module';
     }),
     UserModule,
     ChatModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],
