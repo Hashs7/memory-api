@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { GetUser } from './auth/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import {User} from "./user.schema";
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('user')
 @Controller('user')
@@ -12,6 +12,7 @@ export class UserController {
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     type: [User],
@@ -32,6 +33,7 @@ export class UserController {
 
   @Get('/me')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     type: User,

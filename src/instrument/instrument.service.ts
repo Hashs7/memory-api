@@ -89,7 +89,13 @@ export class InstrumentService {
     return instrument.save();
   }
 
-  remove(id: string) {
+  async remove(id: string, user: User) {
+    const instrument = await this.findOne(id);
+    // @ts-ignore
+    if (!instrument.owner.equals(user._id)) {
+      throw new UnauthorizedException("L'utilisateur n'est pas propriétaire de l'instrument");
+    }
+    
     return this.instrumentModel.findOneAndDelete({ id });
   }
 }

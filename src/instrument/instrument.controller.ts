@@ -47,6 +47,7 @@ export class InstrumentController {
 
   @Get('/user')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     type: [Instrument],
@@ -59,10 +60,10 @@ export class InstrumentController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @UseInterceptors(
     FileInterceptor('image', fileInterceptorOptions),
   )
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create instrument' })
   @ApiResponse({
     status: 200,
@@ -79,10 +80,10 @@ export class InstrumentController {
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @UseInterceptors(
     FileInterceptor('image', fileInterceptorOptions),
   )
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update instrument with shortId' })
   @ApiResponse({
     status: 200,
@@ -99,8 +100,13 @@ export class InstrumentController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Delete instrument with shortId' })
-  remove(@Param('id') id: string) {
-    return this.instrumentService.remove(id);
+  @ApiBearerAuth()
+  remove(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ) {
+    return this.instrumentService.remove(id, user);
   }
 }
