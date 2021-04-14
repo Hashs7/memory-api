@@ -7,27 +7,42 @@ import {
   UploadedFiles,
   Res,
   Param,
-  HttpStatus,
+  HttpStatus, BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { ApiTags } from '@nestjs/swagger';
+import { AzureStorageFileInterceptor, UploadedFileMetadata } from '@nestjs/azure-storage/dist';
 
 @ApiTags('file')
 @Controller('file')
 export class FileController {
+
   /**
    * Upload single file
    * @param file
    */
   @Post()
   @UseInterceptors(
-    FileInterceptor('image', fileInterceptorOptions),
+    process.env.NODE_ENV !== 'production' ?
+    FileInterceptor('file', fileInterceptorOptions) :
+    AzureStorageFileInterceptor('file'),
   )
-  async uploadedFile(@UploadedFile() file) {
+  async uploadedFile(
+    @UploadedFile() file: UploadedFileMetadata
+  ) {
+    if (!file) {
+      throw new BadRequestException('Aucun fichier reçu');
+    }
+
+    if (!file.storageUrl) {
+      // @ts-ignore
+      file.storageUrl = this.createStorageUrl(file);
+    }
+
     const response = {
       originalname: file.originalname,
-      filename: file.filename,
+      storageUrl: file.storageUrl,
     };
 
     return {
@@ -43,14 +58,22 @@ export class FileController {
    */
   @Post('multiple')
   @UseInterceptors(
-    FilesInterceptor('image', 10, fileInterceptorOptions),
+    process.env.NODE_ENV !== 'production' ?
+      FilesInterceptor('file', 10, fileInterceptorOptions) :
+      AzureStorageFileInterceptor('file'),
   )
   async uploadMultipleFiles(@UploadedFiles() files) {
     const response = [];
+    if (!files) {
+      throw new BadRequestException('Aucun fichier reçu');
+    }
+
     files.forEach((file) => {
+      // @ts-ignore
+      file.storageUrl = this.createStorageUrl(file);
       const fileReponse = {
         originalname: file.originalname,
-        filename: file.filename,
+        storageUrl: file.storageUrl,
       };
       response.push(fileReponse);
     });
@@ -75,5 +98,14 @@ export class FileController {
       status: HttpStatus.OK,
       data: response,
     };
+  }
+
+  /**
+   * Add storage property Multer file
+   * @param file
+   */
+  createStorageUrl(file: Express.Multer.File) {
+    const port = parseInt(process.env.PORT) | 3000;
+    return `http://localhost:${port}/file/${file.filename}`;
   }
 }
