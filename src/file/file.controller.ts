@@ -7,16 +7,20 @@ import {
   UploadedFiles,
   Res,
   Param,
-  HttpStatus, BadRequestException,
+  HttpStatus, BadRequestException, Logger,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { ApiTags } from '@nestjs/swagger';
-import { AzureStorageFileInterceptor, UploadedFileMetadata } from '@nestjs/azure-storage/dist';
+import { AzureStorageFileInterceptor, AzureStorageService, UploadedFileMetadata } from '@nestjs/azure-storage/dist';
+import { randomBytes } from "crypto";
+
+process.env.NODE_ENV = 'production';
 
 @ApiTags('file')
 @Controller('file')
 export class FileController {
+  constructor(private readonly azureStorage: AzureStorageService) {}
 
   /**
    * Upload single file
@@ -36,8 +40,19 @@ export class FileController {
     }
 
     if (!file.storageUrl) {
+      // Store image locally
       // @ts-ignore
       file.storageUrl = this.createStorageUrl(file);
+    } else {
+      // Store image on azure
+      Logger.log(`file ${file.originalname} ${file.mimetype} ${file.size} ${file.storageUrl} `)
+      file = {
+        ...file,
+        originalname: 'foo-bar.txt',
+      };
+      file.storageUrl = await this.azureStorage.upload(file);
+      file.storageUrl = file.storageUrl.split(process.env.AZURE_STORAGE_SAS_KEY).shift();
+      Logger.log(`file ${file.originalname} ${file.mimetype} ${file.size} ${file.storageUrl} `)
     }
 
     const response = {
@@ -92,12 +107,27 @@ export class FileController {
    */
   @Get(':imagename')
   getImage(@Param('imagename') image, @Res() res) {
-    const response = res.sendFile(image, { root: './uploads' });
+    let response;
+    if (process.env.NODE_ENV !== 'production') {
+      response = res.sendFile(image, { root: './uploads' });
+    } else {
+      // TODO Get image from storage
+
+    }
 
     return {
       status: HttpStatus.OK,
       data: response,
     };
+  }
+
+  fileProxy(url) {
+    
+  }
+
+  uniquifyFilename(filename): string {
+    const prefix = randomBytes(10).toString('hex');
+    return prefix + filename;
   }
 
   /**

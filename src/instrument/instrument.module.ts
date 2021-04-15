@@ -4,7 +4,6 @@ import { InstrumentController } from './instrument.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Instrument, InstrumentSchema } from './instrument.schema';
 import { MemoryModule } from './memory/memory.module';
-import { MemoryController } from './memory/memory.controller';
 
 @Module({
   imports: [
