@@ -14,13 +14,18 @@ import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { ApiTags } from '@nestjs/swagger';
 import { AzureStorageFileInterceptor, AzureStorageService, UploadedFileMetadata } from '@nestjs/azure-storage/dist';
 import { randomBytes } from "crypto";
+import got from 'got';
+import { FileService } from './file.service';
 
 process.env.NODE_ENV = 'production';
 
 @ApiTags('file')
 @Controller('file')
 export class FileController {
-  constructor(private readonly azureStorage: AzureStorageService) {}
+  constructor(
+    private readonly azureStorage: AzureStorageService,
+    private readonly fileService: FileService,
+  ) {}
 
   /**
    * Upload single file
@@ -39,21 +44,7 @@ export class FileController {
       throw new BadRequestException('Aucun fichier reçu');
     }
 
-    if (!file.storageUrl) {
-      // Store image locally
-      // @ts-ignore
-      file.storageUrl = this.createStorageUrl(file);
-    } else {
-      // Store image on azure
-      Logger.log(`file ${file.originalname} ${file.mimetype} ${file.size} ${file.storageUrl} `)
-      file = {
-        ...file,
-        originalname: 'foo-bar.txt',
-      };
-      file.storageUrl = await this.azureStorage.upload(file);
-      file.storageUrl = file.storageUrl.split(process.env.AZURE_STORAGE_SAS_KEY).shift();
-      Logger.log(`file ${file.originalname} ${file.mimetype} ${file.size} ${file.storageUrl} `)
-    }
+    await this.fileService.create(file);
 
     const response = {
       originalname: file.originalname,
@@ -62,7 +53,7 @@ export class FileController {
 
     return {
       status: HttpStatus.OK,
-      message: 'Image uploaded successfully!',
+      message: 'Image uploaded successfully',
       data: response,
     };
   }
@@ -106,13 +97,17 @@ export class FileController {
    * @param res
    */
   @Get(':imagename')
-  getImage(@Param('imagename') image, @Res() res) {
+  async getImage(@Param('imagename') image, @Res() res) {
     let response;
     if (process.env.NODE_ENV !== 'production') {
       response = res.sendFile(image, { root: './uploads' });
     } else {
       // TODO Get image from storage
-
+      const url = 'https://memoryapp.blob.core.windows.net/production/telechargement.jpeg' + process.env.AZURE_STORAGE_SAS_KEY;
+      const getFile = await got(url).buffer();
+      res.set('Content-Type', 'image/png');
+      response = res.send(getFile);
+      Logger.log('coucou', 'ccc')
     }
 
     return {
@@ -131,7 +126,7 @@ export class FileController {
   }
 
   /**
-   * Add storage property Multer file
+   * TODO remove
    * @param file
    */
   createStorageUrl(file: Express.Multer.File) {

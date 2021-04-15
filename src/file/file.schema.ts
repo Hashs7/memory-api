@@ -3,32 +3,27 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 import { User } from '../user/user.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray } from 'class-validator';
-import { UploadedFileMetadata } from '@nestjs/azure-storage/dist';
 
 @Schema()
-export class File extends Document implements UploadedFileMetadata {
+export class File extends Document {
 
   @Prop({ required: true })
   @ApiProperty({
-    description: 'jean-mi.png',
+    description: '02020303200.png',
   })
   originalname: string;
 
   @Prop()
   @ApiProperty({
-    description: 'azure file name',
+    description: 'filename.png',
   })
-  storageName: string;
+  name: string;
 
   @Prop()
   @ApiProperty({
     description: 'azure url without token',
   })
   storageUrl: string;
-
-  @Prop()
-  @ApiProperty()
-  buffer: Buffer;
 
   @Prop()
   @ApiProperty()
@@ -45,25 +40,6 @@ export class File extends Document implements UploadedFileMetadata {
   @Prop()
   @ApiProperty()
   size: string;
-
-  @Prop()
-  createdAt: Date;
-
-  @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    ref: User.name,
-    required: true,
-  })
-  @ApiProperty({ type: User })
-  owner: MongooseSchema.Types.ObjectId;
-
-  @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: User.name,
-  })
-  @ApiProperty({ type: [User] })
-  oldOwners: MongooseSchema.Types.ObjectId[];
-
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);
