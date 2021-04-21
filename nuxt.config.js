@@ -57,4 +57,11 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+	generate: {
+		exclude: [
+			/^\/admin/ // path starts with /admin
+		],
+		fallback: true,
+	}
 }
