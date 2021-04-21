@@ -30,7 +30,6 @@
 
 <script>
 import AuthService from '~/plugins/AuthService';
-import ApiService from '~/plugins/ApiService';
 
 export default {
   name: 'Login',
@@ -55,7 +54,7 @@ export default {
       e.preventDefault();
       console.log(this.email);
       try {
-        const res = await ApiService.login({
+        const res = await this.$api.login({
           username: this.email,
           password: this.password,
         });

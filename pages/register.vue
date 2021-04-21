@@ -25,7 +25,6 @@
 
 <script>
 import AuthService from '~/plugins/AuthService';
-import ApiService from '~/plugins/ApiService';
 
 export default {
   name: 'Register',
@@ -40,7 +39,7 @@ export default {
     async submit(e) {
       e.preventDefault();
       try {
-        const res = await ApiService.register({
+        const res = await this.$api.register({
           username: this.username,
           email: this.email,
           password: this.password,

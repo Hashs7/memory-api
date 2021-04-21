@@ -1,6 +1,6 @@
 import AuthService from './AuthService';
 
-class ApiService {
+class ApiController {
   constructor($axios) {
     this.$axios = $axios;
 
@@ -65,6 +65,6 @@ class ApiService {
 }
 
 export default function ({ $axios }, inject) {
-  const api = new ApiService($axios);
+  const api = new ApiController($axios);
   inject('api', api);
 }

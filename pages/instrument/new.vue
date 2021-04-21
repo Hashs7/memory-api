@@ -24,8 +24,6 @@
 </template>
 
 <script>
-import ApiService from '~/plugins/ApiService';
-
 export default {
   name: 'NewInstrument',
   data() {
@@ -42,7 +40,7 @@ export default {
       e.preventDefault();
       try {
         console.log(this.name);
-        const res = await ApiService.newInstrument({
+        const res = await this.$api.newInstrument({
           name: this.name,
           type: this.type,
           specification: this.specification,
