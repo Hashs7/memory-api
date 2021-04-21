@@ -15,15 +15,18 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-	  '~assets/styles/colors.scss'
+	  // '~assets/styles/colors.scss'
   ],
 
 	styleResources: {
-		scss: ['./assets/style/*.scss']
+		scss: ['./assets/styles/*.scss']
 	},
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+	  { src: '~/plugins/ApiService.js' },
+	  { src: '~/plugins/AuthService.js', mode: 'client' },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -46,7 +49,9 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+	  baseURL: process.env.VUE_APP_API_URL,
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
@@ -54,6 +59,10 @@ export default {
       lang: 'fr',
     },
   },
+
+	server: {
+		port: 8080 // default: 3000
+	},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

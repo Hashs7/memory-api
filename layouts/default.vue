@@ -44,12 +44,27 @@ export default {
           to: { name: 'index' },
         },
         {
-          title: 'Inspire',
-          icon: 'lightbulb',
-          to: { name: 'inspire' },
+          title: 'Login',
+          icon: 'account',
+          to: { name: 'login' },
+        },
+        {
+          title: 'Register',
+          icon: 'account',
+          to: { name: 'register' },
+        },
+        {
+          title: 'Instruments',
+          icon: 'account',
+          to: { name: 'instrument' },
+        },
+        {
+          title: 'Chat',
+          icon: 'comment',
+          to: { name: 'chat' },
         },
       ],
-    }
+    };
   },
-}
+};
 </script>
