@@ -8,16 +8,20 @@ export const mutations = {
   setAuthenticated(state, value) {
     state.authenticated = value;
   },
+
   setUser(state, value) {
     state.user = value;
+    console.log('user', value);
   },
+
   setChatUserId(state, value) {
     state.chatUserId = value;
   },
 };
 
 export const actions = {
-  initStore({ commit, dispatch }) {
+  nuxtClientInit({ dispatch }) {
+    console.log('client init');
     try {
       dispatch('getUser');
     } catch (e) {

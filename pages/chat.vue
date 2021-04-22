@@ -65,7 +65,6 @@ export default {
   async mounted() {
     try {
       const res = await ApiService.getUserConversations();
-      console.log(res.data);
       this.conversations = res.data;
     } catch (e) {
       console.log(e);

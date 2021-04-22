@@ -59,6 +59,11 @@ export default {
           to: { name: 'instrument' },
         },
         {
+          title: 'Ajout instrument',
+          icon: 'pencil',
+          to: { name: 'instrument-new' },
+        },
+        {
           title: 'Chat',
           icon: 'comment',
           to: { name: 'chat' },

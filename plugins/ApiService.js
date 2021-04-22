@@ -20,6 +20,7 @@ class ApiController {
 
   me() {
     const token = AuthService.getJWT();
+    console.log(token);
     if (!token) {
       return null;
     }
@@ -57,6 +58,10 @@ class ApiController {
 
   getInstruments() {
     return this.$axios.get('/instrument');
+  }
+
+  getUserInstruments() {
+    return this.$axios.get('/instrument/user');
   }
 
   getInstrumentById(id) {

@@ -26,6 +26,7 @@ export default {
   plugins: [
 	  { src: '~/plugins/ApiService.js' },
 	  { src: '~/plugins/AuthService.js', mode: 'client' },
+	  { src: '~/plugins/nuxt-client-init.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -1,7 +1,7 @@
 <template>
   <section class="view view--instrument-list">
     <b-tabs>
-      <b-tab-item label="Liste des instruments public">
+      <b-tab-item label="Mes instruments" v-if="instruments.length">
         <b-table
           :data="instruments"
           :columns="columns"
@@ -16,14 +16,21 @@
 
 <script>
 export default {
-  async asyncData({ $api }) {
-    const res = await $api.getInstruments();
-    return {
-      instruments: [...res.data],
-    };
+  async fetch() {
+    let instruments = [];
+    try {
+      const res = await this.$api.getUserInstruments();
+      instruments = [...res.data];
+    } catch (e) {
+      console.log(e);
+    }
+    this.instruments = [...instruments];
+    console.log('instrument', instruments, this.instruments);
   },
+  fetchOnServer: false,
   data() {
     return {
+      coucou: 'ddd',
       instruments: [],
       selected: null,
       columns: [
