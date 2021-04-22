@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { Instrument } from './instrument.schema';
@@ -28,6 +28,7 @@ export class InstrumentService {
   }
 
   findForUser(user: User) {
+    Logger.log(user, 'jean');
     return this.instrumentModel.find({ owner: user._id });
   }
 
