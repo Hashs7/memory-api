@@ -73,6 +73,10 @@ class ApiController {
   getInstrumentById(id) {
     return this.$axios.get(`/instrument/${id}`);
   }
+
+  getImage(filename) {
+    return this.$axios.get(`/file/${filename}`);
+  }
 }
 
 export default function ({ $axios }, inject) {

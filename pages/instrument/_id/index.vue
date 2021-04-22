@@ -1,6 +1,10 @@
 <template>
   <div class="instrument">
     <div v-if="instrument">
+      <div class="instrument__image" v-if="instrument.image">
+        <img :src="profilePicture" alt="" />
+      </div>
+
       <h1>Name : {{ instrument.name }}</h1>
       <h3>Type : {{ instrument.type }}</h3>
       <h3>Spec : {{ instrument.specification }}</h3>
@@ -28,6 +32,9 @@ export default {
     addMemmory() {
       const { id } = this.$route.params;
       return `/instrument/${id}/souvenir/creation`;
+    },
+    profilePicture() {
+      return `http://localhost:3000/file/${this.instrument.image}`;
     },
   },
 };
