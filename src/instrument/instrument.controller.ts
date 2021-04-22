@@ -49,7 +49,6 @@ export class InstrumentController {
     type: [Instrument],
   })
   findForUser(@GetUser() user: User) {
-    Logger.log('coucou', 'InstrulentController');
     return this.instrumentService.findForUser(user);
   }
 

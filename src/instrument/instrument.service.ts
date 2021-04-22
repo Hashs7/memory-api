@@ -28,7 +28,6 @@ export class InstrumentService {
   }
 
   findForUser(user: User) {
-    Logger.log(user, 'jean');
     return this.instrumentModel.find({ owner: user._id });
   }
 
@@ -84,7 +83,7 @@ export class InstrumentService {
     memory: Memory,
   ) {
     const instrument = await this.findOne(id);
-    instrument.memories.push(memory._id);
+    instrument.memories.push(memory);
     instrument.markModified('memories');
 
     return instrument.save();

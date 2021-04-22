@@ -21,9 +21,7 @@ export class MemoryService {
    * @param instrumentId
    */
   async findAll(instrumentId: string): Promise<Memory[]> {
-    const instrument = await this.instrumentService.findOne(instrumentId)
-      .populate('memories');
-    // @ts-ignore
+    const instrument = await this.instrumentService.findOne(instrumentId);
     return instrument.memories;
   }
 
