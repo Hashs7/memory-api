@@ -56,6 +56,12 @@ class ApiController {
     return this.$axios.post('/instrument', { ...payload });
   }
 
+  newMemory(instrumentId, payload) {
+    return this.$axios.post(`/instrument/${instrumentId}/memory`, {
+      ...payload,
+    });
+  }
+
   getInstruments() {
     return this.$axios.get('/instrument');
   }

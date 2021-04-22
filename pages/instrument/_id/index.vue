@@ -4,6 +4,8 @@
       <h1>Name : {{ instrument.name }}</h1>
       <h3>Type : {{ instrument.type }}</h3>
       <h3>Spec : {{ instrument.specification }}</h3>
+
+      <button @click="addMemmory">Ajouter un souvenir</button>
     </div>
   </div>
 </template>
@@ -20,6 +22,13 @@ export default {
     return {
       instrument: null,
     };
+  },
+  methods: {
+    addMemmory() {
+      this.$router.push({
+        name: 'instrument-id-souvenir-new',
+      });
+    },
   },
 };
 </script>

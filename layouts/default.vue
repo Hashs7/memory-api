@@ -46,12 +46,12 @@ export default {
         {
           title: 'Login',
           icon: 'account',
-          to: { name: 'login' },
+          to: { name: 'connexion' },
         },
         {
           title: 'Register',
           icon: 'account',
-          to: { name: 'register' },
+          to: { name: 'inscription' },
         },
         {
           title: 'Instruments',

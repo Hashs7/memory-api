@@ -25,12 +25,10 @@ export default {
       console.log(e);
     }
     this.instruments = [...instruments];
-    console.log('instrument', instruments, this.instruments);
   },
   fetchOnServer: false,
   data() {
     return {
-      coucou: 'ddd',
       instruments: [],
       selected: null,
       columns: [
