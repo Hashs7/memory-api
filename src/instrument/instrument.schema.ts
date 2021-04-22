@@ -78,11 +78,14 @@ export class Instrument extends Document {
   oldOwners: MongooseSchema.Types.ObjectId[];
 
   @IsArray()
-  @Prop([Memory])
+  @Prop({
+    type: [MongooseSchema.Types.ObjectId],
+    ref: Memory.name,
+  })
   @ApiProperty({
     type: [Memory]
   })
-  memories: Memory[];
+  memories: MongooseSchema.Types.ObjectId[];
 }
 
 export const InstrumentSchema = SchemaFactory.createForClass(Instrument);

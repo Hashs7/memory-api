@@ -84,7 +84,7 @@ export class InstrumentService {
     memory: Memory,
   ) {
     const instrument = await this.findOne(id);
-    instrument.memories.push(memory);
+    instrument.memories.push(memory._id);
     instrument.markModified('memories');
 
     return instrument.save();
