@@ -55,7 +55,7 @@ export default {
         },
         {
           title: 'Instruments',
-          icon: 'account',
+          icon: 'format-list-bulleted',
           to: { name: 'instrument' },
         },
         {

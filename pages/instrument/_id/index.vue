@@ -5,7 +5,13 @@
       <h3>Type : {{ instrument.type }}</h3>
       <h3>Spec : {{ instrument.specification }}</h3>
 
-      <button @click="addMemmory">Ajouter un souvenir</button>
+      <NuxtLink :to="addMemmory">Ajouter un souvenir</NuxtLink>
+
+      <div class="memories">
+        <div v-for="m in instrument.memories" :key="m._id" class="memory">
+          {{ m.name }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -13,21 +19,15 @@
 <script>
 export default {
   async asyncData({ $api, params }) {
-    const res = await $api.getInstrumentById(params.id);
+    const instrument = (await $api.getInstrumentById(params.id))?.data;
     return {
-      instrument: res.data,
+      instrument,
     };
   },
-  data() {
-    return {
-      instrument: null,
-    };
-  },
-  methods: {
+  computed: {
     addMemmory() {
-      this.$router.push({
-        name: 'instrument-id-souvenir-new',
-      });
+      const { id } = this.$route.params;
+      return `/instrument/${id}/souvenir/creation`;
     },
   },
 };
