@@ -18,14 +18,18 @@
           <b-input type="text" v-model="specification"> </b-input>
         </b-field>
       </div>
+      <FileUpload ref="files" />
       <button type="submit" class="button is-primary">Ajouter</button>
     </form>
   </div>
 </template>
 
 <script>
+import FileUpload from '@/components/FileUpload';
+
 export default {
   name: 'NewInstrument',
+  components: [FileUpload],
   data() {
     return {
       success: false,
@@ -38,25 +42,32 @@ export default {
     // Form submitted event
     async submit(e) {
       e.preventDefault();
+      const file = this.$refs.files.dropFiles;
       try {
-        console.log(this.name);
-        const res = await this.$api.newInstrument({
+        await this.$api.newInstrument({
           name: this.name,
           type: this.type,
           specification: this.specification,
+          file,
         });
-        console.log('created callback', res);
-        this.createdHandler();
+        this.notifyCreated();
       } catch (e) {
         console.error(e);
+        this.notifyError();
       }
     },
 
     // Instrument created callback
-    createdHandler() {
+    notifyCreated() {
       this.$buefy.toast.open({
         message: "L'instrument vient d'être créé",
         type: 'is-success',
+      });
+    },
+    notifyError() {
+      this.$buefy.toast.open({
+        message: "L'instrument n'a pas été créé",
+        type: 'is-danger',
       });
     },
   },
