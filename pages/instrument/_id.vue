@@ -9,9 +9,9 @@
       <h2 v-if="instrument.brand || instrument.specification">
         <span v-if="instrument.brand">{{ instrument.brand }}</span>
         <span v-if="instrument.brand && instrument.specification"> - </span>
-        <span v-if="instrument.specification">{{
-          instrument.specification
-        }}</span>
+        <span v-if="instrument.specification">
+          {{ instrument.specification }}
+        </span>
       </h2>
 
       <div class="instrument__owner">

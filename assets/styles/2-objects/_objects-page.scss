@@ -1,0 +1,18 @@
+.o-page {
+  display: flex;
+  flex-direction: column;
+  // Remove navbar height
+  min-height: calc(100vh - 3.25rem);
+}
+
+.o-page--full {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.o-page__body {
+  flex-grow: 1;
+}

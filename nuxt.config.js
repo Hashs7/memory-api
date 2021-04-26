@@ -20,11 +20,11 @@ export default {
 
 	styleResources: {
 		scss: [
-      '@/assets/styles/0-settings/settings-mixins.scss',
-      '@/assets/styles/0-settings/settings-variable.scss',
-      '@/assets/styles/0-settings/settings-typography.scss',
-      '@/assets/styles/0-settings/settings-media.scss',
-      '@/assets/styles/0-settings/settings-index.scss',
+      '@/assets/styles/0-settings/_settings-mixins.scss',
+      '@/assets/styles/0-settings/_settings-variable.scss',
+      '@/assets/styles/0-settings/_settings-typography.scss',
+      '@/assets/styles/0-settings/_settings-media.scss',
+      '@/assets/styles/0-settings/_settings-index.scss',
     ]
 	},
 
@@ -42,6 +42,8 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    '@nuxtjs/style-resources',
+    '@nuxtjs/router-extras',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -52,7 +54,6 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
-	  '@nuxtjs/style-resources',
     '@nuxtjs/auth-next',
   ],
 
