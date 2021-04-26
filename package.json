@@ -16,7 +16,9 @@
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.9.1",
     "nuxt": "^2.15.3",
-    "nuxt-buefy": "^0.4.4"
+    "nuxt-buefy": "^0.4.4",
+    "vue-audio-recorder": "^3.0.1",
+    "vue-wysiwyg": "^1.7.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^6.0.0",

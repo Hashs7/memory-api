@@ -15,7 +15,8 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-	  '@/assets/styles/style.scss'
+	  'vue-wysiwyg/dist/vueWysiwyg.css',
+	  '@/assets/styles/style.scss',
   ],
 
 	styleResources: {
@@ -32,6 +33,8 @@ export default {
   plugins: [
 	  { src: '~/plugins/ApiService.js' },
 	  { src: '~/plugins/AuthService.js', mode: 'client' },
+	  { src: '~/plugins/audio-recorder.js', mode: 'client' },
+	  { src: '~/plugins/wysiwyg.js', mode: 'client' },
 	  { src: '~/plugins/nuxt-client-init.js', mode: 'client' },
   ],
 

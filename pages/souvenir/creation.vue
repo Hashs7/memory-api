@@ -8,25 +8,12 @@
     <form class="o-page__body">
       <div class="slider">
         <div class="slider__item slider__intro">
-          <div class="form__group">
+          <div>
             <b-field label="Titre">
               <b-input v-model="name" type="text"> </b-input>
             </b-field>
-          </div>
-          <div class="form__group">
             <b-field label="Date">
-              <b-datepicker
-                ref="datepicker"
-                v-model="date"
-                expanded
-                placeholder="Select a date"
-              >
-              </b-datepicker>
-              <b-button
-                type="is-primary"
-                icon-left="calendar-today"
-                @click="$refs.datepicker.toggle()"
-              />
+              <b-datepicker v-model="date" placeholder="Select a date" />
             </b-field>
           </div>
         </div>
@@ -109,11 +96,7 @@ export default {
       name: '',
       date: [],
       type: 'Concert',
-      contents: [
-        {
-          ...CONTENT_TYPE.text,
-        },
-      ],
+      contents: [],
     };
   },
   methods: {
@@ -181,6 +164,8 @@ export default {
 .slider__add {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   .u-button {
     margin: 8px;
