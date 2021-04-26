@@ -2,24 +2,24 @@
   <div class="chat">
     <h1>Chat page</h1>
     <div class="users-online">
-      <TalkUser v-for="u in onlineUsers" :user="u" :key="u.id" />
+      <TalkUser v-for="u in onlineUsers" :key="u.id" :user="u" />
     </div>
     <div class="chat-container">
       <div class="conversations">
         <SelectConversation
           v-for="(c, i) in conversations"
+          :key="i"
           :users="c.users"
           :lastMessage="lastMessage(c.messages)"
-          :key="i"
           @click.native="selectConv(i)"
         />
       </div>
-      <div class="current-conversation" v-if="openedConversation">
+      <div v-if="openedConversation" class="current-conversation">
         <Message
           v-for="(msg, i) in openedConversation.messages"
+          :key="i"
           :text="msg.text"
           :sender="isSender(msg.sender)"
-          :key="i"
         />
         <form class="send" @submit.prevent="sendMessage">
           <b-field>
@@ -53,7 +53,7 @@ export default {
   },
   sockets: {
     connect() {
-      console.log('socket to notification channel connected');
+      // console.log('socket to notification channel connected');
     },
     newMessage({ conversation, message }) {
       const current = this.conversations.find(
@@ -62,18 +62,18 @@ export default {
       current.messages.push(message);
     },
   },
+  computed: {
+    openedConversation() {
+      return this.conversations[this.currentConversation];
+    },
+  },
   async mounted() {
     try {
       const res = await ApiService.getUserConversations();
       this.conversations = res.data;
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
-  },
-  computed: {
-    openedConversation() {
-      return this.conversations[this.currentConversation];
-    },
   },
   methods: {
     lastMessage(messages) {
@@ -87,7 +87,7 @@ export default {
     },
     sendMessage() {
       if (!this.message.length || !this.openedConversation) return;
-      console.log(this.openedConversation);
+      // console.log(this.openedConversation);
       ApiService.sendMessage({
         conversation: this.openedConversation._id,
         text: this.message,

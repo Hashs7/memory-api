@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <client-only>
-      <wysiwyg v-model="html" />
-    </client-only>
-  </div>
+  <client-only>
+    <wysiwyg v-model="html" />
+  </client-only>
 </template>
 
 <script>
@@ -16,3 +14,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.editr {
+  height: 100%;
+  border: none;
+}
+</style>

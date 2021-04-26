@@ -4,21 +4,24 @@
       <div v-if="instrument.image" class="instrument__image">
         <img :src="profilePicture" alt="" />
       </div>
+      <div class="instrument__container">
+        <h1>{{ instrument.name }}</h1>
+        <h2 v-if="instrument.brand || instrument.specification">
+          <span v-if="instrument.brand">{{ instrument.brand }}</span>
+          <span v-if="instrument.brand && instrument.specification"> - </span>
+          <span v-if="instrument.specification">
+            {{ instrument.specification }}
+          </span>
+        </h2>
 
-      <h1>{{ instrument.name }}</h1>
-      <h2 v-if="instrument.brand || instrument.specification">
-        <span v-if="instrument.brand">{{ instrument.brand }}</span>
-        <span v-if="instrument.brand && instrument.specification"> - </span>
-        <span v-if="instrument.specification">
-          {{ instrument.specification }}
-        </span>
-      </h2>
+        <div class="instrument__owner">
+          {{ instrument.owner.firstName }} {{ instrument.owner.lastName }}
+        </div>
 
-      <div class="instrument__owner">
-        {{ instrument.owner.firstName }} {{ instrument.owner.lastName }}
+        <NuxtLink :to="addMemmory" class="u-button u-button--primary"
+          >Ajouter un souvenir</NuxtLink
+        >
       </div>
-
-      <NuxtLink :to="addMemmory">Ajouter un souvenir</NuxtLink>
 
       <div class="memories">
         <h3>Souvenirs ({{ memoriesCount }})</h3>

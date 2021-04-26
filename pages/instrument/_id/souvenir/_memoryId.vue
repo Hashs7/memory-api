@@ -7,6 +7,10 @@
   </div>
 </template>
 
+<router>
+  path: /instrument/:id/souvenir/:memoryId
+</router>
+
 <script>
 export default {
   props: {

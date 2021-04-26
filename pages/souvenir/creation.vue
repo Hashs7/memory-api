@@ -23,6 +23,7 @@
         </div>
 
         <div class="slider__item slider__add">
+          Ajouter
           <button
             class="u-button u-button--round"
             type="button"
@@ -58,9 +59,7 @@
 </template>
 
 <router>
-{
-  path: '/instrument/:id/souvenir/creation'
-}
+  path: /instrument/:id/souvenir/creation
 </router>
 
 <script>
@@ -134,6 +133,11 @@ export default {
   background-color: $white;
 }
 
+.o-page__footer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .form__group {
   max-width: 300px;
   margin: 0 auto 16px auto;
@@ -157,8 +161,14 @@ export default {
 .slider__item {
   min-width: 260px;
   height: 460px;
-  margin: 8px;
-  box-shadow: $shadow;
+  margin: 20px 12px;
+  box-shadow: $shadow--first;
+  border-radius: $radius;
+  background-color: $white;
+}
+
+.slider__intro {
+  padding: 8px;
 }
 
 .slider__add {
@@ -166,6 +176,8 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-shadow: none;
+  background-color: transparent;
 
   .u-button {
     margin: 8px;

@@ -5,12 +5,12 @@
     <form v-if="!user" @submit="submit">
       <div class="form__group">
         <b-field label="Email">
-          <b-input type="email" v-model="email"> </b-input>
+          <b-input v-model="email" type="email"> </b-input>
         </b-field>
       </div>
       <div class="form__group">
         <b-field label="Mot de passe">
-          <b-input type="password" v-model="password" password-reveal>
+          <b-input v-model="password" type="password" password-reveal>
           </b-input>
         </b-field>
       </div>
@@ -52,16 +52,14 @@ export default {
 
     async submit(e) {
       e.preventDefault();
-      console.log(this.email);
       try {
         const res = await this.$api.login({
           username: this.email,
           password: this.password,
         });
         this.$store.dispatch('setUser', res.data);
-        console.log('logged', res);
       } catch (e) {
-        console.error(e);
+        // console.error(e);
       }
     },
   },

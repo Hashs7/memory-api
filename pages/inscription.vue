@@ -4,17 +4,17 @@
     <form @submit="submit">
       <div class="form__group">
         <b-field label="Surnom">
-          <b-input type="text" v-model="username"> </b-input>
+          <b-input v-model="username" type="text"> </b-input>
         </b-field>
       </div>
       <div class="form__group">
         <b-field label="Email">
-          <b-input type="email" v-model="email"> </b-input>
+          <b-input v-model="email" type="email"> </b-input>
         </b-field>
       </div>
       <div class="form__group">
         <b-field label="Mot de passe">
-          <b-input type="password" v-model="password" password-reveal>
+          <b-input v-model="password" type="password" password-reveal>
           </b-input>
         </b-field>
       </div>
@@ -44,11 +44,9 @@ export default {
           email: this.email,
           password: this.password,
         });
-        console.log('signed up', res);
         AuthService.setJWT(res.data.accessToken);
       } catch (err) {
-        console.log(err);
-        console.log(err.response?.data.message);
+        // console.log(err);
       }
     },
   },

@@ -2,10 +2,8 @@
   <div>
     <Header />
 
-    <section class="main-content columns">
-      <div class="container column is-10">
-        <Nuxt keep-alive />
-      </div>
+    <section class="main-content">
+      <nuxt />
     </section>
   </div>
 </template>
