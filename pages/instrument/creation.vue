@@ -5,17 +5,17 @@
     <form @submit="submit">
       <div class="form__group">
         <b-field label="Nom">
-          <b-input type="text" v-model="name"> </b-input>
+          <b-input v-model="name" type="text"></b-input>
         </b-field>
       </div>
       <div class="form__group">
         <b-field label="Type">
-          <b-input type="text" v-model="type"> </b-input>
+          <b-input v-model="type" type="text"></b-input>
         </b-field>
       </div>
       <div class="form__group">
         <b-field label="Spécification">
-          <b-input type="text" v-model="specification"> </b-input>
+          <b-input v-model="specification" type="text"></b-input>
         </b-field>
       </div>
       <FileUpload ref="files" />
@@ -29,7 +29,7 @@ import FileUpload from '@/components/FileUpload';
 
 export default {
   name: 'NewInstrument',
-  components: [FileUpload],
+  components: { FileUpload },
   data() {
     return {
       success: false,
@@ -52,7 +52,6 @@ export default {
         });
         this.notifyCreated();
       } catch (e) {
-        console.error(e);
         this.notifyError();
       }
     },

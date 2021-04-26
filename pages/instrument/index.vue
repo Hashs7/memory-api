@@ -1,7 +1,7 @@
 <template>
   <section class="view view--instrument-list">
     <b-tabs>
-      <b-tab-item label="Mes instruments" v-if="instruments.length">
+      <b-tab-item v-if="instruments.length" label="Mes instruments">
         <b-table
           :data="instruments"
           :columns="columns"
