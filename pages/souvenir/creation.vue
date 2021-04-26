@@ -5,7 +5,7 @@
       <span>Racontez l'histoire de votre instrument</span>
     </div>
 
-    <form class="o-page__body" @submit="submit">
+    <form class="o-page__body">
       <div class="slider">
         <div class="slider__item slider__intro">
           <div class="form__group">
@@ -36,16 +36,36 @@
         </div>
 
         <div class="slider__item slider__add">
-          <button @click="addContent('media')">Ajouter media</button>
-          <button @click="addContent('audio')">Ajouter audio</button>
-          <button @click="addContent('text')">Ajouter texte</button>
+          <button
+            class="u-button u-button--round"
+            type="button"
+            @click="addContent('media')"
+          >
+            Ajouter media
+          </button>
+          <button
+            class="u-button u-button--round"
+            type="button"
+            @click="addContent('audio')"
+          >
+            Ajouter audio
+          </button>
+          <button
+            class="u-button u-button--round"
+            type="button"
+            @click="addContent('text')"
+          >
+            Ajouter texte
+          </button>
         </div>
       </div>
     </form>
 
     <div class="o-page__footer">
       <button type="button" class="button is-primary">Personnaliser</button>
-      <button type="submit" class="button is-primary">Valider</button>
+      <button type="submit" class="button is-primary" @click="submit">
+        Valider
+      </button>
     </div>
   </div>
 </template>
@@ -98,8 +118,7 @@ export default {
   },
   methods: {
     // Form submitted event
-    async submit(e) {
-      e.preventDefault();
+    async submit() {
       try {
         await this.$api.newMemory(this.$route.params.id, {
           name: this.name,
@@ -131,6 +150,7 @@ export default {
 .o-page--create {
   background-color: $white;
 }
+
 .form__group {
   max-width: 300px;
   margin: 0 auto 16px auto;
@@ -142,6 +162,28 @@ export default {
 
   input {
     width: 100%;
+  }
+}
+
+.slider {
+  display: flex;
+  overflow: auto;
+  padding: 8px;
+}
+
+.slider__item {
+  min-width: 260px;
+  height: 460px;
+  margin: 8px;
+  box-shadow: $shadow;
+}
+
+.slider__add {
+  display: flex;
+  flex-direction: column;
+
+  .u-button {
+    margin: 8px;
   }
 }
 </style>
