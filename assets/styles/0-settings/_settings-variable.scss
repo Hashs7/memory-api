@@ -1,0 +1,59 @@
+/*
+ * [ settings / colors ]
+ */
+
+// -----------------------------------------------------------------------------
+
+// 1. Default color palette
+// ====================================
+
+$white:                #FFFFFF;
+$white-light:          rgba(255, 255, 255, .25);
+$gray:                 #F6F8FA;
+$gray-dark:            #E2E2E2;
+$gray-darker:          #969696;
+
+//$primary-darkest:      #2b0c0c;
+//$primary-darker:       #6b1e1e;
+$primary-dark:         #071E2F;
+$primary:              #0A314D;
+$primary-light:        rgba(5, 28, 44, 0.6);
+$primary-lighter:      rgba(10, 49, 77, .3);
+$primary-lightest:     rgba(10, 49, 77, .15);
+
+//$secondary-darkest:    #12200d;
+$secondary-darker:     #7b5914;
+$secondary-dark:       #977020;
+$secondary:            #C4A462;
+$secondary-contrast:            #a06c00;
+$secondary-light:      rgba(196, 164, 98, .4);
+$secondary-lighter:    rgba(196, 164, 98, .3);
+//$secondary-lightest:   rgba(196, 164, 98, .1);
+
+
+$date: #CED5DB;
+$date-light: rgba(206, 213, 219, .25);
+$color-body:      $white;
+$color-text:      $primary;
+$color-link:      $secondary;
+
+
+/*
+ * [ settings / layout ]
+ */
+
+// -----------------------------------------------------------------------------
+
+$container-max-width: 1180px;
+
+$grid-columns: 12;
+$grid-gap: 16px;
+
+
+
+/*
+ * [ settings / miscellaneous ]
+ */
+$shadow: unquote('0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)');
+$transition: unquote('0.25s ease-out');
+$radius: 4px;

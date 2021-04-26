@@ -1,0 +1,22 @@
+/*
+ * [ elements / media ]
+ */
+
+// -----------------------------------------------------------------------------
+
+img,
+video,
+iframe,
+embed {
+    max-width: 100%;
+    height: auto;
+}
+
+img {
+    user-select: none;
+    vertical-align: top;
+}
+
+iframe {
+    border: 0;
+}

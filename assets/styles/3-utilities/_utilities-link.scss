@@ -1,0 +1,82 @@
+/*
+ * [ utilities / link ]
+ */
+
+// -----------------------------------------------------------------------------
+
+.u-link {
+  position: relative;
+  display: initial;
+  padding-bottom: 5px;
+  color: $primary;
+  text-decoration: none;
+
+  transition: all .3s ease-in-out;
+
+  @include hover{
+  }
+
+  &--secondary {
+    @extend .u-link;
+    color: $secondary-dark;
+    box-shadow:
+      0 -2px 0 0 $secondary-light inset,
+      0 -4px 0 0 transparent inset ;
+
+    transition: all .3s ease-in-out;
+
+    @include hover{
+      box-shadow:
+        0 -2px 0 0 $secondary-dark inset,
+        0 -4px 0 0 transparent inset ;
+    }
+  }
+
+  &--secondary-light {
+    @extend .u-link;
+    color: $secondary;
+    box-shadow:
+      0 -2px 0 0 $secondary-light inset,
+      0 -4px 0 0 transparent inset ;
+
+    transition: all .3s ease-in-out;
+
+    @include hover{
+      box-shadow:
+        0 -2px 0 0 $secondary inset,
+        0 -4px 0 0 transparent inset ;
+    }
+  }
+
+  &--white {
+    @extend .u-link;
+    color: $white;
+    box-shadow:
+      0 -2px 0 0 $white-light inset,
+      0 -4px 0 0 transparent inset ;
+    transition: all .3s ease-in-out;
+
+    @include hover {
+      box-shadow:
+        0 -2px 0 0 $white inset,
+        0 -4px 0 0 transparent inset ;
+    }
+
+    &.nuxt-link-exact-active {
+      box-shadow:
+        0 -2px 0 0 $white inset,
+        0 -4px 0 0 transparent inset ;
+    }
+  }
+  &--underline-cookie {
+    @extend .u-link;
+    box-shadow:
+      0 -2px 0 0 $primary-lightest inset,
+      0 -4px 0 0 transparent inset ;
+    @include hover{
+      box-shadow:
+        0 -2px 0 0 $primary inset,
+        0 -4px 0 0 transparent inset ;
+    }
+  }
+}

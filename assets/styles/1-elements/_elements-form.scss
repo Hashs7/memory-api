@@ -1,0 +1,35 @@
+/*
+ * [ elements / form ]
+ */
+
+// -----------------------------------------------------------------------------
+
+::placeholder {
+  font-size: 16px;
+  color: $primary-lighter;
+  font-family: $font-primary;
+  font-weight: 400;
+}
+
+textarea {
+  min-height: 240px;
+  width: 100%;
+  padding: 16px;
+  resize: vertical;
+  overflow-y: auto;
+  border-radius: 6px;
+  vertical-align: top;
+  border: none;
+}
+
+input {
+  max-width: 100%;
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+table {
+  border-collapse: collapse;
+}

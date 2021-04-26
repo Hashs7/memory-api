@@ -1,0 +1,15 @@
+/*
+ * [ settings / indexes ]
+ */
+
+// -----------------------------------------------------------------------------
+
+$z-index: (
+    header: 1010,
+    modal:  1020,
+    alert:  1030
+);
+
+@function index($key) {
+    @return map-get($z-index, $key);
+}

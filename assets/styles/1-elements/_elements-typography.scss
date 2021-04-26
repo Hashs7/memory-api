@@ -1,0 +1,54 @@
+/*
+ * [ elements / typography ]
+ */
+
+// -----------------------------------------------------------------------------
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: $line-height-headings;
+  font-family: $font-primary;
+  font-weight: 900;
+
+  p {
+    line-height: $line-height-headings;
+    font-family: $font-primary ;
+    font-weight: 900;
+  }
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+}
+
+h1, h2 {
+  font-size: 2.78rem;
+}
+
+p {
+  font-family: $font-primary;
+  font-weight: 300;
+}
+
+input {
+  font-family: $font-primary;
+  font-weight: 400;
+}
+
+
+/* -------- Responsive -------- */
+@media #{$tablet-m-media} {
+  h1, h2 {
+    font-size: 2.5rem;
+  }
+}
+
+@media #{$mobile-l-media} {
+  h1, h2 {
+    font-size: 2rem;
+  }
+}

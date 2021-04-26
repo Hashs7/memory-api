@@ -1,0 +1,75 @@
+/*
+ * [ utilities / grid ]
+ */
+
+// -----------------------------------------------------------------------------
+
+.u-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: ($grid-gap / -2);
+    margin-right: ($grid-gap / -2);
+}
+
+[class*='u-col-'] {
+    width: 100%;
+    min-height: 1px;
+    padding-left: ($grid-gap / 2);
+    padding-right: ($grid-gap / 2);
+}
+
+@for $i from 1 through $grid-columns {
+    .u-col-#{$i} {
+        flex: 0 0 percentage($i / $grid-columns);
+        max-width: percentage($i / $grid-columns);
+    }
+}
+
+@media #{$mobile-s--up} {
+    @for $i from 1 through $grid-columns {
+        .u-col-mobile-s-#{$i} {
+            flex: 0 0 percentage($i / $grid-columns);
+            max-width: percentage($i / $grid-columns);
+        }
+    }
+}
+
+@media #{$mobile-l--up} {
+    @for $i from 1 through $grid-columns {
+        .u-col-mobile-l-#{$i} {
+            flex: 0 0 percentage($i / $grid-columns);
+            max-width: percentage($i / $grid-columns);
+        }
+    }
+}
+
+@media #{$tablet-s--up} {
+    @for $i from 1 through $grid-columns {
+        .u-col-tablet-s-#{$i} {
+            flex: 0 0 percentage($i / $grid-columns);
+            max-width: percentage($i / $grid-columns);
+        }
+    }
+}
+
+
+@media #{$tablet-m--up} {
+    @for $i from 1 through $grid-columns {
+        .u-col-tablet-m-#{$i} {
+            flex: 0 0 percentage($i / $grid-columns);
+            max-width: percentage($i / $grid-columns);
+        }
+    }
+}
+
+
+@media #{$desktop-m--up} {
+    @for $i from 1 through $grid-columns {
+        .u-col-desktop-m-#{$i} {
+            flex: 0 0 percentage($i / $grid-columns);
+            max-width: percentage($i / $grid-columns);
+        }
+    }
+}
+

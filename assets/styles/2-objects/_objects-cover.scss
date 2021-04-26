@@ -1,0 +1,25 @@
+/*
+ * [ objects / cover ]
+ */
+
+// -----------------------------------------------------------------------------
+
+.o-cover-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.o-cover-image img {
+    min-width: 100%;
+    min-height: 100%;
+    position: absolute;
+    bottom: 50%;
+    right: 50%;
+    transform: translate(50%, 50%);
+
+    // reset
+    max-width: none;
+    max-height: none;
+    height: auto;
+    width: auto;
+}

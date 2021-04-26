@@ -1,0 +1,28 @@
+/*
+ * [ objects / container ]
+ */
+
+// -----------------------------------------------------------------------------
+
+.o-container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 80px;
+
+  @media #{$desktop-l-media-min} {
+    max-width: 1320px;
+  }
+
+  @media #{$tablet-m-media} {
+    padding: 0 50px;
+  }
+
+  @media #{$mobile-l-media} {
+    padding: 0 30px;
+  }
+}
+
+.o-page {
+  margin: auto;
+}

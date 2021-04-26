@@ -1,0 +1,42 @@
+/*
+ * [ settings / medias ]
+ */
+
+// -----------------------------------------------------------------------------
+
+$landscape: 'screen and (orientation: landscape)';
+$portrait: 'screen and (orientation: portrait)';
+
+$desktop-l: 1920px;
+$desktop-m: 1280px;
+$desktop-s: 1180px;
+$desktop-l-media-min: 'screen and (min-width: 1920px)';
+$desktop-l-media: 'screen and (max-width: 1920px)';
+$desktop-m-media: 'screen and (max-width: 1280px)';
+$desktop-s-media: 'screen and (max-width: 1180px)';
+
+$tablet-l: 874px;
+$tablet-m: 768px;
+$tablet-s: 600px;
+$tablet-l-media: 'screen and (max-width: 874px)';
+$tablet-m-media: 'screen and (max-width: 768px)';
+$tablet-s-media: 'screen and (max-width: 600px)';
+
+$mobile-l: 425px;
+$mobile-m: 375px;
+$mobile-s: 350px;
+$mobile-l-media: 'screen and (max-width: 425px)';
+$mobile-m-media: 'screen and (max-width: 375px)';
+$mobile-s-media: 'screen and (max-width: 350px)';
+
+
+// Medias for grid
+$desktop-l--up: 'screen and (min-width: 1920px)';
+$desktop-m--up: 'screen and (min-width: 1367px)';
+
+$tablet-m--up: 'screen and (min-width: 769px)';
+$tablet-s--up: 'screen and (min-width: 601px)';
+
+$mobile-l--up: 'screen and (min-width: 426px)';
+$mobile-m--up: 'screen and (min-width: 376px)';
+$mobile-s--up: 'screen and (min-width: 351px)';

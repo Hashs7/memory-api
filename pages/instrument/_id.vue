@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <NuxtChild keep-alive :instrument="instrument" />
+    <NuxtChild :instrument="instrument" />
   </div>
 </template>
 
