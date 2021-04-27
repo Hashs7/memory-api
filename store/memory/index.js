@@ -21,6 +21,12 @@ export const mutations = {
   updateDate(state, value) {
     state.date = value;
   },
+
+  selectTheme(state, slug) {
+    state.themes.forEach((t) => (t.selected = false));
+    const theme = state.themes.find((t) => t.slug === slug);
+    theme.selected = true;
+  },
 };
 
 export const actions = {};

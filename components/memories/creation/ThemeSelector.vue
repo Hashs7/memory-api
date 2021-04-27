@@ -1,7 +1,8 @@
 <template>
-  <div :class="[theme.slug]" class="theme">
+  <div :class="[theme.slug]" class="theme" @click="select">
     <span class="theme__title">{{ theme.title }}</span>
     <span class="theme__subtitle">{{ theme.subtitle }}</span>
+    <div v-if="theme.selected" class="theme__checked"></div>
   </div>
 </template>
 
@@ -14,11 +15,17 @@ export default {
       required: true,
     },
   },
+  methods: {
+    select() {
+      this.$store.commit('memory/selectTheme', this.theme.slug);
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .theme {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -27,6 +34,16 @@ export default {
   border: 4px solid $white;
   border-radius: 6px;
   box-shadow: $shadow--second;
+}
+
+.theme__checked {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 32px;
+  background-color: #85eea2;
 }
 
 .theme__title {
