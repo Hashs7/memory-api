@@ -7,53 +7,40 @@
 
     <form class="o-page__body">
       <div class="slider">
-        <div class="slider__item slider__intro">
-          <div>
-            <b-field label="Titre">
-              <b-input v-model="name" type="text"> </b-input>
-            </b-field>
-            <b-field label="Date">
-              <b-datepicker v-model="date" placeholder="Select a date" />
-            </b-field>
-          </div>
-        </div>
+        <SlideIntro />
 
         <div v-for="(c, i) in contents" :key="i" class="slider__item">
-          <component v-bind:is="c.template" v-if="c.template" :key="i" />
+          <component :is="c.template" v-if="c.template" :key="i" />
           <button type="button" class="slider__close" @click="removeItem(i)">
             x
           </button>
         </div>
 
-        <div class="slider__item slider__add">
-          Ajouter
-          <button
-            class="u-button u-button--round"
-            type="button"
-            @click="addContent('media')"
-          >
-            Ajouter media
-          </button>
-          <button
-            class="u-button u-button--round"
-            type="button"
-            @click="addContent('audio')"
-          >
-            Ajouter audio
-          </button>
-          <button
-            class="u-button u-button--round"
-            type="button"
-            @click="addContent('text')"
-          >
-            Ajouter texte
-          </button>
-        </div>
+        <SliderAdd />
       </div>
     </form>
 
+    <form v-if="showThemes" class="o-page--full themes">
+      <div class="themes__container">
+        <h3>Choisissez votre thème</h3>
+        <div class="themes__grid">
+          <ThemeSelector v-for="(t, i) in themes" :key="i" :theme="t" />
+        </div>
+      </div>
+      <span
+        class="o-page--full themes__background"
+        @click="showThemes = false"
+      ></span>
+    </form>
+
     <div class="o-page__footer">
-      <button type="button" class="button is-primary">Personnaliser</button>
+      <button
+        type="button"
+        class="button is-primary"
+        @click="showThemes = !showThemes"
+      >
+        Personnaliser
+      </button>
       <button type="submit" class="button is-primary" @click="submit">
         Valider
       </button>
@@ -66,28 +53,20 @@
 </router>
 
 <script>
-import TextContent from '@/components/memories/creation/TextContent';
-import AudioContent from '@/components/memories/creation/AudioContent';
-import MediaContent from '@/components/memories/creation/MediaContent';
-
-const CONTENT_TYPE = {
-  media: {
-    template: 'MediaContent',
-    content: '',
-  },
-  audio: {
-    template: 'AudioContent',
-    content: '',
-  },
-  text: {
-    template: 'TextContent',
-    content: '',
-  },
-};
+import { mapState } from 'vuex';
+import SlideIntro from '@/components/memories/creation/slider/SlideIntro';
+import SliderAdd from '@/components/memories/creation/slider/SliderAdd';
+import TextContent from '@/components/memories/creation/contents/TextContent';
+import AudioContent from '@/components/memories/creation/contents/AudioContent';
+import MediaContent from '@/components/memories/creation/contents/MediaContent';
+import ThemeSelector from '@/components/memories/creation/ThemeSelector';
 
 export default {
   name: 'NewInstrument',
   components: {
+    ThemeSelector,
+    SlideIntro,
+    SliderAdd,
     TextContent,
     AudioContent,
     MediaContent,
@@ -95,11 +74,14 @@ export default {
   data() {
     return {
       success: false,
-      name: '',
-      date: [],
-      type: 'Concert',
-      contents: [],
+      showThemes: false,
     };
+  },
+  computed: {
+    ...mapState({
+      contents: (state) => state.memory.contents,
+      themes: (state) => state.memory.themes,
+    }),
   },
   methods: {
     // Form submitted event
@@ -124,10 +106,6 @@ export default {
       });
     },
 
-    addContent(type) {
-      this.contents.push(CONTENT_TYPE[type]);
-    },
-
     removeItem(index) {
       this.contents.splice(index, 1);
     },
@@ -137,7 +115,7 @@ export default {
 
 <style lang="scss">
 .o-page--create {
-  background-color: $white;
+  background-color: $gray-lightest;
 }
 
 .o-page__footer {
@@ -175,23 +153,6 @@ export default {
   background-color: $white;
 }
 
-.slider__intro {
-  padding: 8px;
-}
-
-.slider__add {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: none;
-  background-color: transparent;
-
-  .u-button {
-    margin: 8px;
-  }
-}
-
 .slider__close {
   position: absolute;
   top: 0;
@@ -203,5 +164,26 @@ export default {
   box-shadow: $shadow--second;
   border: none;
   transform: translate(25%, -25%);
+}
+
+.themes {
+  z-index: 20;
+  margin-top: 124px;
+}
+
+.themes__container {
+  position: relative;
+  z-index: 20;
+  padding: 22px;
+  border-radius: 24px 24px 0 0;
+  box-shadow: $shadow--first;
+  background-color: $white;
+}
+
+.themes__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
 }
 </style>
