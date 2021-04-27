@@ -20,6 +20,9 @@
 
         <div v-for="(c, i) in contents" :key="i" class="slider__item">
           <component v-bind:is="c.template" v-if="c.template" :key="i" />
+          <button type="button" class="slider__close" @click="removeItem(i)">
+            x
+          </button>
         </div>
 
         <div class="slider__item slider__add">
@@ -124,6 +127,10 @@ export default {
     addContent(type) {
       this.contents.push(CONTENT_TYPE[type]);
     },
+
+    removeItem(index) {
+      this.contents.splice(index, 1);
+    },
   },
 };
 </script>
@@ -159,6 +166,7 @@ export default {
 }
 
 .slider__item {
+  position: relative;
   min-width: 260px;
   height: 460px;
   margin: 20px 12px;
@@ -182,5 +190,18 @@ export default {
   .u-button {
     margin: 8px;
   }
+}
+
+.slider__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  background-color: $white;
+  box-shadow: $shadow--second;
+  border: none;
+  transform: translate(25%, -25%);
 }
 </style>
