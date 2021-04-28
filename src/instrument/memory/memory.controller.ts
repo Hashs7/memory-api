@@ -8,7 +8,7 @@ import { GetUser } from '../../user/auth/get-user.decorator';
 import { User } from '../../user/user.schema';
 import { AuthGuard } from '@nestjs/passport';
 
-@ApiTags('instrument/memory')
+@ApiTags('instrument/{id}/memory')
 @Controller('instrument/:instrument')
 export class MemoryController {
   constructor(private readonly memoryService: MemoryService) {}
@@ -18,8 +18,10 @@ export class MemoryController {
     status: 200,
     type: [Memory],
   })
-  findAll(): Promise<Memory[]> {
-    return this.memoryService.findAll();
+  findAll(
+    @Param('instrument') instrument: string,
+  ): Promise<Memory[]> {
+    return this.memoryService.findAll(instrument);
   }
 
   @Get('memory/:id')
@@ -60,9 +62,10 @@ export class MemoryController {
 
   @Delete('memory/:id')
   remove(
+    @GetUser() user: User,
+    @Param('id') id: string,
     @Param('instrument') instrument: string,
-    @Param('id') id: string
-  ) {
-    return this.memoryService.remove(id, instrument);
+) {
+    return this.memoryService.remove(user, id, instrument);
   }
 }

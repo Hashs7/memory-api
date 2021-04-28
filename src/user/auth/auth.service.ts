@@ -88,7 +88,6 @@ export class AuthService {
     }
 
     const token = randomBytes(20).toString('hex');
-    console.log(user, token);
     await this.mailService.sendResetPassword(user, token);
 
     user.resetPasswordToken = token;

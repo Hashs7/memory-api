@@ -16,6 +16,29 @@ export class MemoryService {
     @InjectModel(Memory.name) private memoryModel: Model<Memory>
   ) {}
 
+  /**
+   * Find all memories of instrument
+   * @param instrumentId
+   */
+  async findAll(instrumentId: string): Promise<Memory[]> {
+    const instrument = await this.instrumentService.findOne(instrumentId);
+    return instrument.memories;
+  }
+
+  /**
+   * Find memory with id
+   * @param id
+   */
+  findOne(id: string): Promise<Memory> {
+    return this.memoryModel.findOne({ id }).exec();
+  }
+
+  /**
+   * Create new memory associated to instrument
+   * @param userId
+   * @param instrument
+   * @param createMemoryDto
+   */
   async create(
     userId: Schema.Types.ObjectId,
     instrument: string,
@@ -24,29 +47,23 @@ export class MemoryService {
     const { withUsers } = createMemoryDto;
     const users = (await this.userService.findUsers(withUsers))
       .map((u) => u._id);
-    console.log('this.memoryModel', this.memoryModel);
 
-    // TODO Fix Subdocument
-    // const memory = new Memory(createMemoryDto, userId, users);
     const memory = await this.memoryModel.create({
       ...createMemoryDto,
       createdBy: userId,
       withUsers: users
     });
-    console.log(memory);
     await this.instrumentService.addMemory(instrument, memory);
 
     return memory;
   }
 
-  findAll(): Promise<Memory[]> {
-    return this.memoryModel.find().exec();
-  }
-
-  findOne(id: string): Promise<Memory> {
-    return this.memoryModel.findOne({ id }).exec();
-  }
-
+  /**
+   * Update memory if user is owner
+   * @param id
+   * @param user
+   * @param updateMemoryDto
+   */
   async update(
     id: string,
     user: User,
@@ -76,16 +93,20 @@ export class MemoryService {
 
   /**
    * Remove from instrument array
+   * @param user
    * @param id
-   * @param instrument
+   * @param instrumentId
    */
-  async remove(id: string, instrumentId: string) {
+  async remove(user: User, id: string, instrumentId: string) {
     const instrument = await this.instrumentService.findOne(instrumentId);
-    console.log(instrument);
-    console.log(instrument.memories);
 
+    // @ts-ignore
+    if (!instrument.owner.equals(user._id)) {
+      throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
+    }
+
+    // @ts-ignore
     const index = instrument.memories.findIndex((m) => m._id.equals(id));
-    console.log(index);
     instrument.memories.splice(index, 1);
     instrument.markModified('memories');
     await instrument.save();
