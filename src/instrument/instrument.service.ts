@@ -24,7 +24,7 @@ export class InstrumentService {
   }
 
   findOne(id: string) {
-    return this.instrumentModel.findOne({ id });
+    return this.instrumentModel.findOne({ id }).populate('owner');
   }
 
   findForUser(user: User) {
