@@ -21,18 +21,23 @@
       <FileUpload ref="files" />
       <button type="submit" class="button is-primary">Ajouter</button>
     </form>
+
+    <button @click="showSurvey = true">Répondre aux questions</button>
+    <Survey v-if="showSurvey" />
   </div>
 </template>
 
 <script>
 import FileUpload from '@/components/FileUpload';
+import Survey from '@/components/instrument/Survey';
 
 export default {
   name: 'NewInstrument',
-  components: { FileUpload },
+  components: { FileUpload, Survey },
   data() {
     return {
       success: false,
+      showSurvey: false,
       name: '',
       type: '',
       specification: '',

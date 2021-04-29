@@ -1,9 +1,14 @@
 <template>
   <div class="slider__item slider__intro">
     <div>
-      <b-field label="Titre">
-        <b-input v-model="name" type="text"> </b-input>
-      </b-field>
+      <label class="title">
+        <textarea
+          v-model="name"
+          type="text"
+          class="title__input"
+          placeholder="Comment voulez-vous nommer ce souvenir ?"
+        ></textarea>
+      </label>
       <client-only>
         <b-field label="Date">
           <b-datepicker
@@ -44,8 +49,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .slider__intro {
   padding: 8px;
+}
+.title__input {
+  font-size: 36px;
+  font-weight: 700;
+  resize: none;
+
+  &::placeholder {
+    font-size: 36px;
+    font-weight: 700;
+  }
 }
 </style>
