@@ -81,7 +81,9 @@ export default {
       if (this.index >= this.questions.length - 1) return;
       this.index++;
     },
-    validate() {},
+    validate() {
+      this.$emit('validate', true);
+    },
   },
 };
 </script>

@@ -23,7 +23,7 @@
     </form>
 
     <button @click="showSurvey = true">Répondre aux questions</button>
-    <Survey v-if="showSurvey" />
+    <Survey v-if="showSurvey" @validate="showSurvey = false" />
   </div>
 </template>
 

@@ -10,7 +10,7 @@
         <SlideIntro />
 
         <div v-for="(c, i) in contents" :key="i" class="slider__item">
-          <component :is="c.template" v-if="c.template" :key="i" />
+          <component :is="c.component" v-if="c.component" :key="i" />
           <button type="button" class="slider__close" @click="removeItem(i)">
             x
           </button>
