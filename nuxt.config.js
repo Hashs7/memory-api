@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Memory Motel',
+    title: 'Jamies',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -71,6 +71,9 @@ export default {
   pwa: {
     manifest: {
       lang: 'fr',
+    },
+    meta: {
+      mobileAppIOS: 'dark-content',
     },
   },
 

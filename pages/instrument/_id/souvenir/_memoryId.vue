@@ -2,23 +2,22 @@
   <div class="o-page o-page--memory">
     <div class="o-page__container">
       <div class="memory-slider">
-        <MemoryCard
-          :class="[getClass(0)]"
-          class="memory"
-          @click="select(0)"
-          @swipe="next"
-        >
+        <MemoryCard :class="[getClass(0)]" class="memory" @swipe="next">
           <h1 v-if="memory" class="memory__title">{{ memory.name }}</h1>
         </MemoryCard>
         <MemoryCard
           v-for="(c, i) in contents"
           :key="i"
-          :class="[getClass(i + 1)]"
+          :class="[getClass(i + 1), c.component]"
           class="memory memory--content"
-          @click="select(i + 1)"
           @swipe="next"
         >
-          {{ c.component }}
+          <img
+            v-if="c.component === 'media'"
+            src="~assets/img/trash.png"
+            alt=""
+          />
+          <span v-else>{{ c.component }}</span>
         </MemoryCard>
       </div>
       <!--<button
@@ -54,13 +53,18 @@ export default {
       index: 0,
       contents: [
         {
-          component: 'audio',
-        },
-        {
+          url: '~assets/img/trash.png',
           component: 'media',
         },
         {
           component: 'text',
+        },
+        {
+          url: '~assets/img/trash.png',
+          component: 'media',
+        },
+        {
+          component: 'audio',
         },
       ],
     };
@@ -91,7 +95,10 @@ export default {
     },
 
     next() {
-      if (this.index >= this.contents.length) return;
+      if (this.index >= this.contents.length) {
+        this.$router.push(this.closeMemory);
+        return;
+      }
       this.index++;
     },
 
@@ -167,7 +174,18 @@ export default {
   padding: 32px;
   background-color: #fff;
   box-shadow: $shadow--first;
+  overflow: hidden;
   border-radius: 8px;
+
+  &.media {
+    padding: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 
   &.active {
     z-index: 10;

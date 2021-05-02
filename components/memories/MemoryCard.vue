@@ -39,19 +39,25 @@ export default {
         y: e.deltaY,
         rotate: -e.deltaY / 20,
       });
+      console.log(-e.deltaY / 20);
     },
     panEnd(e) {
-      if (e.distance > this.SWIPE_DISTANCE) {
-        this.$emit('swipe');
-        gsap.to(this.$refs.card, {
-          x: -this.xMax - 50,
-          y: e.deltaY * 3,
-          overwrite: true,
-        });
+      if (
+        e.additionalEvent === 'panright' ||
+        e.distance < this.SWIPE_DISTANCE
+      ) {
+        gsap.to(this.$refs.card, { x: 0, y: 0, rotate: 0 });
         return;
       }
+
+      this.$emit('swipe');
+      gsap.to(this.$refs.card, {
+        x: -this.xMax - 50,
+        y: e.deltaY * 3,
+        rotate: e.deltaY < 0 ? 35 : -35,
+        overwrite: true,
+      });
       // Reset card postion
-      gsap.to(this.$refs.card, { x: 0, y: 0, rotate: 0 });
     },
   },
 };
