@@ -5,14 +5,19 @@
         <img :src="profilePicture" alt="" />
       </div>
       <div class="instrument__container">
-        <h1>{{ instrument.name }}</h1>
-        <h2 v-if="instrument.brand || instrument.specification">
-          <span v-if="instrument.brand">{{ instrument.brand }}</span>
-          <span v-if="instrument.brand && instrument.specification"> - </span>
-          <span v-if="instrument.specification">
-            {{ instrument.specification }}
-          </span>
-        </h2>
+        <div class="instrument__head">
+          <h1 class="instrument__title">{{ instrument.name }}</h1>
+          <h2
+            v-if="instrument.brand || instrument.specification"
+            class="instrument__description"
+          >
+            <span v-if="instrument.brand">{{ instrument.brand }}</span>
+            <span v-if="instrument.brand && instrument.specification"> - </span>
+            <span v-if="instrument.specification">
+              {{ instrument.specification }}
+            </span>
+          </h2>
+        </div>
 
         <div class="instrument__owner">
           {{ instrument.owner.firstName }} {{ instrument.owner.lastName }}
@@ -42,6 +47,13 @@ import MemoryPreview from '@/components/memories/MemoryPreview';
 
 export default {
   components: { MemoryPreview },
+  layout(ctx) {
+    let layout = 'default';
+    if (ctx.route.params.memoryId) {
+      layout = 'none';
+    }
+    return layout;
+  },
   async asyncData({ $api, params }) {
     const instrument = (await $api.getInstrumentById(params.id))?.data;
     return {
@@ -62,3 +74,29 @@ export default {
   },
 };
 </script>
+
+<style>
+.instrument__container {
+  position: relative;
+  z-index: 1;
+  margin-top: -32px;
+  padding-top: 22px;
+  border-radius: 32px 32px 0 0;
+  background-color: #fff;
+}
+.instrument__head {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.instrument__title {
+  font-size: 26px;
+}
+.instrument__description {
+  font-size: 16px;
+  font-weight: 400;
+}
+.instrument__owner {
+  text-align: center;
+  margin-bottom: 20px;
+}
+</style>

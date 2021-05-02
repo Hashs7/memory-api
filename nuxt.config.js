@@ -33,6 +33,7 @@ export default {
   plugins: [
 	  { src: '~/plugins/ApiService.js' },
 	  { src: '~/plugins/AuthService.js', mode: 'client' },
+	  { src: '~/plugins/hammer.js', mode: 'client' },
 	  { src: '~/plugins/audio-recorder.js', mode: 'client' },
 	  { src: '~/plugins/wysiwyg.js', mode: 'client' },
 	  { src: '~/plugins/nuxt-client-init.js', mode: 'client' },
@@ -74,11 +75,13 @@ export default {
   },
 
 	server: {
+    host: '0', // default: localhost
 		port: 8080 // default: 3000
 	},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+  },
 
 	generate: {
 		exclude: [

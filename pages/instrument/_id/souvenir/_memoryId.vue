@@ -2,26 +2,33 @@
   <div class="o-page o-page--memory">
     <div class="o-page__container">
       <div class="memory-slider">
-        <div :class="[getClass(0)]" class="memory">
+        <MemoryCard
+          :class="[getClass(0)]"
+          class="memory"
+          @click="select(0)"
+          @swipe="next"
+        >
           <h1 v-if="memory" class="memory__title">{{ memory.name }}</h1>
-        </div>
-        <div
+        </MemoryCard>
+        <MemoryCard
           v-for="(c, i) in contents"
           :key="i"
           :class="[getClass(i + 1)]"
           class="memory memory--content"
+          @click="select(i + 1)"
+          @swipe="next"
         >
           {{ c.component }}
-        </div>
+        </MemoryCard>
       </div>
-      <button
+      <!--<button
         class="memory-slider__control memory-slider__previous"
         @click="previous"
       ></button>
       <button
         class="memory-slider__control memory-slider__next"
         @click="next"
-      ></button>
+      ></button>-->
     </div>
     <nuxt-link :to="closeMemory" class="memory__background"></nuxt-link>
   </div>
@@ -32,7 +39,10 @@
 </router>
 
 <script>
+import MemoryCard from '@/components/memories/MemoryCard';
+
 export default {
+  components: { MemoryCard },
   props: {
     instrument: {
       type: Object,
@@ -66,6 +76,14 @@ export default {
       return `/instrument/${id}`;
     },
   },
+  mounted() {
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+  },
+  beforeUnmount() {
+    document.body.style.overflow = 'auto';
+    document.body.style.height = 'auto';
+  },
   methods: {
     previous() {
       if (this.index === 0) return;
@@ -75,6 +93,10 @@ export default {
     next() {
       if (this.index >= this.contents.length) return;
       this.index++;
+    },
+
+    select(index) {
+      this.index = index;
     },
 
     getClass(contentIndex) {
@@ -145,24 +167,25 @@ export default {
   padding: 32px;
   background-color: #fff;
   box-shadow: $shadow--first;
+  border-radius: 8px;
 
   &.active {
     z-index: 10;
   }
   &.next {
-    transform: scale(0.95) translateX(24px);
+    transform: scale(0.98) translateX(24px);
     z-index: 9;
   }
   &.next--second {
-    transform: scale(0.9) translateX(48px);
+    transform: scale(0.96) translateX(44px);
     z-index: 8;
   }
   &.previous {
-    transform: scale(0.95) translateX(-24px);
+    transform: scale(0.98) translateX(-24px);
     z-index: 9;
   }
   &.previous--second {
-    transform: scale(0.9) translateX(-48px);
+    transform: scale(0.96) translateX(-44px);
     z-index: 8;
   }
 }
