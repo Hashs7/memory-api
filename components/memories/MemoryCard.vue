@@ -26,12 +26,10 @@ export default {
     };
   },
   mounted() {
-    setTimeout(() => {
-      const { x, y, width, height } = this.$refs.card.getBoundingClientRect();
-      this.origin = { x, y };
-      this.xMax = x + width;
-      this.yMax = y + height;
-    }, 2000);
+    const { x, y, width, height } = this.$refs.card.getBoundingClientRect();
+    this.origin = { x, y };
+    this.xMax = x + width;
+    this.yMax = y + height;
   },
   methods: {
     pan(e) {
@@ -39,20 +37,21 @@ export default {
       gsap.set(this.$refs.card, {
         x: Math.min(e.deltaX, 0),
         y: e.deltaY,
-        rotate: -e.deltaY / 100,
+        rotate: -e.deltaY / 20,
       });
     },
     panEnd(e) {
       if (e.distance > this.SWIPE_DISTANCE) {
         this.$emit('swipe');
         gsap.to(this.$refs.card, {
-          x: -this.xMax + 10,
+          x: -this.xMax - 50,
           y: e.deltaY * 3,
+          overwrite: true,
         });
         return;
       }
       // Reset card postion
-      gsap.to(this.$refs.card, { x: 0, y: 0 });
+      gsap.to(this.$refs.card, { x: 0, y: 0, rotate: 0 });
     },
   },
 };
