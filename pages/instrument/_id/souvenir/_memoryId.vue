@@ -12,11 +12,7 @@
           class="memory memory--content"
           @swipe="next"
         >
-          <img
-            v-if="c.component === 'media'"
-            src="~assets/img/trash.png"
-            alt=""
-          />
+          <img v-if="c.component === 'media'" :src="c.url" alt="" />
           <span v-else>{{ c.component }}</span>
         </MemoryCard>
       </div>
@@ -53,14 +49,16 @@ export default {
       index: 0,
       contents: [
         {
-          url: '~assets/img/trash.png',
+          url:
+            'http://192.168.2.2:3000/file/167389118_1136555450195277_8275646705457542181_n2131.jpg',
           component: 'media',
         },
         {
           component: 'text',
         },
         {
-          url: '~assets/img/trash.png',
+          url:
+            'http://192.168.2.2:3000/file/167389118_1136555450195277_8275646705457542181_n2131.jpg',
           component: 'media',
         },
         {

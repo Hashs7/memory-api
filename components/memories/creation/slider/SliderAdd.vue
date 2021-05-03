@@ -6,28 +6,32 @@
       type="button"
       @click="addContent('media')"
     >
-      Ajouter media
+      <IconMedia />
     </button>
     <button
       class="u-button u-button--round"
       type="button"
       @click="addContent('audio')"
     >
-      Ajouter audio
+      <IconAudio />
     </button>
     <button
       class="u-button u-button--round"
       type="button"
       @click="addContent('text')"
     >
-      Ajouter texte
+      Txt
     </button>
   </div>
 </template>
 
 <script>
+import IconAudio from '~/assets/svg/ic_audio.svg?inline';
+import IconMedia from '~/assets/svg/ic_media.svg?inline';
+
 export default {
   name: 'SliderAdd',
+  components: { IconAudio, IconMedia },
   methods: {
     addContent(type) {
       this.$store.commit('memory/addContent', type);

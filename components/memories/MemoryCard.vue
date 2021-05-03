@@ -33,13 +33,11 @@ export default {
   },
   methods: {
     pan(e) {
-      console.log(e);
       gsap.set(this.$refs.card, {
         x: Math.min(e.deltaX, 0),
         y: e.deltaY,
         rotate: -e.deltaY / 20,
       });
-      console.log(-e.deltaY / 20);
     },
     panEnd(e) {
       if (
@@ -49,6 +47,7 @@ export default {
         gsap.to(this.$refs.card, { x: 0, y: 0, rotate: 0 });
         return;
       }
+      console.log(e);
 
       this.$emit('swipe');
       gsap.to(this.$refs.card, {
