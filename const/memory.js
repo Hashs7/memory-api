@@ -16,6 +16,12 @@ export const CONTENT_TYPE = {
   },
 };
 
+export const formatContentType = (types) =>
+  types.map((t) => {
+    delete t.component;
+    return t;
+  });
+
 export const THEMES = [
   {
     title: "Noir c'est noir",

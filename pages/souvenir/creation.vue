@@ -60,6 +60,7 @@ import TextContent from '@/components/memories/creation/contents/TextContent';
 import AudioContent from '@/components/memories/creation/contents/AudioContent';
 import MediaContent from '@/components/memories/creation/contents/MediaContent';
 import ThemeSelector from '@/components/memories/creation/ThemeSelector';
+import { formatContentType } from '../../const/memory';
 
 export default {
   name: 'NewInstrument',
@@ -94,7 +95,7 @@ export default {
           name: this.name,
           date: this.date,
           type: this.type,
-          contents: this.contents,
+          contents: formatContentType(this.contents),
         });
         this.createdHandler();
       } catch (e) {
