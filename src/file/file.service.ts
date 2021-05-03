@@ -16,28 +16,29 @@ export class FileService {
   }
 
   findOne(id: string) {
-    return this.fileModel.findOne({ id });
+    return this.fileModel.findOne({ _id: id });
   }
 
   async create(file): Promise<File> {
     const { originalname } = file;
+    Logger.log(file)
     const generatedName = randomBytes(10).toString('hex');
+    const filetype = file.mimetype.split('/').shift();
+    Logger.log(`file ${filetype} ${file.mimetype} ${file.size} ${file.storageUrl} `)
+    file = {
+      ...file,
+      originalname: generatedName + '.' + filetype,
+    };
 
-    if (!file.storageUrl) {
+    if (process.env.NODE_ENV !== 'production') {
       // Store image locally
       // @ts-ignore
-      file.storageUrl = this.createStorageUrl(file);
+      file.path = file.path.split('/')[0];
+      // file.storageUrl = this.createStorageUrl(file);
     } else {
       // Store image on azure
-      const filetype = file.mimetype.split('/').shift();
-      console.log(filetype, generatedName);
-      Logger.log(`file ${filetype} ${file.mimetype} ${file.size} ${file.storageUrl} `)
-      file = {
-        ...file,
-        originalname: generatedName + '.' + filetype,
-      };
-      file.storageUrl = await this.azureStorage.upload(file);
-      file.storageUrl = file.storageUrl.split(process.env.AZURE_STORAGE_SAS_KEY).shift();
+      const path = await this.azureStorage.upload(file);
+      file.path = path.split(process.env.AZURE_STORAGE_SAS_KEY).shift();
       Logger.log(`file ${file.originalname} ${file.mimetype} ${file.size} ${file.storageUrl} `)
     }
 

@@ -14,7 +14,7 @@ export class UserService {
   }
 
   async findUser(id: string): Promise<User> {
-    return this.userModel.findOne({ _id: id }) ;
+    return this.userModel.findOne({ _id: id });
   }
 
   async findUserWithResetToken(resetPasswordToken: string): Promise<User> {

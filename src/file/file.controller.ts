@@ -7,17 +7,23 @@ import {
   UploadedFiles,
   Res,
   Param,
-  HttpStatus, BadRequestException, Logger,
+  HttpStatus,
+  BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { ApiTags } from '@nestjs/swagger';
-import { AzureStorageFileInterceptor, AzureStorageService, UploadedFileMetadata } from '@nestjs/azure-storage/dist';
-import { randomBytes } from "crypto";
+import {
+  AzureStorageFileInterceptor,
+  AzureStorageService,
+  UploadedFileMetadata,
+} from '@nestjs/azure-storage/dist';
+import { randomBytes } from 'crypto';
 import got from 'got';
 import { FileService } from './file.service';
 
-process.env.NODE_ENV = 'production';
+// process.env.NODE_ENV = 'production';
 
 @ApiTags('file')
 @Controller('file')
@@ -33,28 +39,21 @@ export class FileController {
    */
   @Post()
   @UseInterceptors(
-    process.env.NODE_ENV !== 'production' ?
-    FileInterceptor('file', fileInterceptorOptions) :
-    AzureStorageFileInterceptor('file'),
+    process.env.NODE_ENV !== 'production'
+      ? FileInterceptor('file', fileInterceptorOptions)
+      : AzureStorageFileInterceptor('file'),
   )
-  async uploadedFile(
-    @UploadedFile() file: UploadedFileMetadata
-  ) {
+  async uploadedFile(@UploadedFile() file: UploadedFileMetadata) {
     if (!file) {
       throw new BadRequestException('Aucun fichier reçu');
     }
 
-    await this.fileService.create(file);
-
-    const response = {
-      originalname: file.originalname,
-      storageUrl: file.storageUrl,
-    };
+    const data = await this.fileService.create(file);
 
     return {
       status: HttpStatus.OK,
       message: 'Image uploaded successfully',
-      data: response,
+      data,
     };
   }
 
@@ -64,9 +63,9 @@ export class FileController {
    */
   @Post('multiple')
   @UseInterceptors(
-    process.env.NODE_ENV !== 'production' ?
-      FilesInterceptor('file', 10, fileInterceptorOptions) :
-      AzureStorageFileInterceptor('file'),
+    process.env.NODE_ENV !== 'production'
+      ? FilesInterceptor('file', 10, fileInterceptorOptions)
+      : AzureStorageFileInterceptor('file'),
   )
   async uploadMultipleFiles(@UploadedFiles() files) {
     const response = [];
@@ -93,21 +92,23 @@ export class FileController {
 
   /**
    * Get file by name
-   * @param image
+   * @param id
    * @param res
    */
-  @Get(':imagename')
-  async getImage(@Param('imagename') image, @Res() res) {
+  @Get(':id')
+  async getImage(@Param('id') id, @Res() res) {
     let response;
+    const image = await this.fileService.findOne(id);
+
     if (process.env.NODE_ENV !== 'production') {
-      response = res.sendFile(image, { root: './uploads' });
+      response = res.sendFile(image.originalname, { root: `./${image.path}` });
     } else {
-      // TODO Get image from storage
-      const url = 'https://memoryapp.blob.core.windows.net/production/telechargement.jpeg' + process.env.AZURE_STORAGE_SAS_KEY;
+      // const url = `${process.env.AZURE_STORAGE_URL}/production/telechargement.jpeg${process.env.AZURE_STORAGE_SAS_KEY}`;
+      const url = `${process.env.AZURE_STORAGE_URL}${image.path}/${image.originalname}${process.env.AZURE_STORAGE_SAS_KEY}`;
       const getFile = await got(url).buffer();
-      res.set('Content-Type', 'image/png');
+      // res.set('Content-Type', 'image/png');
+      res.set('Content-Type', image.mimetype);
       response = res.send(getFile);
-      Logger.log('coucou', 'ccc')
     }
 
     return {
@@ -116,9 +117,7 @@ export class FileController {
     };
   }
 
-  fileProxy(url) {
-    
-  }
+  fileProxy(url) {}
 
   uniquifyFilename(filename): string {
     const prefix = randomBytes(10).toString('hex');
