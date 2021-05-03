@@ -1,13 +1,16 @@
 export const CONTENT_TYPE = {
   media: {
+    type: 'media',
     component: 'MediaContent',
     content: '',
   },
   audio: {
+    type: 'audio',
     component: 'AudioContent',
     content: '',
   },
   text: {
+    type: 'text',
     component: 'TextContent',
     content: '',
   },

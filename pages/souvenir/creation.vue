@@ -79,6 +79,9 @@ export default {
   },
   computed: {
     ...mapState({
+      name: (state) => state.memory.name,
+      date: (state) => state.memory.date,
+      type: (state) => state.memory.type,
       contents: (state) => state.memory.contents,
       themes: (state) => state.memory.themes,
     }),
@@ -91,6 +94,7 @@ export default {
           name: this.name,
           date: this.date,
           type: this.type,
+          contents: this.contents,
         });
         this.createdHandler();
       } catch (e) {
