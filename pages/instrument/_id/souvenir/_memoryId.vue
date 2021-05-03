@@ -83,6 +83,7 @@ export default {
     document.body.style.height = '100vh';
   },
   beforeUnmount() {
+    console.log('before ');
     document.body.style.overflow = 'auto';
     document.body.style.height = 'auto';
   },

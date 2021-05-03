@@ -14,29 +14,26 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-	  'vue-wysiwyg/dist/vueWysiwyg.css',
-	  '@/assets/styles/style.scss',
-  ],
+  css: ['vue-wysiwyg/dist/vueWysiwyg.css', '@/assets/styles/style.scss'],
 
-	styleResources: {
-		scss: [
+  styleResources: {
+    scss: [
       '@/assets/styles/0-settings/_settings-mixins.scss',
       '@/assets/styles/0-settings/_settings-variable.scss',
       '@/assets/styles/0-settings/_settings-typography.scss',
       '@/assets/styles/0-settings/_settings-media.scss',
       '@/assets/styles/0-settings/_settings-index.scss',
-    ]
-	},
+    ],
+  },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-	  { src: '~/plugins/ApiService.js' },
-	  { src: '~/plugins/AuthService.js', mode: 'client' },
-	  { src: '~/plugins/hammer.js', mode: 'client' },
-	  { src: '~/plugins/audio-recorder.js', mode: 'client' },
-	  { src: '~/plugins/wysiwyg.js', mode: 'client' },
-	  { src: '~/plugins/nuxt-client-init.js', mode: 'client' },
+    { src: '~/plugins/ApiService.js' },
+    { src: '~/plugins/AuthService.js', mode: 'client' },
+    { src: '~/plugins/hammer.js', mode: 'client' },
+    { src: '~/plugins/audio-recorder.js', mode: 'client' },
+    { src: '~/plugins/wysiwyg.js', mode: 'client' },
+    { src: '~/plugins/nuxt-client-init.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -64,7 +61,11 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-	  baseURL: process.env.VUE_APP_API_URL,
+    baseURL: process.env.VUE_APP_API_URL,
+  },
+
+  env: {
+    apiUrl: process.env.VUE_APP_API_URL || 'http://localhost:3000',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -77,19 +78,18 @@ export default {
     },
   },
 
-	server: {
+  server: {
     host: '0', // default: localhost
-		port: 8080 // default: 3000
-	},
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
+    port: 8080, // default: 3000
   },
 
-	generate: {
-		exclude: [
-			/^\/admin/ // path starts with /admin
-		],
-		fallback: true,
-	}
-}
+  // Build Configuration: https://go.nuxtjs.dev/config-build
+  build: {},
+
+  generate: {
+    exclude: [
+      /^\/admin/, // path starts with /admin
+    ],
+    fallback: true,
+  },
+};

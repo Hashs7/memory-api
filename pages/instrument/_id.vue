@@ -66,8 +66,7 @@ export default {
       return `/instrument/${id}/souvenir/creation`;
     },
     profilePicture() {
-      console.log('api url', process.env.VUE_APP_API_URL, process.env.client);
-      return `${process.env.VUE_APP_API_URL}/file/${this.instrument.image.originalname}`;
+      return `${process.env.apiUrl}/file/${this.instrument.image.originalname}`;
     },
     memoriesCount() {
       return this.instrument.memories.length;

@@ -44,11 +44,10 @@ export default {
         e.additionalEvent === 'panright' ||
         e.distance < this.SWIPE_DISTANCE
       ) {
+        // Reset card postion
         gsap.to(this.$refs.card, { x: 0, y: 0, rotate: 0 });
         return;
       }
-      console.log(e);
-
       this.$emit('swipe');
       gsap.to(this.$refs.card, {
         x: -this.xMax - 50,
@@ -56,7 +55,6 @@ export default {
         rotate: e.deltaY < 0 ? 35 : -35,
         overwrite: true,
       });
-      // Reset card postion
     },
   },
 };
