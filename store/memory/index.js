@@ -30,6 +30,10 @@ export const mutations = {
     state.date = value;
   },
 
+  removeContent(state, index) {
+    state.contents.splice(index, 1);
+  },
+
   selectTheme(state, slug) {
     state.themes.forEach((t) => (t.selected = false));
     const theme = state.themes.find((t) => t.slug === slug);

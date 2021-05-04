@@ -112,7 +112,7 @@ export default {
     },
 
     removeItem(index) {
-      this.contents.splice(index, 1);
+      this.$store.commit('memory/removeContent', index);
     },
   },
 };
