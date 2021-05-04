@@ -9,6 +9,7 @@ import { User, UserSchema } from '../user/user.schema';
 
 // process.env.NODE_ENV = 'production';
 // if (process.env.NODE_ENV === 'production') require('dotenv').config();
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
 @Module({
@@ -22,11 +23,13 @@ require('dotenv').config();
       accountName: process.env.AZURE_STORAGE_ACCOUNT,
       containerName: 'production',
     }),
-    ...(process.env.NODE_ENV !== 'production' ? [
-      MulterModule.register({
-        dest: './uploads',
-      }),
-    ] : []),
+    ...(process.env.NODE_ENV !== 'production'
+      ? [
+          MulterModule.register({
+            dest: './uploads',
+          }),
+        ]
+      : []),
     /*...(process.env.NODE_ENV === 'production' ? [
       AzureStorageModule.withConfig({
         sasKey: process.env.AZURE_STORAGE_SAS_KEY,
@@ -41,5 +44,6 @@ require('dotenv').config();
   ],
   controllers: [FileController],
   providers: [FileService],
+  exports: [FileService],
 })
 export class FileModule {}

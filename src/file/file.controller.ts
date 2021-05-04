@@ -90,13 +90,23 @@ export class FileController {
     };
   }
 
+  @Get(':imagename')
+  getImage(@Param('imagename') image, @Res() res) {
+    const response = res.sendFile(image, { root: './uploads' });
+
+    return {
+      status: HttpStatus.OK,
+      data: response,
+    };
+  }
+
   /**
    * Get file by name
    * @param id
    * @param res
    */
-  @Get(':id')
-  async getImage(@Param('id') id, @Res() res) {
+  @Get('id/:id')
+  async getImageById(@Param('id') id, @Res() res) {
     let response;
     const image = await this.fileService.findOne(id);
 
@@ -116,6 +126,7 @@ export class FileController {
       data: response,
     };
   }
+
 
   fileProxy(url) {}
 

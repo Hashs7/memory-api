@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Schema as MongooseSchema, Types, Document } from 'mongoose';
+import { Schema as MongooseSchema, Types } from 'mongoose';
 import { CreateMemoryDto } from './dto/create-memory.dto';
 import { User } from '../../user/user.schema';
 
@@ -13,7 +13,7 @@ export enum MemoryType {
 // export class Memory extends Document  {
 // @Schema({ timestamps: true, _id: false })
 @Schema({ timestamps: true })
-export class Memory extends Types.Subdocument  {
+export class Memory extends Types.Subdocument {
   @Prop()
   @ApiProperty()
   name: string;
@@ -34,7 +34,7 @@ export class Memory extends Types.Subdocument  {
   })
   type: string;
 
-/*
+  /*
   @Prop({
     type: String,
     enum: Object.values(MemoryType),
@@ -51,7 +51,7 @@ export class Memory extends Types.Subdocument  {
     required: true,
   })
   @ApiProperty({
-    type: User
+    type: User,
   })
   createdBy: MongooseSchema.Types.ObjectId;
 
@@ -61,7 +61,7 @@ export class Memory extends Types.Subdocument  {
     required: false,
   })
   @ApiProperty({
-    type: [User]
+    type: [User],
   })
   withUsers?: MongooseSchema.Types.ObjectId[];
 
@@ -71,13 +71,11 @@ export class Memory extends Types.Subdocument  {
   constructor(
     createMemoryDto: CreateMemoryDto,
     createdBy: MongooseSchema.Types.ObjectId,
-    withUsers:MongooseSchema.Types.ObjectId[]
+    withUsers: MongooseSchema.Types.ObjectId[],
   ) {
     super();
     this.name = createMemoryDto.name;
     this.description = createMemoryDto.description;
-    console.log(createMemoryDto.name);
-    console.log('dtooo', createMemoryDto);
     this.date = createMemoryDto.date;
     this.type = createMemoryDto.type;
     this.createdBy = createdBy;

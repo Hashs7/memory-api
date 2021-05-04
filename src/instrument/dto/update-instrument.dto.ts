@@ -10,8 +10,10 @@ export class UpdateInstrumentDto {
   @ApiPropertyOptional()
   description?: string;
 
+  /*
   @ApiPropertyOptional()
   image?: string;
+  */
 
   @ApiPropertyOptional()
   type?: string;

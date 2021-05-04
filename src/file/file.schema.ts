@@ -50,6 +50,10 @@ export class File extends Document {
   })
   @ApiProperty({ type: User })
   user: MongooseSchema.Types.ObjectId;*/
+
+  rewritePath(file: File): string {
+    return `${process.env.API_BASE_URL}/${file.path}/${file.originalname}`;
+  }
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);

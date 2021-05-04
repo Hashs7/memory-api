@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { MemoryService } from './memory.service';
 import { CreateMemoryDto } from './dto/create-memory.dto';
 import { UpdateMemoryDto } from './dto/update-memory.dto';
@@ -18,9 +27,7 @@ export class MemoryController {
     status: 200,
     type: [Memory],
   })
-  findAll(
-    @Param('instrument') instrument: string,
-  ): Promise<Memory[]> {
+  findAll(@Param('instrument') instrument: string): Promise<Memory[]> {
     return this.memoryService.findAll(instrument);
   }
 
@@ -55,7 +62,7 @@ export class MemoryController {
   update(
     @Param('id') id: string,
     @GetUser() user: User,
-    @Body() updateMemoryDto: UpdateMemoryDto
+    @Body() updateMemoryDto: UpdateMemoryDto,
   ): Promise<Memory> {
     return this.memoryService.update(id, user, updateMemoryDto);
   }
@@ -65,7 +72,7 @@ export class MemoryController {
     @GetUser() user: User,
     @Param('id') id: string,
     @Param('instrument') instrument: string,
-) {
+  ) {
     return this.memoryService.remove(user, id, instrument);
   }
 }

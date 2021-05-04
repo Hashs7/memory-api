@@ -17,13 +17,14 @@ export class CreateMemoryDto {
   @ApiProperty()
   date: Date;
 
-  @IsNotEmpty()
-  @IsString()
+  // @IsNotEmpty()
+  // @IsString()
+  @IsOptional()
   // @IsEnum(MemoryType)
   @ApiProperty({
     // enum: Object.values(MemoryType),
   })
-  type: string;
+  type?: string;
 
   @IsString()
   @IsNotEmpty()
