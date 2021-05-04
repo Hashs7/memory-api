@@ -2,7 +2,7 @@
   <div class="instrument">
     <div v-if="instrument">
       <div v-if="instrument.image" class="instrument__image">
-        <img :src="profilePicture" alt="" />
+        <img :src="instrument.image.path" alt="" />
       </div>
       <div class="instrument__container">
         <div class="instrument__head">
@@ -64,9 +64,6 @@ export default {
     addMemmory() {
       const { id } = this.$route.params;
       return `/instrument/${id}/souvenir/creation`;
-    },
-    profilePicture() {
-      return `${process.env.apiUrl}/file/${this.instrument.image.originalname}`;
     },
     memoriesCount() {
       return this.instrument.memories.length;
