@@ -14,11 +14,6 @@ import {
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { ApiTags } from '@nestjs/swagger';
-import {
-  AzureStorageFileInterceptor,
-  AzureStorageService,
-  UploadedFileMetadata,
-} from '@nestjs/azure-storage/dist';
 import { randomBytes } from 'crypto';
 import got from 'got';
 import { FileService } from './file.service';
@@ -28,10 +23,7 @@ import { FileService } from './file.service';
 @ApiTags('file')
 @Controller('file')
 export class FileController {
-  constructor(
-    private readonly azureStorage: AzureStorageService,
-    private readonly fileService: FileService,
-  ) {}
+  constructor(private readonly fileService: FileService) {}
 
   /**
    * Upload single file
@@ -39,11 +31,13 @@ export class FileController {
    */
   @Post()
   @UseInterceptors(
-    process.env.NODE_ENV !== 'production'
+    /*process.env.NODE_ENV !== 'production'
       ? FileInterceptor('file', fileInterceptorOptions)
       : AzureStorageFileInterceptor('file'),
+    */
+    FileInterceptor('file', fileInterceptorOptions),
   )
-  async uploadedFile(@UploadedFile() file: UploadedFileMetadata) {
+  async uploadedFile(@UploadedFile() file) {
     if (!file) {
       throw new BadRequestException('Aucun fichier reçu');
     }
@@ -63,9 +57,12 @@ export class FileController {
    */
   @Post('multiple')
   @UseInterceptors(
+    /*
     process.env.NODE_ENV !== 'production'
       ? FilesInterceptor('file', 10, fileInterceptorOptions)
       : AzureStorageFileInterceptor('file'),
+    */
+    FilesInterceptor('file', 10, fileInterceptorOptions),
   )
   async uploadMultipleFiles(@UploadedFiles() files) {
     const response = [];
@@ -73,15 +70,10 @@ export class FileController {
       throw new BadRequestException('Aucun fichier reçu');
     }
 
-    files.forEach((file) => {
-      // @ts-ignore
-      file.storageUrl = this.createStorageUrl(file);
-      const fileReponse = {
-        originalname: file.originalname,
-        storageUrl: file.storageUrl,
-      };
-      response.push(fileReponse);
-    });
+    for (const file of files) {
+      const data = await this.fileService.create(file);
+      response.push(data);
+    }
 
     return {
       status: HttpStatus.OK,
@@ -127,20 +119,8 @@ export class FileController {
     };
   }
 
-
-  fileProxy(url) {}
-
   uniquifyFilename(filename): string {
     const prefix = randomBytes(10).toString('hex');
     return prefix + filename;
-  }
-
-  /**
-   * TODO remove
-   * @param file
-   */
-  createStorageUrl(file: Express.Multer.File) {
-    const port = parseInt(process.env.PORT) | 3000;
-    return `http://localhost:${port}/file/${file.filename}`;
   }
 }

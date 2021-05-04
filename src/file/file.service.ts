@@ -3,7 +3,6 @@ import { File } from './file.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { AzureStorageService } from '@nestjs/azure-storage/dist';
 import { randomBytes } from 'crypto';
 import { rewritePath } from './file.helper';
 
@@ -11,7 +10,7 @@ import { rewritePath } from './file.helper';
 export class FileService {
   constructor(
     private configService: ConfigService,
-    private readonly azureStorage: AzureStorageService,
+    // private azureStorage: AzureStorageService,
     @InjectModel(File.name) private fileModel: Model<File>,
   ) {}
 
@@ -28,22 +27,19 @@ export class FileService {
     Logger.log(
       `file ${filetype} ${file.mimetype} ${file.size} ${file.storageUrl} `,
     );
-    file = {
+    /*file = {
       ...file,
       originalname: generatedName + '.' + filetype,
-    };
+    };*/
 
     if (process.env.NODE_ENV !== 'production') {
       // Store image locally
-      file.path = file.path.split('/')[0];
+      file.path = file.path.split('/')[1];
       // file.storageUrl = this.createStorageUrl(file);
     } else {
       // Store image on azure
-      const path = await this.azureStorage.upload(file);
-      file.path = path.split(process.env.AZURE_STORAGE_SAS_KEY).shift();
-      Logger.log(
-        `file ${file.originalname} ${file.mimetype} ${file.size} ${file.storageUrl} `,
-      );
+      /*const path = await this.azureStorage.upload(file);
+      file.path = path.split(process.env.AZURE_STORAGE_SAS_KEY).shift();*/
     }
 
     const fileDoc = await this.fileModel.create({

@@ -16,11 +16,13 @@ import * as shortid from 'shortid';
 import { User } from '../user/user.schema';
 import { Memory } from './memory/memory.schema';
 import { rewritePath } from '../file/file.helper';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class InstrumentService {
   constructor(
     private configService: ConfigService,
+    private fileService: FileService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
@@ -46,12 +48,12 @@ export class InstrumentService {
   async create(
     user: User,
     createInstrumentDto: CreateInstrumentDto,
-    filename?: string,
+    file?: Express.Multer.File,
   ) {
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
-      ...(filename && { image: filename }),
+      ...(file && { image: (await this.fileService.create(file))._id }),
       id,
       owner: user._id,
       memories: [],

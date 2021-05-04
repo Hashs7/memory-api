@@ -8,7 +8,9 @@ import { UserModule } from '../../user/user.module';
 import { UserService } from '../../user/user.service';
 import { User, UserSchema } from '../../user/user.schema';
 import { Memory, MemorySchema } from './memory.schema';
-import {MemoryContent, MemoryContentSchema} from "./content/content.schema";
+import { MemoryContent, MemoryContentSchema } from './content/content.schema';
+import { FileService } from '../../file/file.service';
+import { File, FileSchema } from '../../file/file.schema';
 
 @Module({
   imports: [
@@ -16,11 +18,12 @@ import {MemoryContent, MemoryContentSchema} from "./content/content.schema";
     MongooseModule.forFeature([
       { name: Memory.name, schema: MemorySchema },
       { name: User.name, schema: UserSchema },
+      { name: File.name, schema: FileSchema },
       { name: Instrument.name, schema: InstrumentSchema },
       { name: MemoryContent.name, schema: MemoryContentSchema },
     ]),
   ],
   controllers: [MemoryController],
-  providers: [MemoryService, InstrumentService, UserService],
+  providers: [MemoryService, InstrumentService, UserService, FileService],
 })
 export class MemoryModule {}

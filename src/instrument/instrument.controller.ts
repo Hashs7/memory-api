@@ -8,7 +8,8 @@ import {
   Delete,
   UseGuards,
   UseInterceptors,
-  UploadedFile, Logger,
+  UploadedFile,
+  Logger,
 } from '@nestjs/common';
 import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
@@ -58,7 +59,6 @@ export class InstrumentController {
     type: Instrument,
   })
   findOne(@Param('id') id: string) {
-    Logger.log(id, 'wow');
     return this.instrumentService.findOne(id);
   }
 
@@ -77,11 +77,7 @@ export class InstrumentController {
     @Body() createInstrumentDto: CreateInstrumentDto,
     @UploadedFile() file?: Express.Multer.File,
   ) {
-    return this.instrumentService.create(
-      user,
-      createInstrumentDto,
-      file?.filename,
-    );
+    return this.instrumentService.create(user, createInstrumentDto, file);
   }
 
   @Patch(':id')

@@ -85,8 +85,6 @@ export class Instrument extends Document {
     type: [Memory],
   })
   memories: Memory[];
-
-  rewritePath() {}
 }
 
 export const InstrumentSchema = SchemaFactory.createForClass(Instrument);

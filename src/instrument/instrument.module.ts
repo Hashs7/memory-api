@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Instrument, InstrumentSchema } from './instrument.schema';
 import { MemoryModule } from './memory/memory.module';
 import { File, FileSchema } from '../file/file.schema';
+import { FileService } from '../file/file.service';
+import { FileModule } from '../file/file.module';
 
 @Module({
   imports: [
@@ -15,7 +17,7 @@ import { File, FileSchema } from '../file/file.schema';
     ]),
   ],
   controllers: [InstrumentController],
-  providers: [InstrumentService],
+  providers: [InstrumentService, FileService],
   exports: [InstrumentService],
 })
 export class InstrumentModule {}
