@@ -4,17 +4,22 @@
       <button type="button" class="u-button u-button--primary">
         Prendre une photo
       </button>
-      <button
-        type="button"
-        class="u-button u-button--primary"
-        @click="selectGallery"
-      >
-        Choisir une photo
-      </button>
+      <label>
+        <input
+          ref="file"
+          type="file"
+          accept="audio/*,video/*,image/*"
+          class="u-button u-button--primary"
+          @change="previewImg"
+        />
+      </label>
     </div>
     <div v-if="showGallery" class="gallery">
       <span>Galerie</span>
       <MediaGallery />
+    </div>
+    <div v-if="previewSrc" class="preview">
+      <img :src="previewSrc" alt="" />
     </div>
   </div>
 </template>
@@ -31,12 +36,24 @@ export default {
     return {
       showChoices: true,
       showGallery: false,
+      file: null,
+      previewSrc: null,
     };
   },
   methods: {
     selectGallery() {
       this.showChoices = false;
       this.showGallery = true;
+    },
+
+    previewImg() {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(this.$refs.file.files[0]);
+
+      fileReader.addEventListener('loadend', (oFREvent) => {
+        this.previewSrc = oFREvent.target.result;
+        this.showChoices = false;
+      });
     },
   },
 };

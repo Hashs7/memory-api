@@ -1,12 +1,16 @@
 import { CONTENT_TYPE, THEMES } from '@/const/memory';
 
-// Add memory store
-export const state = () => ({
+const initialState = {
   name: '',
   date: [],
   type: 'Concert',
   contents: [],
   themes: [...THEMES],
+};
+
+// Add memory store
+export const state = () => ({
+  ...initialState,
 });
 
 export const mutations = {
@@ -16,6 +20,10 @@ export const mutations = {
 
   updateName(state, value) {
     state.name = value;
+  },
+
+  resetState(state) {
+    state = { ...initialState };
   },
 
   updateDate(state, value) {
