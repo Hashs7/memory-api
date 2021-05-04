@@ -110,6 +110,7 @@ export class MemoryService {
   async remove(user: User, id: string, instrumentId: string) {
     const instrument = await this.instrumentService.findOne(instrumentId);
 
+    console.log(user);
     // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");

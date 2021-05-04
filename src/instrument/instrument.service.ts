@@ -4,19 +4,20 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Model } from 'mongoose';
-import { Instrument } from './instrument.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { CreateInstrumentDto } from './dto/create-instrument.dto';
-import { UpdateInstrumentDto } from './dto/update-instrument.dto';
+import {ConfigService} from '@nestjs/config';
+import {Model} from 'mongoose';
+import {Instrument} from './instrument.schema';
+import {InjectModel} from '@nestjs/mongoose';
+import {CreateInstrumentDto} from './dto/create-instrument.dto';
+import {UpdateInstrumentDto} from './dto/update-instrument.dto';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
-import { User } from '../user/user.schema';
-import { Memory } from './memory/memory.schema';
-import { rewritePath } from '../file/file.helper';
-import { FileService } from '../file/file.service';
+import {User} from '../user/user.schema';
+import {Memory} from './memory/memory.schema';
+import {rewritePath} from '../file/file.helper';
+import {FileService} from '../file/file.service';
+import {File} from '../file/file.schema';
 
 @Injectable()
 export class InstrumentService {
@@ -24,7 +25,8 @@ export class InstrumentService {
     private configService: ConfigService,
     private fileService: FileService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
-  ) {}
+  ) {
+  }
 
   findAll() {
     return this.instrumentModel.find();
@@ -32,8 +34,15 @@ export class InstrumentService {
 
   async findOne(id: string) {
     const instrument = await this.instrumentModel
-      .findOne({ id })
-      .populate(['owner', 'image']);
+      .findOne({id})
+      .populate(['owner', 'image', {
+        path: 'memories',
+        populate: {
+          path: 'contents', populate: {
+            path: 'file', model: File.name
+          }
+        }
+      }]);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     instrument.image.path = rewritePath(instrument.image);
@@ -42,7 +51,7 @@ export class InstrumentService {
   }
 
   findForUser(user: User) {
-    return this.instrumentModel.find({ owner: user._id });
+    return this.instrumentModel.find({owner: user._id});
   }
 
   async create(
@@ -53,7 +62,7 @@ export class InstrumentService {
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
-      ...(file && { image: (await this.fileService.create(file))._id }),
+      ...(file && {image: (await this.fileService.create(file))._id}),
       id,
       owner: user._id,
       memories: [],
@@ -66,8 +75,9 @@ export class InstrumentService {
     fs.writeFile(
       '.tmp/qrcode.png',
       base64Data,
-      { encoding: 'base64' },
-      () => {},
+      {encoding: 'base64'},
+      () => {
+      },
     );
 
     return instrument;
@@ -91,7 +101,7 @@ export class InstrumentService {
       updateInstrumentDto.image = file.filename;
     }*/
     return this.instrumentModel
-      .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
+      .findOneAndUpdate({id}, updateInstrumentDto, {new: true})
       .exec();
   }
 
@@ -112,6 +122,6 @@ export class InstrumentService {
       );
     }
 
-    return this.instrumentModel.findOneAndDelete({ id });
+    return this.instrumentModel.findOneAndDelete({id});
   }
 }

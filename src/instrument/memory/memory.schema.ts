@@ -1,10 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { Schema as MongooseSchema, Types, Document } from 'mongoose';
-import { CreateMemoryDto } from './dto/create-memory.dto';
-import { User } from '../../user/user.schema';
-import { IsArray } from 'class-validator';
-import { MemoryContent } from './content/content.schema';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {ApiProperty} from '@nestjs/swagger';
+import {Schema as MongooseSchema, Types, Document} from 'mongoose';
+import {CreateMemoryDto} from './dto/create-memory.dto';
+import {User} from '../../user/user.schema';
+import {IsArray} from 'class-validator';
+import {MemoryContent} from './content/content.schema';
 
 export enum MemoryType {
   Concert = 'Concert',
@@ -14,7 +14,7 @@ export enum MemoryType {
 // @Schema()
 // export class Memory extends Document  {
 // @Schema({ timestamps: true, _id: false })
-@Schema({ timestamps: true })
+@Schema({timestamps: true})
 export class Memory extends Types.Subdocument {
   @Prop()
   @ApiProperty()
@@ -24,7 +24,7 @@ export class Memory extends Types.Subdocument {
   @ApiProperty()
   description: string;
 
-  @Prop({ type: Date })
+  @Prop({type: Date})
   @ApiProperty()
   date: Date;
 

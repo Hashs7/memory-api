@@ -26,7 +26,6 @@ export class Instrument extends Document {
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: File.name,
-    required: true,
   })
   @ApiProperty({ type: File })
   image: MongooseSchema.Types.ObjectId;

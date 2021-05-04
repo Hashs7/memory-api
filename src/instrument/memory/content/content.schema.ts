@@ -1,6 +1,8 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { Types } from 'mongoose';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {ApiProperty} from '@nestjs/swagger';
+import {Types} from 'mongoose';
+import {File} from '../../../file/file.schema';
+import {Document, Schema as MongooseSchema} from 'mongoose';
 
 export enum ContentType {
   Video = 'video',
@@ -9,7 +11,7 @@ export enum ContentType {
   Text = 'text',
 }
 
-@Schema({ timestamps: true })
+@Schema({timestamps: true})
 export class MemoryContent extends Types.Subdocument {
   @Prop()
   @ApiProperty()
@@ -26,6 +28,14 @@ export class MemoryContent extends Types.Subdocument {
     enum: Object.values(ContentType),
   })
   type: string;
+
+
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: File.name,
+  })
+  @ApiProperty({type: File})
+  file: MongooseSchema.Types.ObjectId;
 }
 
 export const MemoryContentSchema = SchemaFactory.createForClass(MemoryContent);
