@@ -19,7 +19,7 @@
       <MediaGallery />
     </div>
     <div v-if="previewSrc" class="preview">
-      <img :src="previewSrc" alt="" />
+      <img :src="previewSrc" alt="" class="preview__img" />
     </div>
   </div>
 </template>
@@ -79,5 +79,16 @@ export default {
 
 .gallery {
   margin-top: 0;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+}
+
+.preview__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
