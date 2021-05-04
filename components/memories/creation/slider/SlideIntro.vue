@@ -34,7 +34,7 @@ export default {
         return this.$store.state.memory.name;
       },
       set(value) {
-        this.$store.commit('updateName', value);
+        this.$store.commit('memory/updateName', value);
       },
     },
     date: {
@@ -42,7 +42,7 @@ export default {
         return this.$store.state.memory.date;
       },
       set(value) {
-        this.$store.commit('updateDate', value);
+        this.$store.commit('memory/updateDate', value);
       },
     },
   },

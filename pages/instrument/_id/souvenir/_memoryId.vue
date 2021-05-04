@@ -12,8 +12,8 @@
           class="memory memory--content"
           @swipe="next"
         >
-          <img v-if="c.component === 'media'" :src="c.url" alt="" />
-          <span v-else>{{ c.component }}</span>
+          <img v-if="c.type === 'media'" :src="c.url" alt="" />
+          <span v-else>{{ c.type }}</span>
         </MemoryCard>
       </div>
       <!--<button
@@ -47,24 +47,6 @@ export default {
   data() {
     return {
       index: 0,
-      contents: [
-        {
-          url:
-            'http://192.168.2.2:3000/file/167389118_1136555450195277_8275646705457542181_n2131.jpg',
-          component: 'media',
-        },
-        {
-          component: 'text',
-        },
-        {
-          url:
-            'http://192.168.2.2:3000/file/167389118_1136555450195277_8275646705457542181_n2131.jpg',
-          component: 'media',
-        },
-        {
-          component: 'audio',
-        },
-      ],
     };
   },
   computed: {
@@ -77,15 +59,14 @@ export default {
       const { id } = this.$route.params;
       return `/instrument/${id}`;
     },
+
+    contents() {
+      return this.memory.contents;
+    },
   },
   mounted() {
     document.body.style.overflow = 'hidden';
     document.body.style.height = '100vh';
-  },
-  beforeUnmount() {
-    console.log('before ');
-    document.body.style.overflow = 'auto';
-    document.body.style.height = 'auto';
   },
   methods: {
     previous() {
@@ -95,10 +76,16 @@ export default {
 
     next() {
       if (this.index >= this.contents.length) {
+        this.removeBodyStyle();
         this.$router.push(this.closeMemory);
         return;
       }
       this.index++;
+    },
+
+    removeBodyStyle() {
+      document.body.style.overflow = 'auto';
+      document.body.style.height = 'auto';
     },
 
     select(index) {

@@ -2,20 +2,24 @@
   <div class="create">
     <h1>Ajouter un nouvel instrument</h1>
 
-    <form @submit="submit">
+    <form ref="form" @submit="submit">
       <div class="form__group">
         <b-field label="Nom">
-          <b-input v-model="name" type="text"></b-input>
+          <b-input v-model="name" name="name" type="text"></b-input>
         </b-field>
       </div>
       <div class="form__group">
         <b-field label="Type">
-          <b-input v-model="type" type="text"></b-input>
+          <b-input v-model="type" name="type" type="text"></b-input>
         </b-field>
       </div>
       <div class="form__group">
         <b-field label="Spécification">
-          <b-input v-model="specification" type="text"></b-input>
+          <b-input
+            v-model="specification"
+            name="specification"
+            type="text"
+          ></b-input>
         </b-field>
       </div>
       <FileUpload ref="files" />
@@ -47,14 +51,11 @@ export default {
     // Form submitted event
     async submit(e) {
       e.preventDefault();
-      const file = this.$refs.files.dropFiles;
+      const formData = new FormData(this.$refs.form);
+      const file = this.$refs.files.dropFiles[0];
+      formData.append('image', file);
       try {
-        await this.$api.newInstrument({
-          name: this.name,
-          type: this.type,
-          specification: this.specification,
-          file,
-        });
+        await this.$api.newInstrument(formData);
         this.notifyCreated();
       } catch (e) {
         this.notifyError();

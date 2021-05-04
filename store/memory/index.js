@@ -14,7 +14,7 @@ export const mutations = {
     state.contents.push(CONTENT_TYPE[type]);
   },
 
-  updateNale(state, value) {
+  updateName(state, value) {
     state.name = value;
   },
 

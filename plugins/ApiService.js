@@ -53,7 +53,9 @@ class ApiController {
   }
 
   newInstrument(payload) {
-    return this.$axios.post('/instrument', { ...payload });
+    return this.$axios.post('/instrument', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
   }
 
   newMemory(instrumentId, payload) {
