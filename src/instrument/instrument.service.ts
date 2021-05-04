@@ -95,7 +95,7 @@ export class InstrumentService {
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException("L'utilisateur n'est pas propriétaire de l'instrument");
     }
-    
+
     return this.instrumentModel.findOneAndDelete({ id });
   }
 }

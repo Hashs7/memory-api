@@ -8,6 +8,7 @@ import { UserModule } from '../../user/user.module';
 import { UserService } from '../../user/user.service';
 import { User, UserSchema } from '../../user/user.schema';
 import { Memory, MemorySchema } from './memory.schema';
+import {MemoryContent, MemoryContentSchema} from "./content/content.schema";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { Memory, MemorySchema } from './memory.schema';
       { name: Memory.name, schema: MemorySchema },
       { name: User.name, schema: UserSchema },
       { name: Instrument.name, schema: InstrumentSchema },
+      { name: MemoryContent.name, schema: MemoryContentSchema },
     ]),
   ],
   controllers: [MemoryController],
