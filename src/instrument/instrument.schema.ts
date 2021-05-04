@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { User } from "../user/user.schema";
+import { User } from '../user/user.schema';
+import { File } from '../file/file.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Memory } from './memory/memory.schema';
 import { IsArray } from 'class-validator';
@@ -22,12 +23,13 @@ export class Instrument extends Document {
   })
   description: string;
 
-  @Prop()
-  @ApiProperty({
-    title: 'Main image',
-    description: "Image url",
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: File.name,
+    required: true,
   })
-  image: string;
+  @ApiProperty({ type: File })
+  image: MongooseSchema.Types.ObjectId;
 
   @Prop()
   @ApiProperty({
@@ -52,7 +54,7 @@ export class Instrument extends Document {
 
   @Prop()
   @ApiProperty({
-    description: "Type de finition",
+    description: 'Type de finition',
   })
   specification: string;
 
@@ -80,9 +82,11 @@ export class Instrument extends Document {
   @IsArray()
   @Prop([Memory])
   @ApiProperty({
-    type: [Memory]
+    type: [Memory],
   })
   memories: Memory[];
+
+  rewritePath() {}
 }
 
 export const InstrumentSchema = SchemaFactory.createForClass(Instrument);

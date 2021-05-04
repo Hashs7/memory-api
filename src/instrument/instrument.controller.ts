@@ -58,6 +58,7 @@ export class InstrumentController {
     type: Instrument,
   })
   findOne(@Param('id') id: string) {
+    Logger.log(id, 'wow');
     return this.instrumentService.findOne(id);
   }
 

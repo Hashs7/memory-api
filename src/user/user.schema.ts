@@ -1,9 +1,9 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Exclude} from 'class-transformer';
-import {Document} from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import {ApiProperty} from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
-import DateTimeFormat = Intl.DateTimeFormat;
+import { File } from '../file/file.schema';
 
 type ValidatePasswordFunction<T> = (password: string) => T;
 
@@ -63,6 +63,14 @@ export class User extends Document {
   @Prop()
   @Exclude()
   resetPasswordExpire: Date;
+
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: File.name,
+    required: false,
+  })
+  @ApiProperty({ type: File })
+  thumbnail?: MongooseSchema.Types.ObjectId;
 
   validatePassword: ValidatePasswordFunction<boolean>;
 }

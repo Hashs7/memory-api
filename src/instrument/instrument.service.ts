@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import { Instrument } from './instrument.schema';
@@ -10,32 +15,43 @@ import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
 import { User } from '../user/user.schema';
 import { Memory } from './memory/memory.schema';
+import { rewritePath } from '../file/file.helper';
 
 @Injectable()
 export class InstrumentService {
   constructor(
     private configService: ConfigService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
-  ) {
-  }
+  ) {}
 
   findAll() {
     return this.instrumentModel.find();
   }
 
-  findOne(id: string) {
-    return this.instrumentModel.findOne({ id }).populate('owner');
+  async findOne(id: string) {
+    const instrument = await this.instrumentModel
+      .findOne({ id })
+      .populate(['owner', 'image']);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    instrument.image.path = rewritePath(instrument.image);
+
+    return instrument;
   }
 
   findForUser(user: User) {
     return this.instrumentModel.find({ owner: user._id });
   }
 
-  async create(user: User, createInstrumentDto: CreateInstrumentDto, filename?: string) {
+  async create(
+    user: User,
+    createInstrumentDto: CreateInstrumentDto,
+    filename?: string,
+  ) {
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
-      ...filename && { image: filename },
+      ...(filename && { image: filename }),
       id,
       owner: user._id,
       memories: [],
@@ -49,8 +65,7 @@ export class InstrumentService {
       '.tmp/qrcode.png',
       base64Data,
       { encoding: 'base64' },
-      () => {
-      },
+      () => {},
     );
 
     return instrument;
@@ -64,24 +79,21 @@ export class InstrumentService {
   ) {
     const instrument = await this.findOne(id);
     if (!instrument) {
-      throw new NotFoundException('L\'instrument n\'existe pas');
+      throw new NotFoundException("L'instrument n'existe pas");
     }
     // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
-      throw new UnauthorizedException('Utilisateur n\'est pas propriétaire');
+      throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }
-    if (file) {
+    /*if (file) {
       updateInstrumentDto.image = file.filename;
-    }
+    }*/
     return this.instrumentModel
       .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
       .exec();
   }
 
-  async addMemory(
-    id: string,
-    memory: Memory,
-  ) {
+  async addMemory(id: string, memory: Memory) {
     const instrument = await this.findOne(id);
     instrument.memories.push(memory);
     instrument.markModified('memories');
@@ -93,7 +105,9 @@ export class InstrumentService {
     const instrument = await this.findOne(id);
     // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
-      throw new UnauthorizedException("L'utilisateur n'est pas propriétaire de l'instrument");
+      throw new UnauthorizedException(
+        "L'utilisateur n'est pas propriétaire de l'instrument",
+      );
     }
 
     return this.instrumentModel.findOneAndDelete({ id });

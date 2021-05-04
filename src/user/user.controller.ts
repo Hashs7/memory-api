@@ -1,8 +1,8 @@
-import {Body, Controller, Get, UseGuards} from '@nestjs/common';
+import { Body, Controller, Get, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from './auth/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import {User} from "./user.schema";
+import { User } from './user.schema';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('user')
@@ -23,12 +23,12 @@ export class UserController {
   ): Promise<User[]> {
     const users = await this.userService.findUsers(userIds);
     return users
-      .map(u => {
+      .map((u) => {
         delete u.password;
         delete u.salt;
         return u;
       })
-      .filter(u => u.id !== user.id);
+      .filter((u) => u.id !== user.id);
   }
 
   @Get('/me')

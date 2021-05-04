@@ -4,12 +4,13 @@ import { InstrumentController } from './instrument.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Instrument, InstrumentSchema } from './instrument.schema';
 import { MemoryModule } from './memory/memory.module';
-import { MemoryController } from './memory/memory.controller';
+import { File, FileSchema } from '../file/file.schema';
 
 @Module({
   imports: [
     MemoryModule,
     MongooseModule.forFeature([
+      { name: File.name, schema: FileSchema },
       { name: Instrument.name, schema: InstrumentSchema },
     ]),
   ],

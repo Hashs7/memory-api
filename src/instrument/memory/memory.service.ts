@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateMemoryDto } from './dto/create-memory.dto';
 import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
@@ -13,7 +17,7 @@ export class MemoryService {
   constructor(
     private instrumentService: InstrumentService,
     private userService: UserService,
-    @InjectModel(Memory.name) private memoryModel: Model<Memory>
+    @InjectModel(Memory.name) private memoryModel: Model<Memory>,
   ) {}
 
   /**
@@ -42,16 +46,17 @@ export class MemoryService {
   async create(
     userId: Schema.Types.ObjectId,
     instrument: string,
-    createMemoryDto: CreateMemoryDto
+    createMemoryDto: CreateMemoryDto,
   ): Promise<Memory> {
     const { withUsers } = createMemoryDto;
-    const users = (await this.userService.findUsers(withUsers))
-      .map((u) => u._id);
+    const users = (await this.userService.findUsers(withUsers)).map(
+      (u) => u._id,
+    );
 
     const memory = await this.memoryModel.create({
       ...createMemoryDto,
       createdBy: userId,
-      withUsers: users
+      withUsers: users,
     });
     await this.instrumentService.addMemory(instrument, memory);
 
@@ -67,12 +72,13 @@ export class MemoryService {
   async update(
     id: string,
     user: User,
-    updateMemoryDto: UpdateMemoryDto
+    updateMemoryDto: UpdateMemoryDto,
   ): Promise<Memory> {
     const memory = await this.findOne(id);
     const instrument = await this.instrumentService.findOne(id);
-    const withUsers = (await this.userService.findUsers(updateMemoryDto.withUsers))
-      .map((u) => u._id);
+    const withUsers = (
+      await this.userService.findUsers(updateMemoryDto.withUsers)
+    ).map((u) => u._id);
     if (!memory) {
       throw new NotFoundException("L'instrument n'existe pas");
     }
@@ -84,10 +90,14 @@ export class MemoryService {
     delete updateMemoryDto.withUsers;
 
     return this.memoryModel
-      .findOneAndUpdate({ id }, {
-        ...updateMemoryDto,
-        withUsers,
-      }, { new: true })
+      .findOneAndUpdate(
+        { id },
+        {
+          ...updateMemoryDto,
+          withUsers,
+        },
+        { new: true },
+      )
       .exec();
   }
 
