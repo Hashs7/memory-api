@@ -68,9 +68,6 @@ export class Memory extends Types.Subdocument {
   })
   withUsers?: MongooseSchema.Types.ObjectId[];
 
-  @Prop()
-  media?: string[];
-
   @IsArray()
   @Prop([MemoryContent])
   @ApiProperty({
@@ -86,8 +83,6 @@ export class Memory extends Types.Subdocument {
     super();
     this.name = createMemoryDto.name;
     this.description = createMemoryDto.description;
-    console.log(createMemoryDto.name);
-    console.log('dtooo', createMemoryDto);
     this.date = createMemoryDto.date;
     this.type = createMemoryDto.type;
     this.createdBy = createdBy;

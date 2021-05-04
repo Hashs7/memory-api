@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import {MemoryContent} from "../content/content.schema";
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { MemoryContent } from '../content/content.schema';
 
 export class CreateMemoryDto {
   @IsNotEmpty()
