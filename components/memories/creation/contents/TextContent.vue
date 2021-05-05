@@ -7,10 +7,24 @@
 <script>
 export default {
   name: 'TextCreation',
-  data() {
-    return {
-      html: null,
-    };
+  props: {
+    index: {
+      type: Number,
+      required: true,
+    },
+  },
+  computed: {
+    html: {
+      get() {
+        return this.$store.state.memory.contents[this.index].content;
+      },
+      set(value) {
+        this.$store.commit('memory/updateContent', {
+          index: this.index,
+          value,
+        });
+      },
+    },
   },
 };
 </script>

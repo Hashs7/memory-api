@@ -32,6 +32,12 @@ export default {
   components: {
     MediaGallery,
   },
+  props: {
+    index: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       showChoices: true,
@@ -49,17 +55,25 @@ export default {
     previewImg() {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(this.$refs.file.files[0]);
+      fileReader.addEventListener('loadend', (e) => this.uploadImg(e));
+    },
 
-      fileReader.addEventListener('loadend', (oFREvent) => {
-        this.previewSrc = oFREvent.target.result;
-        this.showChoices = false;
+    async uploadImg(event) {
+      this.previewSrc = event.target.result;
+      this.showChoices = false;
+      const formData = new FormData();
+      formData.append('file', this.$refs.file.files[0]);
+      const { data } = await this.$api.uploadFile(formData);
+      this.$store.commit('memory/updateContent', {
+        index: this.index,
+        value: data.response._id,
       });
     },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .media-content {
   width: 100%;
   height: 100%;
@@ -67,6 +81,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   text-align: center;
+  border-radius: $radius;
+  overflow: hidden;
 }
 
 .media-content__container {

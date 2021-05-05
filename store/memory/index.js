@@ -22,12 +22,16 @@ export const mutations = {
     state.name = value;
   },
 
-  resetState(state) {
-    state = { ...initialState };
-  },
-
   updateDate(state, value) {
     state.date = value;
+  },
+
+  updateContent(state, { index, value }) {
+    state.contents[index].content = value;
+  },
+
+  resetState(state) {
+    state = { ...initialState };
   },
 
   removeContent(state, index) {

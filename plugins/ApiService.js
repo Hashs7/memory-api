@@ -76,8 +76,16 @@ class ApiController {
     return this.$axios.get(`/instrument/${id}`);
   }
 
-  getImage(filename) {
+  getFile(filename) {
     return this.$axios.get(`/file/${filename}`);
+  }
+
+  uploadFile(file) {
+    return this.$axios.post('/file', file, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
   }
 }
 
