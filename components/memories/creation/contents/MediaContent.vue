@@ -1,23 +1,14 @@
 <template>
   <div class="media-content">
-    <div v-if="showChoices" class="media-content__container">
-      <button type="button" class="u-button u-button--primary">
-        Prendre une photo
-      </button>
-      <label>
-        <input
-          ref="file"
-          type="file"
-          accept="audio/*,video/*,image/*"
-          class="u-button u-button--primary"
-          @change="previewImg"
-        />
-      </label>
-    </div>
-    <div v-if="showGallery" class="gallery">
-      <span>Galerie</span>
-      <MediaGallery />
-    </div>
+    <label v-if="showChoices" class="media-content__container">
+      <input
+        ref="file"
+        class="media-content__input"
+        type="file"
+        accept="audio/*,video/*,image/*"
+        @change="previewImg"
+      />
+    </label>
     <div v-if="previewSrc" class="preview">
       <img :src="previewSrc" alt="" class="preview__img" />
     </div>
@@ -25,13 +16,8 @@
 </template>
 
 <script>
-import MediaGallery from '@/components/layout/MediaGallery';
-
 export default {
   name: 'MediaCreation',
-  components: {
-    MediaGallery,
-  },
   props: {
     index: {
       type: Number,
@@ -41,17 +27,11 @@ export default {
   data() {
     return {
       showChoices: true,
-      showGallery: false,
       file: null,
       previewSrc: null,
     };
   },
   methods: {
-    selectGallery() {
-      this.showChoices = false;
-      this.showGallery = true;
-    },
-
     previewImg() {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(this.$refs.file.files[0]);
@@ -86,7 +66,8 @@ export default {
 }
 
 .media-content__container {
-  margin: auto;
+  width: 100%;
+  height: 100%;
 }
 
 .u-button {
@@ -106,5 +87,10 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.media-content__input {
+  width: 100%;
+  height: 100%;
 }
 </style>

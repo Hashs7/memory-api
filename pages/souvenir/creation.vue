@@ -1,51 +1,12 @@
 <template>
-  <div class="o-page o-page--create">
-    <div class="o-page__header">
-      <h1>Création</h1>
-      <span>Racontez l'histoire de votre instrument</span>
-    </div>
-
-    <form class="o-page__body">
-      <div class="slider">
-        <SlideIntro />
-
-        <div v-for="(c, i) in contents" :key="i" class="slider__item">
-          <component :is="c.component" v-if="c.component" :key="i" :index="i" />
-          <button type="button" class="slider__close" @click="removeItem(i)">
-            x
-          </button>
-        </div>
-
-        <SliderAdd />
-      </div>
-    </form>
-
-    <form v-if="showThemes" class="o-page--full themes">
-      <div class="themes__container">
-        <h3>Choisissez votre thème</h3>
-        <div class="themes__grid">
-          <ThemeSelector v-for="(t, i) in themes" :key="i" :theme="t" />
-        </div>
-      </div>
-      <span
-        class="o-page--full themes__background"
-        @click="showThemes = false"
-      ></span>
-    </form>
-
-    <div class="o-page__footer">
-      <button
-        type="button"
-        class="button is-primary"
-        @click="showThemes = !showThemes"
-      >
-        Personnaliser
-      </button>
-      <button type="submit" class="button is-primary" @click="submit">
-        Valider
-      </button>
-    </div>
-  </div>
+  <CreateForm v-if="!showSummary" @next="showSummary = true" />
+  <Summary
+    v-else-if="!showConfidentiality"
+    @back="showSummary = false"
+    @submit="submit"
+    @params="showConfidentiality = true"
+  />
+  <Confidentiality v-else @select="showConfidentiality = false" />
 </template>
 
 <router>
@@ -54,28 +15,23 @@
 
 <script>
 import { mapState } from 'vuex';
-import SlideIntro from '@/components/memories/creation/slider/SlideIntro';
-import SliderAdd from '@/components/memories/creation/slider/SliderAdd';
-import TextContent from '@/components/memories/creation/contents/TextContent';
-import AudioContent from '@/components/memories/creation/contents/AudioContent';
-import MediaContent from '@/components/memories/creation/contents/MediaContent';
-import ThemeSelector from '@/components/memories/creation/ThemeSelector';
-import { formatContentType } from '../../const/memory';
+import CreateForm from '@/components/memories/creation/views/CreateForm';
+import Summary from '@/components/memories/creation/views/Summary';
+import Confidentiality from '@/components/memories/creation/views/Confidentiality';
+import { formatContentType } from '@/const/memory';
 
 export default {
   name: 'NewInstrument',
   components: {
-    ThemeSelector,
-    SlideIntro,
-    SliderAdd,
-    TextContent,
-    AudioContent,
-    MediaContent,
+    CreateForm,
+    Summary,
+    Confidentiality,
   },
   data() {
     return {
       success: false,
-      showThemes: false,
+      showSummary: false,
+      showConfidentiality: false,
     };
   },
   computed: {
@@ -110,85 +66,13 @@ export default {
         type: 'is-success',
       });
     },
-
-    removeItem(index) {
-      this.$store.commit('memory/removeContent', index);
-    },
   },
 };
 </script>
 
 <style lang="scss">
-.o-page--create {
-  background-color: $gray-lightest;
-}
-
 .o-page__footer {
   display: flex;
   justify-content: space-between;
-}
-
-.form__group {
-  max-width: 300px;
-  margin: 0 auto 16px auto;
-
-  label {
-    text-align: left;
-    display: block;
-  }
-
-  input {
-    width: 100%;
-  }
-}
-
-.slider {
-  display: flex;
-  overflow: auto;
-  padding: 8px;
-}
-
-.slider__item {
-  position: relative;
-  min-width: 260px;
-  height: 460px;
-  margin: 20px 12px;
-  box-shadow: $shadow--first;
-  border-radius: $radius;
-  background-color: $white;
-}
-
-.slider__close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 40px;
-  background-color: $white;
-  box-shadow: $shadow--second;
-  border: none;
-  transform: translate(25%, -25%);
-}
-
-.themes {
-  z-index: 20;
-  margin-top: 124px;
-}
-
-.themes__container {
-  position: relative;
-  z-index: 20;
-  padding: 22px;
-  border-radius: 24px 24px 0 0;
-  box-shadow: $shadow--first;
-  background-color: $white;
-}
-
-.themes__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 12px;
-  grid-row-gap: 12px;
 }
 </style>
