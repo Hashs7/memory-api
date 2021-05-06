@@ -10,7 +10,7 @@
 </template>
 
 <router>
-  path: /instrument/:id/souvenir/creation
+path: /instrument/:id/souvenir/creation
 </router>
 
 <script>
@@ -71,6 +71,10 @@ export default {
 </script>
 
 <style lang="scss">
+.o-page--create {
+  background-color: #fffefa;
+}
+
 .o-page__footer {
   display: flex;
   justify-content: space-between;

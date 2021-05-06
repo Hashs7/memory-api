@@ -1,6 +1,5 @@
 <template>
   <div class="slider__item slider__add">
-    Ajouter
     <button
       class="u-button u-button--round"
       type="button"
@@ -51,6 +50,7 @@ export default {
 
   .u-button {
     margin: 8px;
+    background-color: $gray-lightest;
   }
 }
 </style>

@@ -11,34 +11,33 @@ $white:                #FFFFFF;
 $black:                #000000;
 $white-light:          rgba(255, 255, 255, .25);
 
-$gray-lightest:        #F8F8F8;
-$gray:                 #F6F8FA;
-$gray-dark:            #E2E2E2;
-$gray-darker:          #969696;
+$gray:                 #D0D0D0;
+$gray-lightest:        lighten($gray, 15%);
+$gray-dark:            darken($gray, 5%);
+$gray-darker:          darken($gray, 10%);
 
-//$primary-darkest:      #2b0c0c;
-//$primary-darker:       #6b1e1e;
-$primary-dark:         #071E2F;
-$primary:              #0A314D;
-$primary-light:        rgba(5, 28, 44, 0.6);
-$primary-lighter:      rgba(10, 49, 77, .3);
-$primary-lightest:     rgba(10, 49, 77, .15);
+$primary:              #FB9669;
+$primary-darkest:      darken($primary, 25%);
+$primary-darker:       darken($primary, 20%);
+$primary-dark:         darken($primary, 10%);
+$primary-light:        lighten($primary, 10%);
+$primary-lighter:      lighten($primary, 20%);
+$primary-lightest:     lighten($primary, 25%);
 
-//$secondary-darkest:    #12200d;
-$secondary-darker:     #7b5914;
-$secondary-dark:       #977020;
-$secondary:            #C4A462;
-$secondary-contrast:            #a06c00;
-$secondary-light:      rgba(196, 164, 98, .4);
-$secondary-lighter:    rgba(196, 164, 98, .3);
-//$secondary-lightest:   rgba(196, 164, 98, .1);
+$secondary:              #3B3560;
+$secondary-darkest:      darken($secondary, 25%);
+$secondary-darker:       darken($secondary, 20%);
+$secondary-dark:         darken($secondary, 10%);
+$secondary-light:        lighten($secondary, 10%);
+$secondary-lighter:      lighten($secondary, 20%);
+$secondary-lightest:     lighten($secondary, 25%);
 
 
 $date: #CED5DB;
 $date-light: rgba(206, 213, 219, .25);
 $color-body:      $white;
-$color-text:      $primary;
-$color-link:      $secondary;
+$color-text:      $secondary;
+$color-link:      $primary;
 
 
 /*
