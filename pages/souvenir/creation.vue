@@ -6,7 +6,7 @@
     @submit="submit"
     @params="showConfidentiality = true"
   />
-  <Confidentiality v-else @select="showConfidentiality = false" />
+  <Confidentiality v-else @back="showConfidentiality = false" />
 </template>
 
 <router>

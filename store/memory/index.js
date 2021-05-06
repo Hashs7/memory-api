@@ -4,6 +4,7 @@ const initialState = {
   name: '',
   date: [],
   type: 'Concert',
+  visibility: null,
   contents: [],
   themes: [...THEMES],
 };
@@ -26,8 +27,17 @@ export const mutations = {
     state.date = value;
   },
 
-  updateContent(state, { index, value }) {
-    state.contents[index].content = value;
+  updateVisibility(state, value) {
+    state.visibility = value;
+  },
+
+  updateContent(state, { index, value, file }) {
+    if (value) {
+      state.contents[index].content = value;
+    }
+    if (file) {
+      state.contents[index].file = file;
+    }
   },
 
   resetState(state) {

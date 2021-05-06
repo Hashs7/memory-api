@@ -12,7 +12,7 @@
           class="memory memory--content"
           @swipe="next"
         >
-          <img v-if="c.type === 'media'" :src="c.url" alt="" />
+          <img v-if="c.type === 'media'" :src="c.file.path" alt="" />
           <span v-else>{{ c.type }}</span>
         </MemoryCard>
       </div>

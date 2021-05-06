@@ -1,7 +1,7 @@
 <template>
   <div class="o-page o-page--create">
     <div class="o-page__header">
-      <h1>Création</h1>
+      <h1 class="o-page__header-title">Création</h1>
       <span>Racontez l'histoire de votre instrument</span>
     </div>
 

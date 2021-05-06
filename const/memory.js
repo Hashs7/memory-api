@@ -3,16 +3,41 @@ export const CONTENT_TYPE = {
     type: 'media',
     component: 'MediaContent',
     content: '',
+    file: '',
   },
   audio: {
     type: 'audio',
     component: 'AudioContent',
     content: '',
+    file: '',
   },
   text: {
     type: 'text',
     component: 'TextContent',
     content: '',
+  },
+};
+
+export const VISIBILITY = {
+  private: {
+    slug: 'private',
+    text: 'Moi seulement',
+    helper: 'Vous seul pouvez voir ce souvenir',
+  },
+  unlisted: {
+    slug: 'unlisted',
+    text: 'Non répertorié',
+    helper: 'Seul les personnes disposant du lien y ont accès',
+  },
+  fans: {
+    slug: 'fans',
+    text: 'Fans seulement',
+    helper: 'Seuls vos amis pourront voir ce souvenir',
+  },
+  public: {
+    slug: 'public',
+    text: 'Tout le monde',
+    helper: 'Votre souvenir est publique',
   },
 };
 

@@ -46,7 +46,7 @@ export default {
       const { data } = await this.$api.uploadFile(formData);
       this.$store.commit('memory/updateContent', {
         index: this.index,
-        value: data.response._id,
+        file: data.response._id,
       });
     },
   },
