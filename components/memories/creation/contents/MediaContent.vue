@@ -1,12 +1,13 @@
 <template>
   <div class="media-content">
     <label v-if="showChoices" class="media-content__container">
+      <IconMedia class="media-content__icon" />
       <input
         ref="file"
         class="media-content__input"
         type="file"
         accept="audio/*,video/*,image/*"
-        @change="previewImg"
+        style="opacity: 0"
       />
     </label>
     <div v-if="previewSrc" class="preview">
@@ -16,8 +17,13 @@
 </template>
 
 <script>
+import IconMedia from '@/assets/svg/ic_media.svg?inline';
+
 export default {
   name: 'MediaCreation',
+  components: {
+    IconMedia,
+  },
   props: {
     index: {
       type: Number,
@@ -30,6 +36,9 @@ export default {
       file: null,
       previewSrc: null,
     };
+  },
+  mounted() {
+    // this.$refs.file.click();
   },
   methods: {
     previewImg() {
@@ -68,6 +77,16 @@ export default {
 .media-content__container {
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-content__input {
+  height: 0.1px;
+  width: 0.1px;
+  overflow: hidden;
+  position: absolute;
 }
 
 .u-button {
@@ -87,10 +106,5 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.media-content__input {
-  width: 100%;
-  height: 100%;
 }
 </style>
