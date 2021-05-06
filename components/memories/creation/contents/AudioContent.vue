@@ -41,4 +41,38 @@ export default {
   background-color: transparent !important;
   box-shadow: none !important;
 }
+
+.ar-player {
+  display: none !important;
+  width: 100%;
+}
+
+.ar-content {
+  height: 100%;
+  justify-content: center;
+}
+
+.ar-icon {
+  border-color: $secondary !important;
+}
+
+.ar-recorder__time-limit {
+  display: none !important;
+}
+
+.ar-recorder__records-limit {
+  display: none !important;
+}
+
+.ar-volume {
+  display: none !important;
+}
+
+.ar-records {
+  width: 100% !important;
+}
+
+.ar-records__record {
+  width: 100% !important;
+}
 </style>
