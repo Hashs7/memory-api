@@ -26,7 +26,10 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 h1, h2 {
-  font-size: 2.78rem;
+  font-family: $font-secondary;
+  font-size: 18px;
+  font-weight: normal;
+  color: $secondary;
 }
 
 p {
@@ -43,12 +46,12 @@ input {
 /* -------- Responsive -------- */
 @media #{$tablet-m-media} {
   h1, h2 {
-    font-size: 2.5rem;
+    font-size: 18px;
   }
 }
 
 @media #{$mobile-l-media} {
   h1, h2 {
-    font-size: 2rem;
+    font-size: 18px;
   }
 }

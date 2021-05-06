@@ -33,16 +33,20 @@
       ></span>
     </form>
 
-    <div class="o-page__footer">
+    <div class="o-page__footer actions">
       <button
         type="button"
-        class="button is-primary"
+        class="button u-button u-button--round actions__theme"
         @click="showThemes = !showThemes"
       >
-        Personnaliser
+        <IconBrush />
       </button>
-      <button type="button" class="button is-primary" @click="$emit('next')">
-        Valider
+      <button
+        type="button"
+        class="button u-button u-button--round actions__submit"
+        @click="$emit('next')"
+      >
+        <IconCheck />
       </button>
     </div>
   </div>
@@ -57,6 +61,8 @@ import AudioContent from '@/components/memories/creation/contents/AudioContent';
 import MediaContent from '@/components/memories/creation/contents/MediaContent';
 import ThemeSelector from '@/components/memories/creation/ThemeSelector';
 import MemoryPreview from '@/components/memories/MemoryPreview';
+import IconCheck from '@/assets/svg/ic_check.svg?inline';
+import IconBrush from '@/assets/svg/ic_brush.svg?inline';
 
 export default {
   name: 'CreateForm',
@@ -68,6 +74,8 @@ export default {
     AudioContent,
     MediaContent,
     MemoryPreview,
+    IconCheck,
+    IconBrush,
   },
   data() {
     return {
@@ -95,6 +103,10 @@ export default {
 <style lang="scss">
 .o-page--create {
   background-color: $gray-lightest;
+
+  .o-page__header {
+    margin-top: 20px;
+  }
 }
 
 .o-page__footer {
@@ -120,6 +132,11 @@ export default {
   display: flex;
   overflow: auto;
   padding: 8px;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
 }
 
 .slider__item {
@@ -164,5 +181,31 @@ export default {
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 12px;
   grid-row-gap: 12px;
+}
+
+.actions {
+  margin-bottom: 17px;
+  padding: 0 19px;
+  &__submit,
+  &__theme {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid white;
+    width: 48px;
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.13);
+    height: 48px;
+
+    svg {
+      width: 18px;
+    }
+  }
+  &__theme {
+    background-color: $secondary;
+  }
+
+  &__submit {
+    background-color: $primary;
+  }
 }
 </style>

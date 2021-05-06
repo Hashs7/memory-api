@@ -4,7 +4,6 @@
       <label class="title">
         <textarea
           v-model="name"
-          type="text"
           class="title__input"
           placeholder="Comment voulez-vous nommer ce souvenir ?"
         ></textarea>

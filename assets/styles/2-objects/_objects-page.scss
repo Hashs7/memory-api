@@ -57,6 +57,10 @@
   }
 }
 
+.o-page__header {
+  text-align: center;
+}
+
 .o-page__body {
   flex-grow: 1;
 }
@@ -126,4 +130,13 @@
   line-height: 1;
   font-size: 13px;
   color: #C0C0C0;
+}
+
+.o-page__title {
+  text-align: center;
+}
+
+.o-page__subtitle {
+  font-size: 14px;
+  color: center;
 }
