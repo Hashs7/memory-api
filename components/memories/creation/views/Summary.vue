@@ -13,6 +13,22 @@
       <MemoryPreview :memory="memory" />
 
       <div class="o-cells">
+        <label class="o-cells__label">Date</label>
+        <client-only>
+          <b-field>
+            <b-datepicker
+              v-model="date"
+              locale="fr"
+              placeholder="Sélectionner une date"
+              icon="calendar-today"
+              trap-focus
+            >
+            </b-datepicker>
+          </b-field>
+        </client-only>
+      </div>
+
+      <div class="o-cells">
         <label class="o-cells__label">Confidentialité</label>
         <div class="o-cells__container">
           <button class="o-cells__item" @click="$emit('params')">
@@ -56,12 +72,19 @@ export default {
   computed: {
     ...mapState({
       name: (state) => state.memory.name,
-      date: (state) => state.memory.date,
       type: (state) => state.memory.type,
       contents: (state) => state.memory.contents,
       themes: (state) => state.memory.themes,
       visibility: (state) => state.memory.visibility,
     }),
+    date: {
+      get() {
+        return this.$store.state.memory.date;
+      },
+      set(value) {
+        this.$store.commit('memory/updateDate', value);
+      },
+    },
     memory() {
       return {
         name: this.name,
@@ -76,4 +99,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.o-page__body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+</style>

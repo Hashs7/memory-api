@@ -8,18 +8,6 @@
           placeholder="Comment voulez-vous nommer ce souvenir ?"
         ></textarea>
       </label>
-      <client-only>
-        <b-field label="Date">
-          <b-datepicker
-            v-model="date"
-            locale="fr"
-            placeholder="Sélectionner une date"
-            icon="calendar-today"
-            trap-focus
-          >
-          </b-datepicker>
-        </b-field>
-      </client-only>
     </div>
   </div>
 </template>
@@ -34,14 +22,6 @@ export default {
       },
       set(value) {
         this.$store.commit('memory/updateName', value);
-      },
-    },
-    date: {
-      get() {
-        return this.$store.state.memory.date;
-      },
-      set(value) {
-        this.$store.commit('memory/updateDate', value);
       },
     },
   },

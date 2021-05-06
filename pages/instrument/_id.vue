@@ -33,6 +33,7 @@
         <MemoryPreview
           v-for="m in instrument.memories"
           :key="m._id"
+          :link="true"
           :memory="m"
         />
       </div>

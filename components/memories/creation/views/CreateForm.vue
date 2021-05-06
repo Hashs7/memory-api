@@ -1,7 +1,9 @@
 <template>
   <div class="o-page o-page--create">
-    <div class="o-page__header">
-      <h1 class="o-page__header-title">Création</h1>
+    <div class="o-page__header o-page__header-nav">
+      <button class="o-page__header-btn icon" @click="$emit('back')">
+        <IconChevron />
+      </button>
       <span>Racontez l'histoire de votre instrument</span>
     </div>
 
@@ -63,6 +65,7 @@ import ThemeSelector from '@/components/memories/creation/ThemeSelector';
 import MemoryPreview from '@/components/memories/MemoryPreview';
 import IconCheck from '@/assets/svg/ic_check.svg?inline';
 import IconBrush from '@/assets/svg/ic_brush.svg?inline';
+import IconChevron from '@/assets/svg/ic_chevron.svg?inline';
 
 export default {
   name: 'CreateForm',
@@ -76,6 +79,7 @@ export default {
     MemoryPreview,
     IconCheck,
     IconBrush,
+    IconChevron,
   },
   data() {
     return {
@@ -103,10 +107,6 @@ export default {
 <style lang="scss">
 .o-page--create {
   background-color: $gray-lightest;
-
-  .o-page__header {
-    margin-top: 20px;
-  }
 }
 
 .o-page__footer {
@@ -131,7 +131,7 @@ export default {
 .slider {
   display: flex;
   overflow: auto;
-  padding: 8px;
+  padding: 8px 24px;
 
   &::-webkit-scrollbar {
     width: 0;
@@ -141,8 +141,8 @@ export default {
 
 .slider__item {
   position: relative;
-  min-width: 260px;
-  height: 460px;
+  min-width: calc(100vw - 60px);
+  height: calc((100vw - 60px) * (16 / 9));
   margin: 20px 12px;
   box-shadow: $shadow--first;
   border-radius: $radius;

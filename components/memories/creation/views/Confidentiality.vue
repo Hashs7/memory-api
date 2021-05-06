@@ -42,18 +42,14 @@ export default {
   data() {
     return {
       index: null,
-      items: [
-        VISIBILITY.private,
-        VISIBILITY.unlisted,
-        VISIBILITY.fans,
-        VISIBILITY.public,
-      ],
+      items: [VISIBILITY.private, VISIBILITY.unlisted, VISIBILITY.public],
     };
   },
   methods: {
     select(index) {
       this.index = index;
       this.$store.commit('memory/updateVisibility', this.items[index].slug);
+      this.$emit('back');
     },
   },
 };

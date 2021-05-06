@@ -27,6 +27,7 @@ export default {
     Summary,
     Confidentiality,
   },
+  layout: 'tabbar',
   data() {
     return {
       success: false,
@@ -42,12 +43,15 @@ export default {
       contents: (state) => state.memory.contents,
       themes: (state) => state.memory.themes,
     }),
+    instrumentId() {
+      return this.$route.params.id;
+    },
   },
   methods: {
     // Form submitted event
     async submit() {
       try {
-        await this.$api.newMemory(this.$route.params.id, {
+        await this.$api.newMemory(this.instrumentId, {
           name: this.name,
           date: this.date,
           type: this.type,
@@ -65,6 +69,12 @@ export default {
         message: "Le souvenir vient d'être créé",
         type: 'is-success',
       });
+      setTimeout(() => {
+        this.$router.push({
+          name: 'instrument-id',
+          params: { id: this.instrumentId },
+        });
+      }, 1000);
     },
   },
 };
