@@ -8,6 +8,7 @@
         type="file"
         accept="audio/*,video/*,image/*"
         style="opacity: 0"
+        @change="previewImg"
       />
     </label>
     <div v-if="previewSrc" class="preview">
