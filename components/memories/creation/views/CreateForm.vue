@@ -100,6 +100,10 @@ export default {
         type: 'is-success',
       });
     },
+
+    removeItem(index) {
+      this.$store.commit('memory/removeContent', index);
+    },
   },
 };
 </script>
