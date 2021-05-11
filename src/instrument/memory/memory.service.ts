@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -11,6 +12,8 @@ import { UserService } from '../../user/user.service';
 import { Model, Schema } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../../user/user.schema';
+import { ContentType, MemoryContent } from './content/content.schema';
+import { rewritePath } from '../../file/file.helper';
 
 @Injectable()
 export class MemoryService {
@@ -18,6 +21,8 @@ export class MemoryService {
     private instrumentService: InstrumentService,
     private userService: UserService,
     @InjectModel(Memory.name) private memoryModel: Model<Memory>,
+    @InjectModel(MemoryContent.name)
+    private memoryContentModel: Model<MemoryContent>,
   ) {}
 
   /**
@@ -53,10 +58,17 @@ export class MemoryService {
       (u) => u._id,
     );
 
+    const contents = await Promise.all(
+      createMemoryDto.contents.map((c) =>
+        this.memoryContentModel.create({ ...c }),
+      ),
+    );
+
     const memory = await this.memoryModel.create({
       ...createMemoryDto,
       createdBy: userId,
       withUsers: users,
+      contents,
     });
     await this.instrumentService.addMemory(instrument, memory);
 
@@ -116,7 +128,6 @@ export class MemoryService {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }
 
-    // @ts-ignore
     const index = instrument.memories.findIndex((m) => m._id.equals(id));
     instrument.memories.splice(index, 1);
     instrument.markModified('memories');

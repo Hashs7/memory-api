@@ -47,7 +47,7 @@ export class FileController {
     return {
       status: HttpStatus.OK,
       message: 'Image uploaded successfully',
-      data,
+      response: data,
     };
   }
 
@@ -78,7 +78,7 @@ export class FileController {
     return {
       status: HttpStatus.OK,
       message: 'Images uploaded successfully!',
-      data: response,
+      response,
     };
   }
 
@@ -88,7 +88,7 @@ export class FileController {
 
     return {
       status: HttpStatus.OK,
-      data: response,
+      response,
     };
   }
 
@@ -115,7 +115,7 @@ export class FileController {
 
     return {
       status: HttpStatus.OK,
-      data: response,
+      response,
     };
   }
 
