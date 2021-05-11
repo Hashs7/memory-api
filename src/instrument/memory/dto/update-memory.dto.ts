@@ -1,5 +1,6 @@
 import { ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { MemoryContent } from '../content/content.schema';
 
 export class UpdateMemoryDto {
   @IsString()
@@ -35,5 +36,5 @@ export class UpdateMemoryDto {
 
   @IsOptional()
   @ApiPropertyOptional()
-  media?: string[];
+  contents?: MemoryContent[];
 }
