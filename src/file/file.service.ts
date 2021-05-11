@@ -24,7 +24,7 @@ export class FileService {
   async findForUser(user: User) {
     const files = await this.fileModel.find({ user: user._id });
     return files.map((f) => {
-      f.path = rewritePath(f);
+      f.rewritePath();
       return f;
     });
   }
@@ -36,10 +36,6 @@ export class FileService {
     Logger.log(
       `file ${filetype} ${file.mimetype} ${file.size} ${file.storageUrl} `,
     );
-    /*file = {
-      ...file,
-      originalname: generatedName + '.' + filetype,
-    };*/
 
     if (process.env.NODE_ENV !== 'production') {
       // Store image locally

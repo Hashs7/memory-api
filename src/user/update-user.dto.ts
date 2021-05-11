@@ -11,7 +11,8 @@ import {
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class CreateUserDto {
+export class UpdateUserDto {
+  @IsOptional()
   @IsString()
   @MinLength(4)
   @MaxLength(32)
@@ -19,8 +20,19 @@ export class CreateUserDto {
     minimum: 4,
     maximum: 32,
   })
-  username: string;
+  username?: string;
 
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(20)
+  @ApiProperty({
+    minimum: 2,
+    maximum: 20,
+  })
+  firstName?: string;
+
+  @IsOptional()
   @IsString()
   @MinLength(4)
   @MaxLength(20)
@@ -28,22 +40,14 @@ export class CreateUserDto {
     minimum: 4,
     maximum: 20,
   })
-  firstName: string;
+  lastName?: string;
 
-  @IsString()
-  @MinLength(4)
-  @MaxLength(20)
-  @ApiProperty({
-    minimum: 4,
-    maximum: 20,
-  })
-  lastName: string;
-
+  @IsOptional()
   @IsEmail()
   @ApiProperty({
     example: 'email@example.com',
   })
-  email: string;
+  email?: string;
 
   @IsPhoneNumber('FR')
   @IsOptional()
@@ -59,17 +63,7 @@ export class CreateUserDto {
   @ApiPropertyOptional()
   whistList?: string[];
 
+  @IsOptional()
   @ApiPropertyOptional()
   image?: string;
-
-  @IsString()
-  @MinLength(8)
-  @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'Mot de passe trop faible',
-  })
-  @ApiProperty({
-    minimum: 8,
-    pattern: '/(?:(?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$/',
-  })
-  password: string;
 }

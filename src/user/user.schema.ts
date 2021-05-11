@@ -1,9 +1,10 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Exclude} from 'class-transformer';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Exclude } from 'class-transformer';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import {ApiProperty} from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 import { File } from '../file/file.schema';
+import { Instrument } from '../instrument/instrument.schema';
 
 type ValidatePasswordFunction<T> = (password: string) => T;
 
@@ -66,6 +67,15 @@ export class User extends Document {
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
+    ref: 'Instrument',
+    required: false,
+    default: [],
+  })
+  @ApiProperty({ type: Instrument })
+  wishList?: MongooseSchema.Types.ObjectId;
+
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
     ref: File.name,
     required: false,
   })
@@ -78,8 +88,8 @@ export class User extends Document {
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.methods.validatePassword = async function (
-    password: string,
+  password: string,
 ): Promise<boolean> {
-    const hash = await bcrypt.hash(password, this.salt);
-    return hash === this.password;
+  const hash = await bcrypt.hash(password, this.salt);
+  return hash === this.password;
 };
