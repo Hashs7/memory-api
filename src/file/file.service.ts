@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 import { rewritePath } from './file.helper';
+import { User } from '../user/user.schema';
 
 @Injectable()
 export class FileService {
@@ -18,6 +19,14 @@ export class FileService {
     const file = await this.fileModel.findOne({ _id: id });
     file.path = rewritePath(file);
     return file;
+  }
+
+  async findForUser(user: User) {
+    const files = await this.fileModel.find({ user: user._id });
+    return files.map((f) => {
+      f.path = rewritePath(f);
+      return f;
+    });
   }
 
   async create(file): Promise<File> {
@@ -35,7 +44,6 @@ export class FileService {
     if (process.env.NODE_ENV !== 'production') {
       // Store image locally
       file.path = file.path.split('/')[1];
-      // file.storageUrl = this.createStorageUrl(file);
     } else {
       // Store image on azure
       /*const path = await this.azureStorage.upload(file);

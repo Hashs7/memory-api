@@ -87,11 +87,8 @@ export class InstrumentService {
     const img: string = await qrcode.toDataURL(url);
     const base64Data = img.split(';base64,').pop();
 
-    fs.writeFile(
-      '.tmp/qrcode.png',
-      base64Data,
-      { encoding: 'base64' },
-      () => {},
+    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
+      console.log('created'),
     );
 
     return instrument;

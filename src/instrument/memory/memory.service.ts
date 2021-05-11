@@ -1,6 +1,5 @@
 import {
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -12,8 +11,7 @@ import { UserService } from '../../user/user.service';
 import { Model, Schema } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../../user/user.schema';
-import { ContentType, MemoryContent } from './content/content.schema';
-import { rewritePath } from '../../file/file.helper';
+import { MemoryContent } from './content/content.schema';
 
 @Injectable()
 export class MemoryService {

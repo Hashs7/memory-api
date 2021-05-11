@@ -10,13 +10,18 @@ import {
   HttpStatus,
   BadRequestException,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { randomBytes } from 'crypto';
 import got from 'got';
 import { FileService } from './file.service';
+import { AuthGuard } from '@nestjs/passport';
+import { Instrument } from '../instrument/instrument.schema';
+import { GetUser } from '../user/auth/get-user.decorator';
+import { User } from '../user/user.schema';
 
 // process.env.NODE_ENV = 'production';
 
@@ -82,8 +87,19 @@ export class FileController {
     };
   }
 
-  @Get(':imagename')
-  getImage(@Param('imagename') image, @Res() res) {
+  @Get('user')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    type: [Instrument],
+  })
+  async getUserFiles(@GetUser() user: User) {
+    return this.fileService.findForUser(user);
+  }
+
+  @Get(':imageName')
+  getImage(@Param('imageName') image, @Res() res) {
     const response = res.sendFile(image, { root: './uploads' });
 
     return {
