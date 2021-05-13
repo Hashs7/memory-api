@@ -49,15 +49,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/buefy
-    'nuxt-buefy',
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
-    '@nuxtjs/auth-next',
-  ],
+  modules: ['nuxt-buefy', '@nuxtjs/axios', '@nuxtjs/pwa', '@nuxtjs/auth-next'],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -66,6 +58,23 @@ export default {
 
   env: {
     apiUrl: process.env.VUE_APP_API_URL || 'http://localhost:3000',
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        user: {
+          property: 'user',
+          autoFetch: false,
+        },
+        endpoints: {
+          login: { url: '/auth/signin', method: 'post' },
+          logout: { url: '/auth/logout', method: 'post' },
+          refresh: { url: '/auth/refresh', method: 'post' },
+          user: { url: '/user/me', method: 'get' },
+        },
+      },
+    },
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
