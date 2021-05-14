@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../user/user.schema';
-import { Instrument } from '../instrument/instrument.schema';
+import { User, UserSchema } from '../user/user.schema';
+import { rewritePath } from './file.helper';
 
 @Schema()
 export class File extends Document {
@@ -43,17 +43,19 @@ export class File extends Document {
   @ApiProperty()
   size: string;
 
-/*  @Prop({
+  @Prop({
     type: MongooseSchema.Types.ObjectId,
-    ref: Instrument.name,
+    ref: 'User',
     required: true,
   })
   @ApiProperty({ type: User })
-  user: MongooseSchema.Types.ObjectId;*/
+  user: MongooseSchema.Types.ObjectId;
 
-  rewritePath(file: File): string {
-    return `${process.env.API_BASE_URL}/${file.path}/${file.originalname}`;
-  }
+  rewritePath() {}
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);
+
+FileSchema.methods.rewritePath = async function () {
+  this.path = rewritePath(this);
+};

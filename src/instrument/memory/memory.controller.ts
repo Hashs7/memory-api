@@ -8,20 +8,19 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import {MemoryService} from './memory.service';
-import {CreateMemoryDto} from './dto/create-memory.dto';
-import {UpdateMemoryDto} from './dto/update-memory.dto';
-import {Memory} from './memory.schema';
-import {ApiResponse, ApiTags} from '@nestjs/swagger';
-import {GetUser} from '../../user/auth/get-user.decorator';
-import {User} from '../../user/user.schema';
-import {AuthGuard} from '@nestjs/passport';
+import { MemoryService } from './memory.service';
+import { CreateMemoryDto } from './dto/create-memory.dto';
+import { UpdateMemoryDto } from './dto/update-memory.dto';
+import { Memory } from './memory.schema';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { GetUser } from '../../user/auth/get-user.decorator';
+import { User } from '../../user/user.schema';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('instrument/{id}/memory')
 @Controller('instrument/:instrument')
 export class MemoryController {
-  constructor(private readonly memoryService: MemoryService) {
-  }
+  constructor(private readonly memoryService: MemoryService) {}
 
   @Get('memory')
   @ApiResponse({

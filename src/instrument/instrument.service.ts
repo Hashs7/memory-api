@@ -3,20 +3,21 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {Model} from 'mongoose';
-import {Instrument} from './instrument.schema';
-import {InjectModel} from '@nestjs/mongoose';
-import {CreateInstrumentDto} from './dto/create-instrument.dto';
-import {UpdateInstrumentDto} from './dto/update-instrument.dto';
+import { ConfigService } from '@nestjs/config';
+import { Model } from 'mongoose';
+import { Instrument } from './instrument.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { CreateInstrumentDto } from './dto/create-instrument.dto';
+import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
-import {User} from '../user/user.schema';
-import {Memory} from './memory/memory.schema';
-import {rewritePath} from '../file/file.helper';
-import {FileService} from '../file/file.service';
-import {File} from '../file/file.schema';
+import { User } from '../user/user.schema';
+import { Memory } from './memory/memory.schema';
+import { rewritePath } from '../file/file.helper';
+import { FileService } from '../file/file.service';
+import { File } from '../file/file.schema';
+import { ContentType } from './memory/content/content.schema';
 
 @Injectable()
 export class InstrumentService {
@@ -24,33 +25,48 @@ export class InstrumentService {
     private configService: ConfigService,
     private fileService: FileService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
-  ) {
-  }
+  ) {}
 
   findAll() {
     return this.instrumentModel.find();
   }
 
   async findOne(id: string) {
-    const instrument = await this.instrumentModel
-      .findOne({id})
-      .populate(['owner', 'image', {
+    const instrument = await this.instrumentModel.findOne({ id }).populate([
+      'owner',
+      'image',
+      {
         path: 'memories',
         populate: {
-          path: 'contents', populate: {
-            path: 'file', model: File.name
-          }
-        }
-      }]);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          path: 'contents',
+          populate: {
+            path: 'file',
+            model: File.name,
+          },
+        },
+      },
+    ]);
+
     // @ts-ignore
     instrument.image.path = rewritePath(instrument.image);
+
+    instrument.memories = instrument.memories.map((m) => {
+      m.contents = m.contents.map((c) => {
+        if (c.type !== ContentType.Text) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          c.file?.path = rewritePath(c.file);
+        }
+        return c;
+      });
+      return m;
+    });
 
     return instrument;
   }
 
   findForUser(user: User) {
-    return this.instrumentModel.find({owner: user._id});
+    return this.instrumentModel.find({ owner: user._id });
   }
 
   async create(
@@ -61,7 +77,7 @@ export class InstrumentService {
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
-      ...(file && {image: (await this.fileService.create(file))._id}),
+      ...(file && { image: (await this.fileService.create(file))._id }),
       id,
       owner: user._id,
       memories: [],
@@ -71,12 +87,8 @@ export class InstrumentService {
     const img: string = await qrcode.toDataURL(url);
     const base64Data = img.split(';base64,').pop();
 
-    fs.writeFile(
-      '.tmp/qrcode.png',
-      base64Data,
-      {encoding: 'base64'},
-      () => {
-      },
+    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
+      console.log('created'),
     );
 
     return instrument;
@@ -100,7 +112,7 @@ export class InstrumentService {
       updateInstrumentDto.image = file.filename;
     }*/
     return this.instrumentModel
-      .findOneAndUpdate({id}, updateInstrumentDto, {new: true})
+      .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
       .exec();
   }
 
@@ -121,6 +133,6 @@ export class InstrumentService {
       );
     }
 
-    return this.instrumentModel.findOneAndDelete({id});
+    return this.instrumentModel.findOneAndDelete({ id });
   }
 }

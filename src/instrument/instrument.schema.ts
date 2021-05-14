@@ -24,6 +24,14 @@ export class Instrument extends Document {
   description: string;
 
   @Prop({
+    default: false,
+  })
+  @ApiProperty({
+    description: 'Instrument est à vendre',
+  })
+  forSale: boolean;
+
+  @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: File.name,
   })
