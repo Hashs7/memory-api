@@ -29,8 +29,6 @@
 </template>
 
 <script>
-import AuthService from '~/plugins/AuthService';
-
 export default {
   name: 'Login',
   data() {
@@ -50,9 +48,8 @@ export default {
     console.log(this.$auth);
   },
   methods: {
-    logout() {
-      this.$store.dispatch('logout');
-      AuthService.deleteJWT();
+    async logout() {
+      await this.$auth.logout();
     },
 
     async userLogin() {
@@ -65,7 +62,7 @@ export default {
         });
         console.log(response);
         this.$auth.setUser(response.data.user);
-        this.$auth.strategy.token.set(response.data.accessToken);
+        // this.$auth.strategy.token.set(response.data.accessToken);
         console.log(this.$auth);
       } catch (err) {
         console.log(err);
