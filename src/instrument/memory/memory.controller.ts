@@ -55,6 +55,7 @@ export class MemoryController {
   }
 
   @Patch('memory/:id')
+  @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
     type: Memory,
@@ -62,9 +63,10 @@ export class MemoryController {
   update(
     @Param('id') id: string,
     @GetUser() user: User,
+    @Param('instrument') instrument: string,
     @Body() updateMemoryDto: UpdateMemoryDto,
   ): Promise<Memory> {
-    return this.memoryService.update(id, user, updateMemoryDto);
+    return this.memoryService.update(id, user, instrument, updateMemoryDto);
   }
 
   @Delete('memory/:id')

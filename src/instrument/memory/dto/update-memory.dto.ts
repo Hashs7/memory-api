@@ -3,6 +3,9 @@ import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { MemoryContent } from '../content/content.schema';
 
 export class UpdateMemoryDto {
+  @ApiPropertyOptional()
+  id?: string;
+
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()

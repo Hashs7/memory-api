@@ -1,21 +1,21 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { Schema as MongooseSchema, Types } from 'mongoose';
-import { CreateMemoryDto } from './dto/create-memory.dto';
-import { User } from '../../user/user.schema';
-import { IsArray } from 'class-validator';
-import { MemoryContent } from './content/content.schema';
-
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {ApiProperty} from '@nestjs/swagger';
+import {Schema as MongooseSchema, Types, Document} from 'mongoose';
+import {CreateMemoryDto} from './dto/create-memory.dto';
+import {User} from '../../user/user.schema';
+import {IsArray} from 'class-validator';
+import {MemoryContent} from './content/content.schema';
 export enum MemoryType {
   Concert = 'Concert',
   Rehearsal = 'Rehearsal',
 }
+const timestamps2 = require('mongoose-timestamp2');
 
-// @Schema()
-// export class Memory extends Document  {
-// @Schema({ timestamps: true, _id: false })
-@Schema({ timestamps: true })
+@Schema()
 export class Memory extends Types.Subdocument {
+  @Prop({ required: true })
+  id: string;
+
   @Prop()
   @ApiProperty()
   name: string;
@@ -24,7 +24,7 @@ export class Memory extends Types.Subdocument {
   @ApiProperty()
   description: string;
 
-  @Prop({ type: Date })
+  @Prop({type: Date})
   @ApiProperty()
   date: Date;
 
@@ -92,5 +92,4 @@ export class Memory extends Types.Subdocument {
           .map((key, value) => this[key] = value);*/
   }
 }
-
-export const MemorySchema = SchemaFactory.createForClass(Memory);
+export const MemorySchema = SchemaFactory.createForClass(Memory).plugin(timestamps2);
