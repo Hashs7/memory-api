@@ -18,6 +18,7 @@ import { rewritePath } from '../file/file.helper';
 import { FileService } from '../file/file.service';
 import { File } from '../file/file.schema';
 import { ContentType } from './memory/content/content.schema';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class InstrumentService {
@@ -27,10 +28,24 @@ export class InstrumentService {
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
+  private validateInstrumentOwner(instrument, user) {
+    // @ts-ignore
+    if (!instrument.owner.equals(user._id)) {
+      throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
+    }
+  }
+
+  /**
+   * Find all instruments
+   */
   findAll() {
     return this.instrumentModel.find();
   }
 
+  /**
+   * Find one instrument with id
+   * @param id
+   */
   async findOne(id: string) {
     const instrument = await this.instrumentModel.findOne({ id }).populate([
       'owner',
@@ -49,11 +64,9 @@ export class InstrumentService {
 
     // @ts-ignore
     instrument.image.path = rewritePath(instrument.image);
-
     instrument.memories = instrument.memories.map((m) => {
       m.contents = m.contents.map((c) => {
         if (c.type !== ContentType.Text) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           c.file?.path = rewritePath(c.file);
         }
@@ -65,10 +78,20 @@ export class InstrumentService {
     return instrument;
   }
 
+  /**
+   * Find user instruments
+   * @param user
+   */
   findForUser(user: User) {
     return this.instrumentModel.find({ owner: user._id });
   }
 
+  /**
+   * Create new instrument
+   * @param user
+   * @param createInstrumentDto
+   * @param file
+   */
   async create(
     user: User,
     createInstrumentDto: CreateInstrumentDto,
@@ -94,6 +117,13 @@ export class InstrumentService {
     return instrument;
   }
 
+  /**
+   * Update instrument props
+   * @param id
+   * @param user
+   * @param updateInstrumentDto
+   * @param file
+   */
   async update(
     id: string,
     user: User,
@@ -104,10 +134,7 @@ export class InstrumentService {
     if (!instrument) {
       throw new NotFoundException("L'instrument n'existe pas");
     }
-    // @ts-ignore
-    if (!instrument.owner.equals(user._id)) {
-      throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
-    }
+    this.validateInstrumentOwner(instrument, user);
     /*if (file) {
       updateInstrumentDto.image = file.filename;
     }*/
@@ -116,6 +143,36 @@ export class InstrumentService {
       .exec();
   }
 
+  /**
+   * Init instrument handover
+   * @param id
+   * @param user
+   */
+  async handover(id: string, user: User): Promise<{ token: string }> {
+    const instrument = await this.findOne(id);
+    this.validateInstrumentOwner(instrument, user);
+
+    if (!instrument.handoverToken) {
+      instrument.handoverToken = randomBytes(20).toString('hex');
+    }
+
+    const expire = new Date();
+    // Expire in 7 days
+    expire.setDate(expire.getDate() + 7);
+    instrument.handoverExpire = expire;
+
+    await instrument.save();
+
+    return {
+      token: instrument.handoverToken,
+    };
+  }
+
+  /**
+   * Add new memory
+   * @param id
+   * @param memory
+   */
   async addMemory(id: string, memory: Memory) {
     const instrument = await this.findOne(id);
     instrument.memories.push(memory);
@@ -124,6 +181,11 @@ export class InstrumentService {
     return instrument.save();
   }
 
+  /**
+   * Delete instrument
+   * @param id
+   * @param user
+   */
   async remove(id: string, user: User) {
     const instrument = await this.findOne(id);
     // @ts-ignore

@@ -99,6 +99,14 @@ export class InstrumentController {
     return this.instrumentService.update(id, user, updateInstrumentDto, file);
   }
 
+  @Patch(':id/handover')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Start handover instrument' })
+  handover(@Param('id') id: string, @GetUser() user: User) {
+    return this.instrumentService.handover(id, user);
+  }
+
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Delete instrument with shortId' })

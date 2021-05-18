@@ -5,6 +5,7 @@ import { File } from '../file/file.schema';
 import { ApiProperty } from '@nestjs/swagger';
 import { Memory } from './memory/memory.schema';
 import { IsArray } from 'class-validator';
+import { Exclude } from 'class-transformer';
 
 @Schema()
 export class Instrument extends Document {
@@ -92,6 +93,14 @@ export class Instrument extends Document {
     type: [Memory],
   })
   memories: Memory[];
+
+  @Prop()
+  @Exclude()
+  handoverToken: string;
+
+  @Prop()
+  @Exclude()
+  handoverExpire: Date;
 }
 
 export const InstrumentSchema = SchemaFactory.createForClass(Instrument);
