@@ -18,10 +18,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { fileInterceptorOptions } from '../utils/file-upload.utils';
-import { Instrument } from '../instrument/instrument.schema';
-import { UpdateInstrumentDto } from '../instrument/dto/update-instrument.dto';
 import { UpdateUserDto } from './update-user.dto';
 
 @ApiTags('user')
@@ -57,10 +53,10 @@ export class UserController {
     status: 200,
     type: User,
   })
-  getLogUser(@GetUser() user: User): User {
-    delete user.salt;
-    delete user.password;
-    return user;
+  getLogUser(@GetUser() user: User) {
+    user.salt = null;
+    user.password = null;
+    return { user };
   }
 
   @Get('/online')

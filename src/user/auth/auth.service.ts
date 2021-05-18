@@ -1,6 +1,7 @@
 import {
   BadRequestException,
-  Injectable, NotFoundException,
+  Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -29,7 +30,7 @@ export class AuthService {
    * Create new user
    * @param createUserDto
    */
-  async signUp(createUserDto: CreateUserDto, fileName: string) {
+  async signUp(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
     const exist = await this.userService.findUserbyEmail(email);
 
@@ -41,7 +42,6 @@ export class AuthService {
     const hashPassword = await this.hashPassword(password, salt);
     const user = await this.userService.createUser(
       createUserDto,
-      fileName,
       salt,
       hashPassword,
     );
@@ -92,18 +92,20 @@ export class AuthService {
 
     user.resetPasswordToken = token;
     const expire = new Date();
-    expire.setHours( expire.getHours() + 1 );
+    expire.setHours(expire.getHours() + 1);
     user.resetPasswordExpire = expire;
 
     await user.save();
 
     return {
-      response: 'Email envoyé'
-    }
+      response: 'Email envoyé',
+    };
   }
 
   async resetPassword(authResetDto: AuthResetDto) {
-    const user = await this.userService.findUserWithResetToken(authResetDto.token);
+    const user = await this.userService.findUserWithResetToken(
+      authResetDto.token,
+    );
     if (!user) {
       throw new NotFoundException('Utilisateur non trouvé');
     }
@@ -111,12 +113,16 @@ export class AuthService {
       throw new UnauthorizedException('Le token a expiré');
     }
 
-    const hashPassword = await this.hashPassword(authResetDto.password, user.salt);
+    const hashPassword = await this.hashPassword(
+      authResetDto.password,
+      user.salt,
+    );
     user.password = hashPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
-    ['password', 'resetPasswordToken', 'resetPasswordExpire']
-      .forEach((item) => user.markModified(item));
+    ['password', 'resetPasswordToken', 'resetPasswordExpire'].forEach((item) =>
+      user.markModified(item),
+    );
     await user.save();
 
     return this.generateAuthSuccessResponse(user);
@@ -155,7 +161,7 @@ export class AuthService {
       jwtConstants.rSignOptions,
     );
     const decoded = this.decodeToken(accessToken);
-    return { accessToken, refreshToken, data: decoded };
+    return { accessToken, refreshToken, user: decoded };
   }
 
   async refreshToken(accessToken: string) {

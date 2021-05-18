@@ -34,7 +34,6 @@ export class UserService {
 
   async createUser(
     createUserDTO: CreateUserDto,
-    fileName,
     salt: string,
     hashPassword: string,
   ) {
@@ -43,7 +42,6 @@ export class UserService {
     const user = new this.userModel();
     user.id = shortid.generate();
     user.email = email;
-    user.image = fileName;
     user.username = username;
     user.firstName = firstName;
     user.lastName = lastName;
