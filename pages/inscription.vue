@@ -49,14 +49,13 @@ export default {
     async submit(e) {
       e.preventDefault();
       try {
-        const res = await this.$api.register({
+        await this.$api.register({
           firstName: this.firstName,
           lastName: this.lastName,
           username: this.username,
           email: this.email,
           password: this.password,
         });
-        console.log(res);
         await this.$auth.loginWith('local', {
           data: {
             username: this.email,
