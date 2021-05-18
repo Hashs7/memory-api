@@ -52,6 +52,14 @@ class ApiController {
     return this.$axios.get(`/instrument/${id}`);
   }
 
+  handoverInstrument(id) {
+    return this.$axios.patch(`/instrument/${id}/handover`);
+  }
+
+  confirmHandoverInstrument(token) {
+    return this.$axios.patch(`/instrument/confirm-handover?token=${token}`);
+  }
+
   getFile(filename) {
     return this.$axios.get(`/file/${filename}`);
   }
