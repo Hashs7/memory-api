@@ -60,21 +60,15 @@ export default {
             password: this.login.password,
           },
         });
-        console.log(response);
         this.$auth.setUser(response.data.user);
-        // this.$auth.strategy.token.set(response.data.accessToken);
-        console.log(this.$auth);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
 
     submit(e) {
       e.preventDefault();
       this.userLogin();
-      /*
-       this.$store.dispatch('setUser', res.data);
-       */
     },
   },
 };

@@ -56,12 +56,13 @@ export default {
           email: this.email,
           password: this.password,
         });
-        await this.$auth.loginWith('local', {
+        const response = await this.$auth.loginWith('local', {
           data: {
             username: this.email,
             password: this.password,
           },
         });
+        this.$auth.setUser(response.data.user);
       } catch (err) {
         // console.log(err);
       }
