@@ -63,6 +63,9 @@ export default {
   auth: {
     strategies: {
       local: {
+        token: {
+          property: 'accessToken',
+        },
         user: {
           property: 'user',
           autoFetch: false,
