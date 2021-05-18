@@ -1,38 +1,14 @@
-import AuthService from './AuthService';
-
 class ApiController {
   constructor($axios) {
     this.$axios = $axios;
-
-    const accessToken = AuthService.getJWT();
-    if (accessToken) {
-      this.setToken(accessToken);
-    }
-  }
-
-  setToken(accessToken) {
-    this.$axios.defaults.headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + accessToken,
-    };
   }
 
   me() {
-    const token = AuthService.getJWT();
-    console.log(token);
-    if (!token) {
-      return null;
-    }
-    return this.$axios.get('/user/me', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return this.$axios.get('/user/me');
   }
 
   async login(payload) {
     const { data } = await this.$axios.post('/auth/signin', { ...payload });
-    AuthService.setJWT(data.accessToken);
-    this.setToken(data.accessToken);
     return data;
   }
 

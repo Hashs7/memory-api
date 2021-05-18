@@ -3,7 +3,17 @@
     <h1>S'inscrire</h1>
     <form @submit="submit">
       <div class="form__group">
-        <b-field label="Surnom">
+        <b-field label="Prénom">
+          <b-input v-model="firstName" type="text"> </b-input>
+        </b-field>
+      </div>
+      <div class="form__group">
+        <b-field label="Nom">
+          <b-input v-model="lastName" type="text"> </b-input>
+        </b-field>
+      </div>
+      <div class="form__group">
+        <b-field label="Pseudo">
           <b-input v-model="username" type="text"> </b-input>
         </b-field>
       </div>
@@ -24,12 +34,12 @@
 </template>
 
 <script>
-import AuthService from '~/plugins/AuthService';
-
 export default {
   name: 'Register',
   data() {
     return {
+      firstName: '',
+      lastName: '',
       username: '',
       email: '',
       password: '',
@@ -39,12 +49,19 @@ export default {
     async submit(e) {
       e.preventDefault();
       try {
-        const res = await this.$api.register({
+        await this.$api.register({
+          firstName: this.firstName,
+          lastName: this.lastName,
           username: this.username,
           email: this.email,
           password: this.password,
         });
-        AuthService.setJWT(res.data.accessToken);
+        await this.$auth.loginWith('local', {
+          data: {
+            username: this.email,
+            password: this.password,
+          },
+        });
       } catch (err) {
         // console.log(err);
       }

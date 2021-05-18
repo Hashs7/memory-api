@@ -20,8 +20,20 @@ export default {
     return {
       nav: [
         {
+          label: 'News',
+          path: '/news',
+        },
+        {
           label: 'Instruments',
           path: '/instrument',
+        },
+        {
+          label: 'Capture',
+          path: '/capture',
+        },
+        {
+          label: 'Recherche',
+          path: '/recherche',
         },
         {
           label: 'Profil',

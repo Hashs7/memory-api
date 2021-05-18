@@ -2,15 +2,15 @@
   <div class="create">
     <h1>Connexion</h1>
 
-    <form v-if="!user" @submit="submit">
+    <form v-if="!$auth.loggedIn" @submit="submit">
       <div class="form__group">
         <b-field label="Email">
-          <b-input v-model="email" type="email"> </b-input>
+          <b-input v-model="login.username" type="email"></b-input>
         </b-field>
       </div>
       <div class="form__group">
         <b-field label="Mot de passe">
-          <b-input v-model="password" type="password" password-reveal>
+          <b-input v-model="login.password" type="password" password-reveal>
           </b-input>
         </b-field>
       </div>
@@ -29,14 +29,14 @@
 </template>
 
 <script>
-import AuthService from '~/plugins/AuthService';
-
 export default {
   name: 'Login',
   data() {
     return {
-      email: '',
-      password: '',
+      login: {
+        username: '',
+        password: '',
+      },
     };
   },
   computed: {
@@ -44,23 +44,37 @@ export default {
       return this.$store.state.user;
     },
   },
+  mounted() {
+    console.log(this.$auth);
+  },
   methods: {
-    logout() {
-      this.$store.dispatch('logout');
-      AuthService.deleteJWT();
+    async logout() {
+      await this.$auth.logout();
     },
 
-    async submit(e) {
-      e.preventDefault();
+    async userLogin() {
       try {
-        const res = await this.$api.login({
-          username: this.email,
-          password: this.password,
+        const response = await this.$auth.loginWith('local', {
+          data: {
+            username: this.login.username,
+            password: this.login.password,
+          },
         });
-        this.$store.dispatch('setUser', res.data);
-      } catch (e) {
-        // console.error(e);
+        console.log(response);
+        this.$auth.setUser(response.data.user);
+        // this.$auth.strategy.token.set(response.data.accessToken);
+        console.log(this.$auth);
+      } catch (err) {
+        console.log(err);
       }
+    },
+
+    submit(e) {
+      e.preventDefault();
+      this.userLogin();
+      /*
+       this.$store.dispatch('setUser', res.data);
+       */
     },
   },
 };
@@ -80,6 +94,7 @@ export default {
     width: 100%;
   }
 }
+
 .button {
   margin: auto;
   display: inline-block;
