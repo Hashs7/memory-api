@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -63,7 +64,7 @@ export class InstrumentService {
     ]);
 
     // @ts-ignore
-    instrument.image.path = rewritePath(instrument.image);
+    instrument.image?.path = rewritePath(instrument.image);
     instrument.memories = instrument.memories.map((m) => {
       m.contents = m.contents.map((c) => {
         if (c.type !== ContentType.Text) {
@@ -148,7 +149,7 @@ export class InstrumentService {
    * @param id
    * @param user
    */
-  async handover(id: string, user: User): Promise<{ token: string }> {
+  async initHandover(id: string, user: User): Promise<{ token: string }> {
     const instrument = await this.findOne(id);
     this.validateInstrumentOwner(instrument, user);
 
@@ -166,6 +167,24 @@ export class InstrumentService {
     return {
       token: instrument.handoverToken,
     };
+  }
+
+  async confirmHandover(token: string, user: User): Promise<Instrument> {
+    const instrument = await this.instrumentModel.findOne({
+      handoverToken: token,
+    });
+
+    if (!instrument || instrument.handoverExpire < new Date()) {
+      throw new UnauthorizedException('La passation a expiré');
+    }
+
+    instrument.handoverToken = null;
+    instrument.handoverExpire = null;
+    instrument.oldOwners.push(instrument.owner);
+    instrument.owner = user._id;
+    await instrument.save();
+
+    return instrument;
   }
 
   /**

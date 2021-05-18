@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Logger,
+  Query,
 } from '@nestjs/common';
 import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
@@ -80,6 +81,14 @@ export class InstrumentController {
     return this.instrumentService.create(user, createInstrumentDto, file);
   }
 
+  @Patch('confirm-handover')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Start handover instrument' })
+  confirmHandover(@Query('token') token: string, @GetUser() user: User) {
+    return this.instrumentService.confirmHandover(token, user);
+  }
+
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -103,8 +112,8 @@ export class InstrumentController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Start handover instrument' })
-  handover(@Param('id') id: string, @GetUser() user: User) {
-    return this.instrumentService.handover(id, user);
+  initHandover(@Param('id') id: string, @GetUser() user: User) {
+    return this.instrumentService.initHandover(id, user);
   }
 
   @Delete(':id')
