@@ -20,8 +20,8 @@ export default {
     return {
       nav: [
         {
-          label: 'News',
-          path: '/news',
+          label: 'Actus',
+          path: '/feed',
         },
         {
           label: 'Instruments',

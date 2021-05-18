@@ -26,6 +26,10 @@
         <NuxtLink :to="addMemmory" class="u-button u-button--primary"
           >Ajouter un souvenir</NuxtLink
         >
+
+        <NuxtLink :to="handover" class="u-button u-button--primary"
+          >Vendre</NuxtLink
+        >
       </div>
 
       <div class="memories">
@@ -65,6 +69,10 @@ export default {
     addMemmory() {
       const { id } = this.$route.params;
       return `/instrument/${id}/souvenir/creation`;
+    },
+    handover() {
+      const { id } = this.$route.params;
+      return `/instrument/${id}/passation`;
     },
     memoriesCount() {
       return this.instrument.memories.length;

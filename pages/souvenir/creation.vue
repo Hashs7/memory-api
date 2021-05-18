@@ -27,7 +27,6 @@ export default {
     Summary,
     Confidentiality,
   },
-  layout: 'tabbar',
   data() {
     return {
       success: false,
