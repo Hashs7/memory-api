@@ -3,6 +3,7 @@
   flex-direction: column;
   // Remove navbar height
   min-height: calc(100vh - 3.25rem);
+  background-color: #FFF9E2;
 }
 
 .o-page--full {
@@ -60,6 +61,12 @@
 
 .o-page__header {
   text-align: center;
+}
+
+.o-page__container {
+  position: relative;
+  z-index: 10;
+  height: 100%;
 }
 
 .o-page__body {

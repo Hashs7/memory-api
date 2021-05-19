@@ -63,8 +63,8 @@ export default {
     redirect: {
       login: '/connexion',
       logout: '/',
-      callback: '/connexion',
-      home: '/',
+      callback: false,
+      home: false,
     },
     strategies: {
       local: {

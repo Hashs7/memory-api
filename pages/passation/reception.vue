@@ -78,8 +78,10 @@ export default {
         this.validated = false;
       }
     },
+
     storeToken() {
-      // TODO set instrument handover token in store to make handover after signin
+      this.$store.commit('handover/setToken', this.token);
+      this.$store.commit('handover/setInstrumentId', this.instrumentId);
     },
   },
 };

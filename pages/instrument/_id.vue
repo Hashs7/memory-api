@@ -23,13 +23,15 @@
           {{ instrument.owner.firstName }} {{ instrument.owner.lastName }}
         </div>
 
-        <NuxtLink :to="addMemmory" class="u-button u-button--primary"
-          >Ajouter un souvenir</NuxtLink
-        >
+        <div v-if="isOwner">
+          <NuxtLink :to="addMemmory" class="u-button u-button--primary"
+            >Ajouter un souvenir</NuxtLink
+          >
 
-        <NuxtLink :to="handover" class="u-button u-button--primary"
-          >Vendre</NuxtLink
-        >
+          <NuxtLink :to="handover" class="u-button u-button--primary"
+            >Vendre</NuxtLink
+          >
+        </div>
       </div>
 
       <div class="memories">
@@ -76,6 +78,10 @@ export default {
     },
     memoriesCount() {
       return this.instrument.memories.length;
+    },
+    isOwner() {
+      console.log(this.instrument.owner._id, this.$auth.$state);
+      return this.instrument.owner._id === this.$auth.$state.user._id;
     },
   },
 };

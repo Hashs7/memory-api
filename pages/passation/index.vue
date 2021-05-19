@@ -8,7 +8,7 @@
       <div v-show="step === 1" class="step step-2">
         <canvas ref="canvas"></canvas>
         <p class="">Invitez le nouveau propriétaire</p>
-        <p>url : {{ url }}</p>
+        <p>{{ url }}</p>
         <label for="mail">Mail :</label>
         <input id="mail" type="text" />
       </div>
@@ -55,7 +55,7 @@ export default {
       }
     },
     async showQRCode() {
-      this.url = `${window.location.href}reception?token=${this.token}`;
+      this.url = `${window.location.href}/reception?token=${this.token}`;
       await QRCode.toCanvas(this.$refs.canvas, this.url);
     },
   },

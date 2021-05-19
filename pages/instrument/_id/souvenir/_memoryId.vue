@@ -139,12 +139,6 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.o-page__container {
-  position: relative;
-  z-index: 10;
-  height: 100%;
-}
-
 .memory-slider {
   position: relative;
   height: 100%;

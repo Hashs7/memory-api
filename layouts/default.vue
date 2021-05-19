@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="main-content">
+    <section class="main-content o-layout--default">
       <nuxt />
     </section>
     <Tabbar />

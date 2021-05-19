@@ -1,36 +1,38 @@
 <template>
-  <div class="create">
-    <h1>Connexion</h1>
+  <div class="o-page o-page--signin">
+    <div class="create">
+      <h1>Connexion</h1>
 
-    <form v-if="!$auth.loggedIn" @submit="submit">
-      <div class="form__group">
-        <b-field label="Email">
-          <b-input v-model="login.username" type="email"></b-input>
-        </b-field>
-      </div>
-      <div class="form__group">
-        <b-field label="Mot de passe">
-          <b-input v-model="login.password" type="password" password-reveal>
-          </b-input>
-        </b-field>
-      </div>
-      <button type="submit" class="button is-primary">Me connecter</button>
-    </form>
-    <button v-else type="submit" class="button" @click="logout">
-      Me déconnecter
-    </button>
+      <form v-if="!$auth.loggedIn" @submit="submit">
+        <div class="form__group">
+          <b-field label="Email">
+            <b-input v-model="login.username" type="email"></b-input>
+          </b-field>
+        </div>
+        <div class="form__group">
+          <b-field label="Mot de passe">
+            <b-input v-model="login.password" type="password" password-reveal>
+            </b-input>
+          </b-field>
+        </div>
+        <button type="submit" class="button is-primary">Me connecter</button>
+      </form>
+      <Logout v-else type="submit" class="button"> Me déconnecter </Logout>
 
-    <div>
-      <h2>Hint</h2>
-      <div>seb@admin.com</div>
-      <div>Password98015</div>
+      <div>
+        <h2>Hint</h2>
+        <div>Password98015</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Logout from '../components/user/Logout';
+
 export default {
   name: 'Login',
+  components: { Logout },
   data() {
     return {
       login: {
@@ -48,10 +50,6 @@ export default {
     console.log(this.$auth);
   },
   methods: {
-    async logout() {
-      await this.$auth.logout();
-    },
-
     async userLogin() {
       try {
         const response = await this.$auth.loginWith('local', {
@@ -61,14 +59,32 @@ export default {
           },
         });
         this.$auth.setUser(response.data.user);
-      } catch (err) {
-        // console.log(err);
-      }
+        this.redirect();
+      } catch (err) {}
     },
 
     submit(e) {
       e.preventDefault();
       this.userLogin();
+    },
+
+    async redirect() {
+      if (this.$store.getters['handover/pendingHandover']) {
+        // user came from handover
+        const id = this.$store.state.handover.instrumentId;
+        const { token } = this.$store.state.handover;
+        debugger;
+        await this.$router.push({
+          name: 'passation-reception',
+          params: { id },
+          query: { token },
+        });
+        return;
+      }
+      // Redirect to personal instruments
+      await this.$router.push({
+        name: 'instrument',
+      });
     },
   },
 };
