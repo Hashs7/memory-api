@@ -56,6 +56,8 @@ export class UserController {
   getLogUser(@GetUser() user: User) {
     user.salt = null;
     user.password = null;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpire = null;
     return { user };
   }
 

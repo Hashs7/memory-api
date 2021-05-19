@@ -9,8 +9,8 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
-  Logger,
   Query,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
@@ -55,6 +55,7 @@ export class InstrumentController {
   }
 
   @Get(':id')
+  // @UseInterceptors(ClassSerializerInterceptor)
   @ApiResponse({
     status: 200,
     type: Instrument,

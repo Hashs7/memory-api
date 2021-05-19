@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { User } from '../user/user.schema';
 import { File } from '../file/file.schema';
@@ -37,7 +37,7 @@ export class Instrument extends Document {
     ref: File.name,
   })
   @ApiProperty({ type: File })
-  image: MongooseSchema.Types.ObjectId;
+  image: File;
 
   @Prop()
   @ApiProperty({
@@ -78,14 +78,35 @@ export class Instrument extends Document {
     required: true,
   })
   @ApiProperty({ type: User })
-  owner: MongooseSchema.Types.ObjectId;
+  owner: User;
 
   @Prop({
     type: [MongooseSchema.Types.ObjectId],
     ref: User.name,
   })
   @ApiProperty({ type: [User] })
-  oldOwners: MongooseSchema.Types.ObjectId[];
+  oldOwners: User[];
+  /*
+  @Prop({
+    type: [MongooseSchema.Types.ObjectId],
+    ref: User.name,
+  })
+  @Prop(
+    raw([
+      {
+        user: { type: MongooseSchema.Types.ObjectId, ref: User.name },
+        date: { type: Date },
+      },
+    ]),
+  )
+  @ApiProperty({ type: [User] })
+  oldOwners: [
+    {
+      user: User;
+      date: Date;
+    },
+  ];
+  */
 
   @IsArray()
   @Prop([Memory])
