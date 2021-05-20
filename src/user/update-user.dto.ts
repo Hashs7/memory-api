@@ -62,8 +62,4 @@ export class UpdateUserDto {
   @IsArray()
   @ApiPropertyOptional()
   whistList?: string[];
-
-  @IsOptional()
-  @ApiPropertyOptional()
-  image?: string;
 }

@@ -29,13 +29,11 @@ export class FileService {
     });
   }
 
-  async create(file): Promise<File> {
+  async create(file: Express.Multer.File, userId: string): Promise<File> {
     const { originalname } = file;
     const generatedName = randomBytes(10).toString('hex');
     const filetype = file.mimetype.split('/').shift();
-    Logger.log(
-      `file ${filetype} ${file.mimetype} ${file.size} ${file.storageUrl} `,
-    );
+    Logger.log(`file ${filetype} ${file.mimetype} ${file.size}`);
 
     if (process.env.NODE_ENV !== 'production') {
       // Store image locally
@@ -49,6 +47,7 @@ export class FileService {
     const fileDoc = await this.fileModel.create({
       ...file,
       name: originalname,
+      user: userId,
     });
 
     return fileDoc;

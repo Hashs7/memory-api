@@ -19,6 +19,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UpdateUserDto } from './update-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { fileInterceptorOptions } from '../utils/file-upload.utils';
 
 @ApiTags('user')
 @Controller('user')
@@ -53,12 +55,9 @@ export class UserController {
     status: 200,
     type: User,
   })
-  getLogUser(@GetUser() user: User) {
-    user.salt = null;
-    user.password = null;
-    user.resetPasswordToken = null;
-    user.resetPasswordExpire = null;
-    return { user };
+  async getLogUser(@GetUser() user: User) {
+    const cleanUser = await this.userService.findUser(user._id);
+    return { user: cleanUser };
   }
 
   @Get('/online')
@@ -68,6 +67,7 @@ export class UserController {
 
   @Patch()
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('thumbnail', fileInterceptorOptions))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Updated user' })
   @ApiResponse({
@@ -75,7 +75,11 @@ export class UserController {
     description: 'The found record',
     type: User,
   })
-  update(@GetUser() user: User, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(user, updateUserDto);
+  update(
+    @GetUser() user: User,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() thumbnail?: Express.Multer.File,
+  ) {
+    return this.userService.update(user, updateUserDto, thumbnail);
   }
 }

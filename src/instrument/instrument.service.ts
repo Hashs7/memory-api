@@ -101,7 +101,9 @@ export class InstrumentService {
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
-      ...(file && { image: (await this.fileService.create(file))._id }),
+      ...(file && {
+        image: (await this.fileService.create(file, user._id))._id,
+      }),
       id,
       owner: user._id,
       memories: [],

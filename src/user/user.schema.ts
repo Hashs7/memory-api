@@ -47,13 +47,6 @@ export class User extends Document {
   lastConnection: Date;
 
   @Prop()
-  @ApiProperty({
-    title: 'Profile image',
-    description: 'Image url',
-  })
-  image: string;
-
-  @Prop()
   @Exclude()
   salt: string;
 
@@ -72,7 +65,7 @@ export class User extends Document {
     default: [],
   })
   @ApiProperty({ type: Instrument })
-  wishList?: MongooseSchema.Types.ObjectId[];
+  wishList?: Instrument[];
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
@@ -80,7 +73,7 @@ export class User extends Document {
     required: false,
   })
   @ApiProperty({ type: File })
-  thumbnail?: MongooseSchema.Types.ObjectId;
+  thumbnail?: File;
 
   validatePassword: ValidatePasswordFunction<boolean>;
 }

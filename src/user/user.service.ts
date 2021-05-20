@@ -5,17 +5,29 @@ import { CreateUserDto } from './auth/dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdateUserDto } from './update-user.dto';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    private readonly fileService: FileService,
+    @InjectModel(User.name) private userModel: Model<User>,
+  ) {}
 
   async findUserbyEmail(email: string): Promise<User> {
     return this.userModel.findOne({ email });
   }
 
   async findUser(id: string): Promise<User> {
-    return this.userModel.findOne({ _id: id });
+    const user = await this.userModel
+      .findOne({ _id: id })
+      .populate('thumbnail');
+    user.thumbnail.rewritePath();
+    user.salt = null;
+    user.password = null;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpire = null;
+    return user;
   }
 
   async findUserWithResetToken(resetPasswordToken: string): Promise<User> {
@@ -73,9 +85,21 @@ export class UserService {
     });
   }
 
-  async update(user: User, updateUserDto: UpdateUserDto) {
+  async update(
+    user: User,
+    updateUserDto: UpdateUserDto,
+    file: Express.Multer.File,
+  ) {
+    const thumbnail = await this.fileService.create(file, user._id);
     return this.userModel
-      .findOneAndUpdate({ _id: user._id }, updateUserDto, { new: true })
+      .findOneAndUpdate(
+        { _id: user._id },
+        {
+          ...updateUserDto,
+          thumbnail: thumbnail._id,
+        },
+        { new: true },
+      )
       .exec();
   }
 }

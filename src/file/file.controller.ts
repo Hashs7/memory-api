@@ -32,9 +32,11 @@ export class FileController {
 
   /**
    * Upload single file
+   * @param user
    * @param file
    */
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     /*process.env.NODE_ENV !== 'production'
       ? FileInterceptor('file', fileInterceptorOptions)
@@ -42,12 +44,12 @@ export class FileController {
     */
     FileInterceptor('file', fileInterceptorOptions),
   )
-  async uploadedFile(@UploadedFile() file) {
+  async uploadedFile(@GetUser() user: User, @UploadedFile() file) {
     if (!file) {
       throw new BadRequestException('Aucun fichier reçu');
     }
 
-    const data = await this.fileService.create(file);
+    const data = await this.fileService.create(file, user._id);
 
     return {
       status: HttpStatus.OK,
@@ -61,6 +63,7 @@ export class FileController {
    * @param files
    */
   @Post('multiple')
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     /*
     process.env.NODE_ENV !== 'production'
@@ -69,14 +72,14 @@ export class FileController {
     */
     FilesInterceptor('file', 10, fileInterceptorOptions),
   )
-  async uploadMultipleFiles(@UploadedFiles() files) {
+  async uploadMultipleFiles(@GetUser() user: User, @UploadedFiles() files) {
     const response = [];
     if (!files) {
       throw new BadRequestException('Aucun fichier reçu');
     }
 
     for (const file of files) {
-      const data = await this.fileService.create(file);
+      const data = await this.fileService.create(file, user._id);
       response.push(data);
     }
 
