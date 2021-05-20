@@ -24,6 +24,10 @@ class ApiController {
     return this.$axios.get('/chat/conversation');
   }
 
+  updateUser(payload) {
+    return this.$axios.patch('/user', payload);
+  }
+
   sendMessage(payload) {
     return this.$axios.post('/chat/message', { ...payload });
   }

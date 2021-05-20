@@ -9,8 +9,6 @@
         <canvas ref="canvas"></canvas>
         <p class="">Invitez le nouveau propriétaire</p>
         <p>{{ url }}</p>
-        <label for="mail">Mail :</label>
-        <input id="mail" type="text" />
       </div>
     </div>
     <button v-if="step !== MAX_STEP" @click="requestHandover">Suivant</button>

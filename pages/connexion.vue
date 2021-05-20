@@ -18,6 +18,7 @@
         <button type="submit" class="button is-primary">Me connecter</button>
       </form>
       <Logout v-else type="submit" class="button"> Me déconnecter </Logout>
+      <button @click="resetPassword">Mot de passe oublié</button>
 
       <div>
         <h2>Hint</h2>
@@ -68,12 +69,15 @@ export default {
       this.userLogin();
     },
 
+    resetPassword() {
+      // TODO remove password field and send request to api
+    },
+
     async redirect() {
       if (this.$store.getters['handover/pendingHandover']) {
         // user came from handover
         const id = this.$store.state.handover.instrumentId;
         const { token } = this.$store.state.handover;
-        debugger;
         await this.$router.push({
           name: 'passation-reception',
           params: { id },
