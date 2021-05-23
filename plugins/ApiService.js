@@ -20,6 +20,10 @@ class ApiController {
     return this.$axios.get('/user/online');
   }
 
+  getUserMedias() {
+    return this.$axios.get('/file/user');
+  }
+
   getUserConversations() {
     return this.$axios.get('/chat/conversation');
   }

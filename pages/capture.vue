@@ -13,12 +13,19 @@
       <h3 class="action__title">Écrire un souvenir</h3>
       <p>Heu, secundus abaculus!</p>
     </div>
+
+    <Gallery />
   </div>
 </template>
 
 <script>
+import Gallery from '../components/user/gallery/Gallery';
+
 export default {
   name: 'Capture',
+  components: {
+    Gallery,
+  },
   methods: {
     newMemory() {
       // TODO Open instrument selector then open instrument memory creation
