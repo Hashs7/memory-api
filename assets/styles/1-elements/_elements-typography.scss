@@ -25,11 +25,18 @@ h1, h2, h3, h4, h5, h6, p {
     margin: 0;
 }
 
-h1, h2 {
+h1 {
   font-family: $font-secondary;
-  font-size: 18px;
+  font-size: 32px;
   font-weight: normal;
   color: $secondary;
+}
+
+h2 {
+  font-family: $font-secondary;
+  color: $secondary;
+  font-size: 24px;
+
 }
 
 p {
@@ -44,7 +51,7 @@ input {
 
 
 /* -------- Responsive -------- */
-@media #{$tablet-m-media} {
+/*@media #{$tablet-m-media} {
   h1, h2 {
     font-size: 18px;
   }
@@ -54,4 +61,4 @@ input {
   h1, h2 {
     font-size: 18px;
   }
-}
+}*/

@@ -4,6 +4,7 @@
   // Remove navbar height
   min-height: calc(100vh - 3.25rem);
   background-color: #FFF9E2;
+  padding: 16px;
 }
 
 .o-page--full {
@@ -73,6 +74,11 @@
   flex-grow: 1;
 }
 
+.o-page__title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 
 .o-page--create,
 .o-page--summary {
@@ -138,10 +144,6 @@
   line-height: 1;
   font-size: 13px;
   color: #C0C0C0;
-}
-
-.o-page__title {
-  text-align: center;
 }
 
 .o-page__subtitle {

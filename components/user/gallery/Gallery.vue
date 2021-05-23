@@ -17,21 +17,17 @@ import GalleryMedia from './GalleryMedia';
 export default {
   name: 'Gallery',
   components: { GalleryMedia },
-  data() {
-    return {
-      medias: [],
-    };
+  computed: {
+    medias() {
+      return this.$store.state.gallery.medias;
+    },
   },
   mounted() {
     this.getMedias();
   },
   methods: {
     async getMedias() {
-      try {
-        const res = await this.$api.getUserMedias();
-        this.medias = res.data;
-        console.log(res.data);
-      } catch (e) {}
+      await this.$store.dispatch('gallery/getMedias');
     },
   },
 };
