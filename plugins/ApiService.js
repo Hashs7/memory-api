@@ -60,6 +60,10 @@ class ApiController {
     return this.$axios.get(`/instrument/${id}`);
   }
 
+  addInstrumentToWishlist(id) {
+    return this.$axios.patch(`/user/wishlist/${id}`);
+  }
+
   handoverInstrument(id) {
     return this.$axios.patch(`/instrument/${id}/handover`);
   }

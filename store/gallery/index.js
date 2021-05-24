@@ -1,5 +1,6 @@
 export const state = () => ({
   medias: [],
+  selected: [],
 });
 
 export const mutations = {
@@ -9,6 +10,19 @@ export const mutations = {
 
   addMedia(state, media) {
     state.medias.push(media);
+  },
+
+  resetSelected(state) {
+    state.selected = [];
+  },
+
+  addSelected(state, media) {
+    state.selected.push(media);
+  },
+
+  removeSelected(state, _id) {
+    const index = state.selected.indexOf(_id);
+    state.selected.splice(index, 1);
   },
 };
 

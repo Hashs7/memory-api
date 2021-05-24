@@ -32,6 +32,15 @@
             >Vendre</NuxtLink
           >
         </div>
+        <div v-else class="instrument__not-owner">
+          <button
+            :class="[isFavorite]"
+            class="u-button"
+            @click.prevent="addToWish"
+          >
+            {{ !isFavorite ? 'Ajouter aux favoris' : 'Enlever des favoris' }}
+          </button>
+        </div>
       </div>
 
       <div class="memories">
@@ -82,6 +91,25 @@ export default {
     isOwner() {
       console.log(this.instrument.owner._id, this.$auth.$state);
       return this.instrument.owner._id === this.$auth.$state.user._id;
+    },
+    isFavorite() {
+      if (this.isOwner) return false;
+      console.log(this.$auth.$state.user);
+      return this.$auth.$state.user.wishList.includes(this.instrument._id);
+      // return true;
+    },
+  },
+  methods: {
+    async addToWish() {
+      try {
+        const res = await this.$api.addInstrumentToWishlist(
+          this.instrument._id
+        );
+        this.$auth.setUser(res.data);
+        console.log(res);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 };
