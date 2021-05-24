@@ -16,7 +16,7 @@ export class User extends Document {
   })
   email: string;
 
-  @Prop({ select: false })
+  @Prop()
   @ApiProperty({
     example: 'azerty123',
   })
@@ -46,7 +46,7 @@ export class User extends Document {
   @Prop()
   lastConnection: Date;
 
-  @Prop({ select: false })
+  @Prop()
   @Exclude()
   salt: string;
 

@@ -83,8 +83,22 @@ export class InstrumentService {
    * Find user instruments
    * @param user
    */
-  findForUser(user: User) {
-    return this.instrumentModel.find({ owner: user._id });
+  async findForUser(user: User) {
+    const userInstruments = await this.instrumentModel.find({
+      owner: user._id,
+    });
+    const oldInstruments = await this.instrumentModel.find({
+      oldOwners: { $in: user._id },
+    });
+    const wishInstruments = await this.instrumentModel.find({
+      _id: { $in: user.wishList },
+    });
+
+    return {
+      userInstruments,
+      oldInstruments,
+      wishInstruments,
+    };
   }
 
   /**
