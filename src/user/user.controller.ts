@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
@@ -21,6 +22,7 @@ import {
 import { UpdateUserDto } from './update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
+import { ObjectId } from 'mongoose';
 
 @ApiTags('user')
 @Controller('user')
@@ -81,5 +83,17 @@ export class UserController {
     @UploadedFile() thumbnail?: Express.Multer.File,
   ) {
     return this.userService.update(user, updateUserDto, thumbnail);
+  }
+
+  @Patch('wishlist/:instrumentId')
+  // @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Updated user' })
+  toggleToWishlist(
+    @GetUser() user: User,
+    @Param('instrumentId') instrumentId: ObjectId,
+  ) {
+    return this.userService.toggleToWishlist(user, instrumentId);
   }
 }

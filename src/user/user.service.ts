@@ -3,7 +3,7 @@ import { User } from './user.schema';
 import * as shortid from 'shortid';
 import { CreateUserDto } from './auth/dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId, Schema, Types } from 'mongoose';
 import { UpdateUserDto } from './update-user.dto';
 import { FileService } from '../file/file.service';
 
@@ -101,5 +101,15 @@ export class UserService {
         { new: true },
       )
       .exec();
+  }
+
+  async toggleToWishlist(user: User, instrumentId: ObjectId) {
+    const index = user.wishList.indexOf(instrumentId);
+    if (index === -1) {
+      user.wishList.push(instrumentId);
+    } else {
+      user.wishList.splice(index, 1);
+    }
+    return user.save();
   }
 }

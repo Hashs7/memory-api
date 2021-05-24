@@ -16,7 +16,7 @@ export class User extends Document {
   })
   email: string;
 
-  @Prop()
+  @Prop({ select: false })
   @ApiProperty({
     example: 'azerty123',
   })
@@ -46,15 +46,15 @@ export class User extends Document {
   @Prop()
   lastConnection: Date;
 
-  @Prop()
+  @Prop({ select: false })
   @Exclude()
   salt: string;
 
-  @Prop()
+  @Prop({ select: false })
   @Exclude()
   resetPasswordToken: string;
 
-  @Prop()
+  @Prop({ select: false })
   @Exclude()
   resetPasswordExpire: Date;
 
@@ -65,7 +65,7 @@ export class User extends Document {
     default: [],
   })
   @ApiProperty({ type: Instrument })
-  wishList?: Instrument[];
+  wishList?: MongooseSchema.Types.ObjectId[];
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
