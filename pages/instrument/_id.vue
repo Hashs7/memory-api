@@ -106,7 +106,6 @@ export default {
           this.instrument._id
         );
         this.$auth.setUser(res.data);
-        console.log(res);
       } catch (e) {
         console.log(e);
       }

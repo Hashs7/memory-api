@@ -59,6 +59,7 @@ export default {
             password: this.login.password,
           },
         });
+        // TODO get more user infos
         this.$auth.setUser(response.data.user);
         this.redirect();
       } catch (err) {}
