@@ -196,7 +196,9 @@ export class InstrumentService {
 
     instrument.handoverToken = null;
     instrument.handoverExpire = null;
-    instrument.oldOwners.push(instrument.owner);
+    if (!instrument.oldOwners.includes(instrument.owner)) {
+      instrument.oldOwners.push(instrument.owner);
+    }
     instrument.owner = user._id;
     await instrument.save();
 
