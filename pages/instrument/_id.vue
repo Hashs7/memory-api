@@ -95,7 +95,7 @@ export default {
     isFavorite() {
       if (this.isOwner) return false;
       console.log(this.$auth.$state.user);
-      return this.$auth.$state.user.wishList.includes(this.instrument._id);
+      return this.$auth.$state.user.wishList?.includes(this.instrument._id);
       // return true;
     },
   },

@@ -3,18 +3,27 @@
     <h1>Mes instruments</h1>
     <section class="view view--instrument-list">
       <b-tabs>
-        <b-tab-item v-if="instruments.length" label="Actuels">
+        <b-tab-item v-if="userInstruments.length" label="Actuels">
           <b-table
-            :data="instruments"
+            :data="userInstruments"
             :columns="columns"
             :selected.sync="selected"
             focusable
           >
           </b-table>
         </b-tab-item>
-        <b-tab-item v-if="instruments.length" label="Passés">
+        <b-tab-item v-if="oldInstruments.length" label="Passés">
           <b-table
-            :data="instruments"
+            :data="oldInstruments"
+            :columns="columns"
+            :selected.sync="selected"
+            focusable
+          >
+          </b-table>
+        </b-tab-item>
+        <b-tab-item v-if="wishInstruments.length" label="Favoris">
+          <b-table
+            :data="wishInstruments"
             :columns="columns"
             :selected.sync="selected"
             focusable
@@ -31,7 +40,9 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      instruments: [],
+      userInstruments: [],
+      oldInstruments: [],
+      wishInstruments: [],
       selected: null,
       columns: [
         {
@@ -56,14 +67,17 @@ export default {
     };
   },
   async fetch() {
-    let instruments = [];
     try {
       const res = await this.$api.getUserInstruments();
-      instruments = [...res.data];
+      console.log(res.data);
+      const { userInstruments, oldInstruments, wishInstruments } = res.data;
+      console.log(userInstruments, oldInstruments, wishInstruments);
+      this.userInstruments = userInstruments;
+      this.oldInstruments = oldInstruments;
+      this.wishInstruments = wishInstruments;
     } catch (e) {
       console.log(e);
     }
-    this.instruments = [...instruments];
   },
   fetchOnServer: false,
   watch: {
