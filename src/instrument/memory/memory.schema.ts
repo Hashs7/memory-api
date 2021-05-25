@@ -14,7 +14,7 @@ const timestamps2 = require('mongoose-timestamp2');
 @Schema()
 export class Memory extends Types.Subdocument {
   @Prop({ required: true })
-  id: string;
+  id:string;
 
   @Prop()
   @ApiProperty()

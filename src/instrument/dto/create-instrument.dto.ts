@@ -1,47 +1,60 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
+import {IsBoolean, IsDate, IsOptional, IsString} from 'class-validator';
 
 export class CreateInstrumentDto {
   @IsString()
   @ApiProperty()
-  name: string;
+  brand: string;
+
+  @IsString()
+  @ApiProperty()
+  modelName: string;
+
+  @IsDate()
+  @ApiProperty()
+  buyDate: Date;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  image: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  name?: string;
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
   description?: string;
 
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
-  image?: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty()
-  type: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
-  brand: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
-  modelName?: string;
-
-  @IsString()
-  @ApiProperty()
-  specification: string;
-
   @IsBoolean()
   @IsOptional()
   @ApiProperty()
   forSale?: boolean;
 
-  @IsDate()
+  @IsString()
   @IsOptional()
   @ApiPropertyOptional()
-  buyDate?: Date;
+  type?: string;
+
+  @IsString()
+  @ApiProperty()
+  specification?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  sonority?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  musicStyle?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional()
+  status?: string;
 }
