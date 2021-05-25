@@ -1,5 +1,5 @@
 <template>
-  <div class="create">
+  <div class="o-page o-page--create">
     <h1>Ajouter un nouvel instrument</h1>
 
     <form ref="form" @submit="submit">

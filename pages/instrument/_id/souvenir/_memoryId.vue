@@ -1,5 +1,5 @@
 <template>
-  <div class="o-page o-page--memory">
+  <div :class="[memory.template]" class="o-page o-page--memory">
     <div class="o-page__container">
       <div class="memory-slider">
         <MemoryCard :class="[getClass(0)]" class="memory" @swipe="next">
@@ -8,22 +8,19 @@
         <MemoryCard
           v-for="(c, i) in contents"
           :key="i"
-          :class="[getClass(i + 1), c.component]"
+          :class="[c.type, mediaType(c.file), getClass(i + 1), c.component]"
           class="memory memory--content"
           @swipe="next"
         >
-          <img v-if="c.type === 'media'" :src="c.file.path" alt="" />
-          <span v-else>{{ c.type }}</span>
+          <img v-if="mediaType(c.file) === 'image'" :src="c.file.path" alt="" />
+          <video
+            v-if="mediaType(c.file) === 'video'"
+            :src="c.file.path"
+            controls
+          />
+          <span v-if="c.type !== 'media'">{{ c.type }}</span>
         </MemoryCard>
       </div>
-      <!--<button
-        class="memory-slider__control memory-slider__previous"
-        @click="previous"
-      ></button>
-      <button
-        class="memory-slider__control memory-slider__next"
-        @click="next"
-      ></button>-->
     </div>
     <nuxt-link :to="closeMemory" class="memory__background"></nuxt-link>
   </div>
@@ -67,8 +64,13 @@ export default {
   mounted() {
     document.body.style.overflow = 'hidden';
     document.body.style.height = '100vh';
+    console.log(this.memory);
   },
   methods: {
+    mediaType(file) {
+      return file.mimetype.split('/')[0];
+    },
+
     previous() {
       if (this.index === 0) return;
       this.index--;
@@ -165,6 +167,12 @@ export default {
       height: 100%;
       object-fit: cover;
     }
+
+    &.video {
+      display: flex;
+      align-items: center;
+      background-color: #000;
+    }
   }
 
   &.active {
@@ -207,5 +215,11 @@ export default {
 
 .memory__title {
   font-size: 40px;
+}
+
+// Templates
+.o-page--memory {
+  &.sardines {
+  }
 }
 </style>

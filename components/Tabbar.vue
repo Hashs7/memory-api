@@ -20,24 +20,16 @@ export default {
     return {
       nav: [
         {
-          label: 'Actus',
+          label: 'Découvrir',
           path: '/feed',
-        },
-        {
-          label: 'Instruments',
-          path: '/instrument',
         },
         {
           label: 'Capture',
           path: '/capture',
         },
         {
-          label: 'Recherche',
-          path: '/recherche',
-        },
-        {
-          label: 'Profil',
-          path: '/profil',
+          label: 'Instruments',
+          path: '/instrument',
         },
       ],
     };

@@ -32,6 +32,9 @@
         </b-tab-item>
       </b-tabs>
     </section>
+    <NuxtLink to="/instrument/creation" class="u-button u-button--primary"
+      >Ajouter un instrument</NuxtLink
+    >
   </div>
 </template>
 

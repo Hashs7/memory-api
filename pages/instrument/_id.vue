@@ -20,7 +20,17 @@
         </div>
 
         <div class="instrument__owner">
-          {{ instrument.owner.firstName }} {{ instrument.owner.lastName }}
+          <div class="user">
+            <div class="user__picture">
+              <img
+                :src="instrument.owner.thumbnail.path"
+                alt="photo de profile"
+              />
+            </div>
+            <div class="user__infos">
+              {{ instrument.owner.firstName }} {{ instrument.owner.lastName }}
+            </div>
+          </div>
         </div>
 
         <div v-if="isOwner">
@@ -137,5 +147,18 @@ export default {
 .instrument__owner {
   text-align: center;
   margin-bottom: 20px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+}
+
+.user__picture {
+  width: 50px;
+  height: 50px;
+  margin-right: 12px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 </style>

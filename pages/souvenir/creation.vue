@@ -42,6 +42,9 @@ export default {
       contents: (state) => state.memory.contents,
       themes: (state) => state.memory.themes,
     }),
+    selectedTheme() {
+      return this.themes.find((el) => el.selected)?.slug;
+    },
     instrumentId() {
       return this.$route.params.id;
     },
@@ -54,6 +57,7 @@ export default {
           name: this.name,
           date: this.date,
           type: this.type,
+          template: this.selectedTheme,
           contents: formatContentType(this.contents),
         });
         this.createdHandler();

@@ -1,5 +1,13 @@
 <template>
   <form @submit="submit">
+    <img
+      v-if="user.thumbnail"
+      :src="user.thumbnail.path"
+      alt=""
+      width="100"
+      height="100"
+      class="user-picture"
+    />
     <div class="form__group">
       <b-field label="Prénom">
         <b-input v-model="user.firstName" type="text"> </b-input>
@@ -15,13 +23,6 @@
         <b-input v-model="user.username" type="text"> </b-input>
       </b-field>
     </div>
-    <img
-      v-if="user.thumbnail"
-      :src="user.thumbnail.path"
-      alt=""
-      width="100"
-      height="100"
-    />
     <FileUpload ref="files" :multiple="false" />
     <button type="submit" class="button is-primary">Valider</button>
   </form>
@@ -76,4 +77,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.user-picture {
+  display: block;
+  margin: 16px auto;
+  border-radius: 50%;
+}
+</style>
