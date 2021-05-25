@@ -19,6 +19,11 @@ export class CreateMemoryDto {
   @IsOptional()
   description?: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  template?: string;
+
   @IsNotEmpty()
   @IsDate()
   @ApiProperty()

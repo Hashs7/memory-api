@@ -4,8 +4,8 @@ import { File } from '../../../file/file.schema';
 import { Schema as MongooseSchema, Types } from 'mongoose';
 
 export enum ContentType {
-  Video = 'media',
-  Image = 'media',
+  Video = 'video',
+  Image = 'image',
   Audio = 'audio',
   Text = 'text',
 }
@@ -33,7 +33,7 @@ export class MemoryContent extends Types.Subdocument {
     ref: File.name,
   })
   @ApiProperty({ type: File })
-  file: MongooseSchema.Types.ObjectId;
+  file: File;
 }
 
 export const MemoryContentSchema = SchemaFactory.createForClass(MemoryContent);

@@ -1,11 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { File } from './file.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
-import { rewritePath } from './file.helper';
 import { User } from '../user/user.schema';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class FileService {
@@ -17,7 +18,7 @@ export class FileService {
 
   async findOne(id: string) {
     const file = await this.fileModel.findOne({ _id: id });
-    file.path = rewritePath(file);
+    file.rewritePath();
     return file;
   }
 
@@ -53,5 +54,21 @@ export class FileService {
     return fileDoc;
   }
 
-  // createMultiple() {}
+  async remove(id: string, user: User) {
+    const file = await this.fileModel.findOne({ _id: id });
+
+    if (user._id.equals(file.user)) {
+      throw new UnauthorizedException(
+        "Vous n'êtes pas propriétaire du fichier",
+      );
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      const filePath = `${path.resolve('./')}/uploads/${file.path}`;
+      fs.unlinkSync(filePath);
+      await file.delete();
+    } else {
+      // Delete image on azure
+    }
+  }
 }

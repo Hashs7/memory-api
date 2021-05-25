@@ -61,15 +61,21 @@ export class InstrumentService {
           },
         },
       },
+      {
+        path: 'owner',
+        populate: {
+          path: 'thumbnail',
+        },
+      },
     ]);
 
-    // @ts-ignore
-    instrument.image?.path = rewritePath(instrument.image);
+    instrument.owner.thumbnail?.rewritePath();
+    instrument.image?.rewritePath();
     instrument.memories = instrument.memories.map((m) => {
       m.contents = m.contents.map((c) => {
         if (c.type !== ContentType.Text) {
-          // @ts-ignore
-          c.file?.path = rewritePath(c.file);
+          console.log(c.file.path);
+          c.file?.rewritePath();
         }
         return c;
       });
