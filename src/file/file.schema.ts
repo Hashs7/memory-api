@@ -51,6 +51,7 @@ export class File extends Document {
   @ApiProperty({ type: User })
   user: MongooseSchema.Types.ObjectId;
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   rewritePath() {}
 }
 

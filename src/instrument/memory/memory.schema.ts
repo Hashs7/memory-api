@@ -1,15 +1,17 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {ApiProperty} from '@nestjs/swagger';
-import {Schema as MongooseSchema, Types, Document} from 'mongoose';
-import {CreateMemoryDto} from './dto/create-memory.dto';
-import {User} from '../../user/user.schema';
-import {IsArray} from 'class-validator';
-import {MemoryContent} from './content/content.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
+import { Schema as MongooseSchema, Types } from 'mongoose';
+import { CreateMemoryDto } from './dto/create-memory.dto';
+import { User } from '../../user/user.schema';
+import { IsArray } from 'class-validator';
+import { MemoryContent } from './content/content.schema';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const timestamps2 = require('mongoose-timestamp2');
+
 export enum MemoryType {
   Concert = 'Concert',
   Rehearsal = 'Rehearsal',
 }
-const timestamps2 = require('mongoose-timestamp2');
 
 @Schema()
 export class Memory extends Types.Subdocument {
@@ -24,7 +26,13 @@ export class Memory extends Types.Subdocument {
   @ApiProperty()
   description: string;
 
-  @Prop({type: Date})
+  @Prop({
+    default: '',
+  })
+  @ApiProperty()
+  template: string;
+
+  @Prop({ type: Date })
   @ApiProperty()
   date: Date;
 
@@ -74,22 +82,8 @@ export class Memory extends Types.Subdocument {
     type: [MemoryContent],
   })
   contents: MemoryContent[];
-
-  constructor(
-    createMemoryDto: CreateMemoryDto,
-    createdBy: MongooseSchema.Types.ObjectId,
-    withUsers: MongooseSchema.Types.ObjectId[],
-  ) {
-    super();
-    this.name = createMemoryDto.name;
-    this.description = createMemoryDto.description;
-    this.date = createMemoryDto.date;
-    this.type = createMemoryDto.type;
-    this.createdBy = createdBy;
-    this.withUsers = withUsers;
-    this.contents = createMemoryDto.contents;
-    /*Object.keys(createMemoryDto)
-          .map((key, value) => this[key] = value);*/
-  }
 }
-export const MemorySchema = SchemaFactory.createForClass(Memory).plugin(timestamps2);
+
+export const MemorySchema = SchemaFactory.createForClass(Memory).plugin(
+  timestamps2,
+);

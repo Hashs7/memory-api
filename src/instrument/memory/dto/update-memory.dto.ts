@@ -1,4 +1,4 @@
-import { ApiPropertyOptional, PartialType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { MemoryContent } from '../content/content.schema';
 
@@ -15,6 +15,11 @@ export class UpdateMemoryDto {
   @IsOptional()
   @ApiPropertyOptional()
   description?: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  template?: string;
 
   @IsNotEmpty()
   @IsDate()

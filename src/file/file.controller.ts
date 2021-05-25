@@ -11,10 +11,16 @@ import {
   BadRequestException,
   Logger,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { randomBytes } from 'crypto';
 import got from 'got';
 import { FileService } from './file.service';
@@ -138,8 +144,11 @@ export class FileController {
     };
   }
 
-  uniquifyFilename(filename): string {
-    const prefix = randomBytes(10).toString('hex');
-    return prefix + filename;
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({ summary: 'Delete instrument with shortId' })
+  @ApiBearerAuth()
+  remove(@Param('id') id: string, @GetUser() user: User) {
+    return this.fileService.remove(id, user);
   }
 }
