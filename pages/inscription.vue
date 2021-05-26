@@ -1,35 +1,53 @@
 <template>
   <div class="o-page o-page--register">
+    <div class="">
+      <h1>Création de compte</h1>
+      <h2>Commençons par vous !</h2>
+    </div>
     <div class="create">
-      <h1>S'inscrire</h1>
       <form @submit="submit">
         <div class="form__group">
-          <b-field label="Prénom">
-            <b-input v-model="firstName" type="text"> </b-input>
+          <b-field>
+            <b-input
+              v-model="username"
+              type="text"
+              placeholder="Surnom"
+            ></b-input>
           </b-field>
         </div>
         <div class="form__group">
-          <b-field label="Nom">
-            <b-input v-model="lastName" type="text"> </b-input>
+          <div class="form__field form__field--half">
+            <b-field>
+              <b-input v-model="firstName" type="text" placeholder="Prénom">
+              </b-input>
+            </b-field>
+          </div>
+          <div class="form__field form__field--half">
+            <b-field>
+              <b-input v-model="lastName" placeholder="Nom" type="text">
+              </b-input>
+            </b-field>
+          </div>
+        </div>
+        <div class="form__group">
+          <b-field>
+            <b-input v-model="email" placeholder="Email" type="email">
+            </b-input>
           </b-field>
         </div>
         <div class="form__group">
-          <b-field label="Pseudo">
-            <b-input v-model="username" type="text"> </b-input>
-          </b-field>
-        </div>
-        <div class="form__group">
-          <b-field label="Email">
-            <b-input v-model="email" type="email"> </b-input>
-          </b-field>
-        </div>
-        <div class="form__group">
-          <b-field label="Mot de passe">
-            <b-input v-model="password" type="password" password-reveal>
+          <b-field>
+            <b-input
+              v-model="password"
+              placeholder="Mot de passe"
+              type="password"
+              password-reveal
+            >
             </b-input>
           </b-field>
         </div>
         <button type="submit" class="button is-primary">S'inscrire</button>
+        <NuxtLink to="/connexion">J'ai déjà un compte</NuxtLink>
       </form>
     </div>
   </div>
@@ -92,6 +110,8 @@ export default {
 
 <style lang="scss">
 .form__group {
+  display: flex;
+  justify-content: space-between;
   max-width: 300px;
   margin: 0 auto 16px auto;
 
@@ -103,5 +123,13 @@ export default {
   input {
     width: 100%;
   }
+}
+
+.field {
+  width: 100%;
+}
+
+.form__field--half {
+  width: calc(50% - 8px);
 }
 </style>

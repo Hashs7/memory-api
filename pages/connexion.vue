@@ -19,6 +19,7 @@
       </form>
       <Logout v-else type="submit" class="button"> Me déconnecter </Logout>
       <button @click="resetPassword">Mot de passe oublié</button>
+      <NuxtLink to="/inscription">S'inscrire</NuxtLink>
 
       <div>
         <h2>Hint</h2>
