@@ -5,9 +5,9 @@
         <section class="section">
           <div class="content has-text-centered">
             <p>
-              <b-icon icon="upload" size="is-large"> </b-icon>
+              <b-icon icon="camera" size="is-large"> </b-icon>
             </p>
-            <p>{{ label }}</p>
+            <p v-if="label">{{ labelText }}</p>
           </div>
         </section>
       </b-upload>
@@ -50,6 +50,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    label: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -57,7 +61,7 @@ export default {
     };
   },
   computed: {
-    label() {
+    labelText() {
       return this.multiple ? 'Déposez vos fichiers' : 'Déposez votre fichier';
     },
   },

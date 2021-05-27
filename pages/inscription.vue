@@ -1,8 +1,9 @@
 <template>
   <div class="o-page o-page--register">
-    <div class="">
-      <h1>Création de compte</h1>
-      <h2>Commençons par vous !</h2>
+    <div class="o-page__header">
+      <div class="logo"><IconLogo /></div>
+      <span class="o-page__title">Création de compte</span>
+      <h1 class="o-page__subtitle">Commençons par vous !</h1>
     </div>
     <div class="create">
       <form @submit="submit">
@@ -54,8 +55,13 @@
 </template>
 
 <script>
+import IconLogo from '~/assets/svg/ic_logo.svg?inline';
+
 export default {
   name: 'Register',
+  components: {
+    IconLogo,
+  },
   data() {
     return {
       firstName: '',
@@ -108,28 +114,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.form__group {
-  display: flex;
-  justify-content: space-between;
-  max-width: 300px;
-  margin: 0 auto 16px auto;
-
-  label {
-    text-align: left;
-    display: block;
-  }
-
-  input {
-    width: 100%;
-  }
+<style lang="scss" scoped>
+.o-page__header {
+  margin-bottom: 64px;
 }
 
-.field {
-  width: 100%;
-}
-
-.form__field--half {
-  width: calc(50% - 8px);
+.logo {
+  display: block;
+  margin: 64px auto;
+  width: 64px;
 }
 </style>

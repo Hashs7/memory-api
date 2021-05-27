@@ -1,13 +1,17 @@
 <template>
-  <div class="o-page o-page--profile-edit">
-    <div class="">
+  <div class="o-page o-page--profile-infos">
+    <div class="infos-heading">
       <span>{{ heading[currentStep].title }}</span>
       <h1>{{ heading[currentStep].subtitle }}</h1>
     </div>
 
     <div class="">
       <UserInfoForm v-if="currentStep === 0" class="step-0" />
-      <InstrumentShortForm v-if="currentStep === 1" class="step-1" />
+      <InstrumentShortForm
+        v-if="currentStep === 1"
+        ref="stepInstrument"
+        class="step-1"
+      />
     </div>
     <div class="indicator">
       <span
@@ -31,12 +35,19 @@
 import UserInfoForm from '@/components/user/UserInfoForm';
 import InstrumentShortForm from '@/components/instrument/InstrumentShortForm';
 
+const STEPS = {
+  CATEGORIES: 'categories',
+  FIRST_INSTRUMENT: 'first-instrument',
+  THIRD: 'third',
+};
+
 export default {
   components: { InstrumentShortForm, UserInfoForm },
   middleware: 'auth',
   data() {
     return {
       MAX_STEPS: 2,
+      steps: [STEPS.CATEGORIES, STEPS.FIRST_INSTRUMENT, STEPS.THIRD],
       currentStep: 0,
       heading: [
         {
@@ -59,7 +70,16 @@ export default {
     previousStep() {
       this.currentStep -= 1;
     },
-    nextStep() {
+    async nextStep() {
+      if (this.steps[this.currentStep] === STEPS.FIRST_INSTRUMENT) {
+        try {
+          await this.$refs.stepInstrument.submit();
+          this.currentStep += 1;
+        } catch (e) {
+          this.notifyError();
+        }
+        return;
+      }
       this.currentStep += 1;
     },
     validate() {
@@ -67,11 +87,24 @@ export default {
         name: 'feed',
       });
     },
+    notifyError() {
+      this.$buefy.toast.open({
+        message: "L'instrument n'a pas été créé",
+        type: 'is-danger',
+      });
+    },
   },
 };
 </script>
 
 <style lang="scss">
+.infos-heading {
+  text-align: center;
+  max-width: 500px;
+  padding: 0 54px;
+  margin: 60px auto;
+}
+
 .indicator {
   display: flex;
   margin: 20px 0;

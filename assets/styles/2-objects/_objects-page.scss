@@ -64,6 +64,15 @@
   text-align: center;
 }
 
+.o-page__title {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.o-page__subtitle {
+  font-size: 24px;
+}
+
 .o-page__container {
   position: relative;
   z-index: 10;
@@ -74,9 +83,6 @@
   flex-grow: 1;
 }
 
-.o-page__title {
-  margin-bottom: 20px;
-}
 
 .o-page--summary .o-page__body {
   padding: 0 8px;
@@ -139,7 +145,3 @@
   color: #C0C0C0;
 }
 
-.o-page__subtitle {
-  font-size: 14px;
-  text-align: center;
-}

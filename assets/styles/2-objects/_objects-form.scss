@@ -1,0 +1,23 @@
+.form__group {
+  display: flex;
+  justify-content: space-between;
+  max-width: 300px;
+  margin: 0 auto 16px auto;
+
+  label {
+    text-align: left;
+    display: block;
+  }
+
+  input {
+    width: 100%;
+  }
+}
+
+.field {
+  width: 100%;
+}
+
+.form__field--half {
+  width: calc(50% - 8px);
+}
