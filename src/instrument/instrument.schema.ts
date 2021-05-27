@@ -1,32 +1,32 @@
-import {Prop, raw, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document, Schema as MongooseSchema} from 'mongoose';
-import {User} from '../user/user.schema';
-import {File} from '../file/file.schema';
-import {ApiProperty} from '@nestjs/swagger';
-import {Memory} from './memory/memory.schema';
-import {IsArray} from 'class-validator';
-import {Exclude} from 'class-transformer';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { User } from '../user/user.schema';
+import { File } from '../file/file.schema';
+import { ApiProperty } from '@nestjs/swagger';
+import { Memory } from './memory/memory.schema';
+import { IsArray } from 'class-validator';
+import { Exclude } from 'class-transformer';
 
 @Schema()
 export class Instrument extends Document {
-  @Prop({required: true})
+  @Prop({ required: true })
   id: string;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   @ApiProperty({
     example: 'Gibson',
     description: "Marque de l'instrument",
   })
   brand: string;
 
-  @Prop({required: true})
+  @Prop()
   @ApiProperty({
     example: 'Gibson SG Standard HC',
     description: "Nom du model de l'instrument",
   })
   modelName: string;
 
-  @Prop({required: true})
+  @Prop()
   @ApiProperty({
     description: "Date d'obtention de l'instrument (mois prêt)",
   })
@@ -37,7 +37,7 @@ export class Instrument extends Document {
     ref: File.name,
     required: true,
   })
-  @ApiProperty({type: File})
+  @ApiProperty({ type: File })
   image: File;
 
   @Prop()
@@ -84,7 +84,7 @@ export class Instrument extends Document {
   @Prop()
   @ApiProperty({
     example: 'Jazz et Rock',
-    description: "Type de musique préférée",
+    description: 'Type de musique préférée',
   })
   musicStyle: string;
 
@@ -103,14 +103,14 @@ export class Instrument extends Document {
     ref: User.name,
     required: true,
   })
-  @ApiProperty({type: User})
+  @ApiProperty({ type: User })
   owner: User;
 
   @Prop({
     type: [MongooseSchema.Types.ObjectId],
     ref: User.name,
   })
-  @ApiProperty({type: [User]})
+  @ApiProperty({ type: [User] })
   oldOwners: User[];
   /*
   @Prop({
