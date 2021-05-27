@@ -21,7 +21,7 @@
 
         <div class="instrument__owner">
           <div class="user">
-            <div class="user__picture">
+            <div v-if="instrument.owner.thumbnail" class="user__picture">
               <img
                 :src="instrument.owner.thumbnail.path"
                 alt="photo de profile"
@@ -34,7 +34,7 @@
         </div>
 
         <div v-if="isOwner">
-          <NuxtLink :to="addMemmory" class="u-button u-button--primary"
+          <NuxtLink :to="addMemory" class="u-button u-button--primary"
             >Ajouter un souvenir</NuxtLink
           >
 
@@ -55,12 +55,17 @@
 
       <div class="memories">
         <h3>Souvenirs ({{ memoriesCount }})</h3>
-        <MemoryPreview
-          v-for="m in instrument.memories"
-          :key="m._id"
-          :link="true"
-          :memory="m"
-        />
+        <template v-if="memoriesCount > 0">
+          <MemoryPreview
+            v-for="m in instrument.memories"
+            :key="m._id"
+            :link="true"
+            :memory="m"
+          />
+        </template>
+        <template v-else>
+          <p>Rip il n'y a pas de souvenirs. Pue la mort.</p>
+        </template>
       </div>
     </div>
 
@@ -87,7 +92,7 @@ export default {
     };
   },
   computed: {
-    addMemmory() {
+    addMemory() {
       const { id } = this.$route.params;
       return `/instrument/${id}/souvenir/creation`;
     },
@@ -99,12 +104,11 @@ export default {
       return this.instrument.memories.length;
     },
     isOwner() {
-      console.log(this.instrument.owner._id, this.$auth.$state);
+      // return true;
       return this.instrument.owner._id === this.$auth.$state.user._id;
     },
     isFavorite() {
       if (this.isOwner) return false;
-      console.log(this.$auth.$state.user);
       return this.$auth.$state.user.wishList?.includes(this.instrument._id);
       // return true;
     },
