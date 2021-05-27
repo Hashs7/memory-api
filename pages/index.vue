@@ -1,17 +1,19 @@
 <template>
-  <section class="view view--instrument-list">
-    <b-tabs>
-      <b-tab-item v-if="instruments.length" label="Instruments">
-        <b-table
-          :data="instruments"
-          :columns="columns"
-          :selected.sync="selected"
-          focusable
-        >
-        </b-table>
-      </b-tab-item>
-    </b-tabs>
-  </section>
+  <div class="o-page">
+    <section class="view view--instrument-list">
+      <b-tabs>
+        <b-tab-item v-if="instruments.length" label="Instruments">
+          <b-table
+            :data="instruments"
+            :columns="columns"
+            :selected.sync="selected"
+            focusable
+          >
+          </b-table>
+        </b-tab-item>
+      </b-tabs>
+    </section>
+  </div>
 </template>
 
 <script>
