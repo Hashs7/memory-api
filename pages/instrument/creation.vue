@@ -22,6 +22,11 @@
           ></b-input>
         </b-field>
       </div>
+      <div class="form__group">
+        <b-field label="Marque">
+          <b-input v-model="brand" name="brand" type="text" required></b-input>
+        </b-field>
+      </div>
       <FileUpload ref="files" />
       <button type="submit" class="button is-primary">Ajouter</button>
     </form>
@@ -45,6 +50,7 @@ export default {
       name: '',
       type: '',
       specification: '',
+      brand: '',
     };
   },
   methods: {
