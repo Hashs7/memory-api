@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {
   IsDate,
   IsEnum,
@@ -6,7 +6,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { MemoryContent } from '../content/content.schema';
+import {MemoryContent} from '../content/content.schema';
+import {MemoryVisibility} from "../memory.schema";
 
 export class CreateMemoryDto {
   @IsNotEmpty()
@@ -25,7 +26,6 @@ export class CreateMemoryDto {
   template?: string;
 
   @IsNotEmpty()
-  @IsDate()
   @ApiProperty()
   date: Date;
 
@@ -36,6 +36,14 @@ export class CreateMemoryDto {
     // enum: Object.values(MemoryType),
   })
   type?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsEnum(MemoryVisibility)
+  @ApiPropertyOptional({
+    enum: Object.values(MemoryVisibility),
+  })
+  visibility?: string;
 
   @IsString()
   @IsNotEmpty()

@@ -27,6 +27,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { Instrument } from './instrument.schema';
+import {AllowAny} from "../user/auth/JwtAuthGuard";
 
 @ApiTags('instrument')
 @Controller('instrument')
@@ -56,12 +57,13 @@ export class InstrumentController {
 
   @Get(':id')
   // @UseInterceptors(ClassSerializerInterceptor)
+  @AllowAny()
   @ApiResponse({
     status: 200,
     type: Instrument,
   })
-  findOne(@Param('id') id: string) {
-    return this.instrumentService.findOne(id);
+  findOne(@Param('id') id: string, @GetUser() user: User) {
+    return this.instrumentService.findOne(id, user);
   }
 
   @Post()

@@ -1,6 +1,7 @@
-import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { MemoryContent } from '../content/content.schema';
+import {ApiProperty, ApiPropertyOptional, PartialType} from '@nestjs/swagger';
+import {IsDate, IsEnum, IsNotEmpty, IsOptional, IsString} from 'class-validator';
+import {MemoryContent} from '../content/content.schema';
+import {MemoryVisibility} from "../memory.schema";
 
 export class UpdateMemoryDto {
   @ApiPropertyOptional()
@@ -33,6 +34,14 @@ export class UpdateMemoryDto {
     // enum: Object.values(MemoryType),
   })
   type?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsEnum(MemoryVisibility)
+  @ApiPropertyOptional({
+    enum: Object.values(MemoryVisibility),
+  })
+  visibility?: string;
 
   @IsOptional()
   @ApiPropertyOptional({

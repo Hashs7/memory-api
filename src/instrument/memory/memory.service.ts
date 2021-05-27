@@ -3,18 +3,18 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateMemoryDto } from './dto/create-memory.dto';
-import { UpdateMemoryDto } from './dto/update-memory.dto';
-import { Memory, MemorySchema } from './memory.schema';
-import { InstrumentService } from '../instrument.service';
-import { UserService } from '../../user/user.service';
-import { Model, Schema } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../../user/user.schema';
-import { MemoryContent } from './content/content.schema';
+import {CreateMemoryDto} from './dto/create-memory.dto';
+import {UpdateMemoryDto} from './dto/update-memory.dto';
+import {Memory, MemorySchema} from './memory.schema';
+import {InstrumentService} from '../instrument.service';
+import {UserService} from '../../user/user.service';
+import {Model, Schema} from 'mongoose';
+import {InjectModel} from '@nestjs/mongoose';
+import {User} from '../../user/user.schema';
+import {MemoryContent} from './content/content.schema';
 import * as shortid from 'shortid';
 
-import { Instrument } from '../instrument.schema';
+import {Instrument} from '../instrument.schema';
 
 @Injectable()
 export class MemoryService {
@@ -25,14 +25,16 @@ export class MemoryService {
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
     @InjectModel(MemoryContent.name)
     private memoryContentModel: Model<MemoryContent>,
-  ) {}
+  ) {
+  }
 
   /**
    * Find all memories of instrument
    * @param instrumentId
+   * @param user
    */
-  async findAll(instrumentId: string): Promise<Memory[]> {
-    const instrument = await this.instrumentService.findOne(instrumentId);
+  async findAll(instrumentId: string, user?: User): Promise<Memory[]> {
+    const instrument = await this.instrumentService.findOne(instrumentId, user);
     return instrument.memories;
   }
 
@@ -41,7 +43,7 @@ export class MemoryService {
    * @param id
    */
   findOne(id: string): Promise<Memory> {
-    return this.memoryModel.findOne({ id }).exec();
+    return this.memoryModel.findOne({id}).exec();
   }
 
   /**
@@ -56,14 +58,14 @@ export class MemoryService {
     createMemoryDto: CreateMemoryDto,
   ): Promise<Memory> {
     const id = shortid.generate();
-    const { withUsers } = createMemoryDto;
+    const {withUsers} = createMemoryDto;
     const users = (await this.userService.findUsers(withUsers)).map(
       (u) => u._id,
     );
 
     const contents = await Promise.all(
       createMemoryDto.contents.map((c) =>
-        this.memoryContentModel.create({ ...c }),
+        this.memoryContentModel.create({...c}),
       ),
     );
 
@@ -92,8 +94,8 @@ export class MemoryService {
     instrumentId: string,
     updateMemoryDto: UpdateMemoryDto,
   ): Promise<Memory> {
-    const memory = await this.memoryModel.findOne({ id });
-    const instrument = await this.instrumentService.findOne(instrumentId);
+    const memory = await this.memoryModel.findOne({id});
+    const instrument = await this.instrumentService.findOne(instrumentId, user);
     const withUsers = (
       await this.userService.findUsers(updateMemoryDto.withUsers)
     ).map((u) => u._id);
@@ -126,7 +128,7 @@ export class MemoryService {
 
     return this.memoryModel
       .findOneAndUpdate(
-        { id: id },
+        {id: id},
         {
           ...updateMemoryDto,
           withUsers,
@@ -147,17 +149,20 @@ export class MemoryService {
    * @param instrumentId
    */
   async remove(user: User, id: string, instrumentId: string) {
-    const instrument = await this.instrumentService.findOne(instrumentId);
+    const instrument = await this.instrumentService.findOne(instrumentId, user);
     // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }
 
-    const index = instrument.memories.findIndex((m) => m._id.equals(id));
+    const index = instrument.memories.findIndex((m) => m.id == id);
+
     instrument.memories.splice(index, 1);
     instrument.markModified('memories');
     await instrument.save();
 
-    return this.memoryModel.findOneAndDelete({ id });
+    this.memoryModel.findOneAndDelete({id});
+
+    return instrument;
   }
 }
