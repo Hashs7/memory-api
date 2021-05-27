@@ -1,5 +1,5 @@
-import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {IsBoolean, IsDate, IsOptional, IsString} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
 
 export class CreateInstrumentDto {
   @IsString()
@@ -7,17 +7,19 @@ export class CreateInstrumentDto {
   brand: string;
 
   @IsString()
+  @IsOptional()
   @ApiProperty()
-  modelName: string;
+  modelName?: string;
 
   @IsDate()
+  @IsOptional()
   @ApiProperty()
-  buyDate: Date;
+  buyDate?: Date;
 
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
-  image: string;
+  image?: string;
 
   @IsString()
   @IsOptional()
@@ -40,6 +42,7 @@ export class CreateInstrumentDto {
   type?: string;
 
   @IsString()
+  @IsOptional()
   @ApiProperty()
   specification?: string;
 
