@@ -28,7 +28,7 @@ export default {
           path: '/capture',
         },
         {
-          label: 'Instruments',
+          label: 'Mon motel',
           path: '/instrument',
         },
       ],

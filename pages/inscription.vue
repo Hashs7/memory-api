@@ -62,6 +62,7 @@ export default {
   components: {
     IconLogo,
   },
+  layout: 'none',
   data() {
     return {
       firstName: '',
@@ -116,12 +117,15 @@ export default {
 
 <style lang="scss" scoped>
 .o-page__header {
-  margin-bottom: 64px;
+  margin: 144px 0 64px 0;
 }
 
 .logo {
-  display: block;
-  margin: 64px auto;
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
   width: 64px;
+  margin: auto;
 }
 </style>

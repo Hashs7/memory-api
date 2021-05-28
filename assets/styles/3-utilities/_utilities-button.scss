@@ -5,15 +5,24 @@
 // -----------------------------------------------------------------------------
 
 .u-button {
-  padding: 8px 40px;
+  font-size: 16px;
+  height: 48px;
+  line-height: 48px;
+  border-radius: 4px;
+  padding: 0 32px;
+  text-align: center;
 
   @include hover {}
 }
 
 .u-button--primary {
-  border-radius: 40px;
-  background-color: $gray-dark;
+  background-color: $gray-darkest;
+  color: $white;
   border: none;
+}
+.u-button--outline {
+  border: 1px solid $gray-darkest;
+  line-height: 46px;
 }
 
 .u-button--round {

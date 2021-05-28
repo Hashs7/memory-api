@@ -1,6 +1,6 @@
 <template>
   <div class="o-page">
-    <h1>Mes instruments</h1>
+    <h1>Mon motel</h1>
     <section class="view view--instrument-list">
       <b-tabs>
         <b-tab-item v-if="userInstruments.length" label="Actuels">
