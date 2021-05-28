@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -58,9 +59,12 @@ export class AuthService {
    * @param hashed
    */
   async signIn(authUserDTO: AuthCredentialsDto, hashed = false) {
+    Logger.log(authUserDTO.password);
+
     const user = await this.userService.findByUsernameOrEmail(
       authUserDTO.username,
     );
+    console.log('user', user);
 
     if (!user) {
       throw new UnauthorizedException('Utilisateur non trouvé');

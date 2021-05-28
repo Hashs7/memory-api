@@ -4,22 +4,22 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {Model} from 'mongoose';
-import {Instrument} from './instrument.schema';
-import {InjectModel} from '@nestjs/mongoose';
-import {CreateInstrumentDto} from './dto/create-instrument.dto';
-import {UpdateInstrumentDto} from './dto/update-instrument.dto';
+import { ConfigService } from '@nestjs/config';
+import { Model } from 'mongoose';
+import { Instrument } from './instrument.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { CreateInstrumentDto } from './dto/create-instrument.dto';
+import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
-import {User} from '../user/user.schema';
-import {Memory} from './memory/memory.schema';
-import {rewritePath} from '../file/file.helper';
-import {FileService} from '../file/file.service';
-import {File} from '../file/file.schema';
-import {ContentType} from './memory/content/content.schema';
-import {randomBytes} from 'crypto';
+import { User } from '../user/user.schema';
+import { Memory } from './memory/memory.schema';
+import { rewritePath } from '../file/file.helper';
+import { FileService } from '../file/file.service';
+import { File } from '../file/file.schema';
+import { ContentType } from './memory/content/content.schema';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class InstrumentService {
@@ -27,8 +27,7 @@ export class InstrumentService {
     private configService: ConfigService,
     private fileService: FileService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
-  ) {
-  }
+  ) {}
 
   private validateInstrumentOwner(instrument, user) {
     // @ts-ignore
@@ -41,17 +40,20 @@ export class InstrumentService {
    * Find all instruments
    */
   findAll() {
-    return this.instrumentModel.find().select('-_id -memories -__v').populate([
-      'owner',
-      'image',
-      {
-        path: 'owner',
-        select: 'username -_id',
-        populate: {
-          path: 'thumbnail',
+    return this.instrumentModel
+      .find()
+      .select('-_id -memories -__v')
+      .populate([
+        'owner',
+        'image',
+        {
+          path: 'owner',
+          select: 'username -_id',
+          populate: {
+            path: 'thumbnail',
+          },
         },
-      },
-    ]);
+      ]);
   }
 
   /**
@@ -60,29 +62,31 @@ export class InstrumentService {
    * @param user
    */
   async findOne(id: string, user?: User) {
-
-    const instrument = await this.instrumentModel.findOne({id}).select('-__v -_id').populate([
-      'owner',
-      'image',
-      {
-        path: 'memories',
-        select: 'username -_id',
-        populate: {
-          path: 'contents',
+    const instrument = await this.instrumentModel
+      .findOne({ id })
+      .select('-__v')
+      .populate([
+        'owner',
+        'image',
+        {
+          path: 'memories',
+          select: 'username -_id',
           populate: {
-            path: 'file',
-            model: File.name,
+            path: 'contents',
+            populate: {
+              path: 'file',
+              model: File.name,
+            },
           },
         },
-      },
-      {
-        path: 'owner',
-        select: 'username',
-        populate: {
-          path: 'thumbnail',
+        {
+          path: 'owner',
+          select: 'username',
+          populate: {
+            path: 'thumbnail',
+          },
         },
-      },
-    ]);
+      ]);
 
     if (!user || !instrument.owner.equals(user._id)) {
       instrument.memories = instrument.memories.filter((m) => {
@@ -115,10 +119,10 @@ export class InstrumentService {
       owner: user._id,
     });
     const oldInstruments = await this.instrumentModel.find({
-      oldOwners: {$in: user._id},
+      oldOwners: { $in: user._id },
     });
     const wishInstruments = await this.instrumentModel.find({
-      _id: {$in: user.wishList},
+      _id: { $in: user.wishList },
     });
 
     return {
@@ -154,7 +158,7 @@ export class InstrumentService {
     const img: string = await qrcode.toDataURL(url);
     const base64Data = img.split(';base64,').pop();
 
-    fs.writeFile('.tmp/qrcode.png', base64Data, {encoding: 'base64'}, () =>
+    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
       console.log('created'),
     );
 
@@ -183,7 +187,7 @@ export class InstrumentService {
       updateInstrumentDto.image = file.filename;
     }*/
     return this.instrumentModel
-      .findOneAndUpdate({id}, updateInstrumentDto, {new: true})
+      .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
       .exec();
   }
 
@@ -259,6 +263,6 @@ export class InstrumentService {
       );
     }
 
-    return this.instrumentModel.findOneAndDelete({id});
+    return this.instrumentModel.findOneAndDelete({ id });
   }
 }
