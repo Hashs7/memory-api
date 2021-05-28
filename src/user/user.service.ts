@@ -22,7 +22,7 @@ export class UserService {
     const user = await this.userModel
       .findOne({ _id: id })
       .populate('thumbnail');
-    user.thumbnail.rewritePath();
+    user.thumbnail?.rewritePath();
     user.salt = null;
     user.password = null;
     user.resetPasswordToken = null;

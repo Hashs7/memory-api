@@ -1,10 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { Schema as MongooseSchema, Types } from 'mongoose';
-import { CreateMemoryDto } from './dto/create-memory.dto';
-import { User } from '../../user/user.schema';
-import { IsArray } from 'class-validator';
-import { MemoryContent } from './content/content.schema';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {ApiProperty} from '@nestjs/swagger';
+import {Schema as MongooseSchema, Types} from 'mongoose';
+import {CreateMemoryDto} from './dto/create-memory.dto';
+import {User} from '../../user/user.schema';
+import {IsArray} from 'class-validator';
+import {MemoryContent} from './content/content.schema';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const timestamps2 = require('mongoose-timestamp2');
 
@@ -13,10 +13,16 @@ export enum MemoryType {
   Rehearsal = 'Rehearsal',
 }
 
+export enum MemoryVisibility {
+  Private = 'Private',
+  UrlOnly = 'UrlOnly',
+  Public = 'Public',
+}
+
 @Schema()
 export class Memory extends Types.Subdocument {
-  @Prop({ required: true })
-  id:string;
+  @Prop({required: true})
+  id: string;
 
   @Prop()
   @ApiProperty()
@@ -32,7 +38,7 @@ export class Memory extends Types.Subdocument {
   @ApiProperty()
   template: string;
 
-  @Prop({ type: Date })
+  @Prop({type: Date})
   @ApiProperty()
   date: Date;
 
@@ -43,6 +49,13 @@ export class Memory extends Types.Subdocument {
     enum: Object.values(MemoryType),
   })
   type?: string;
+
+  @Prop()
+  @ApiProperty({
+    enum: Object.values(MemoryVisibility),
+    default: MemoryVisibility.Private,
+  })
+  visibility: string;
 
   /*
   @Prop({

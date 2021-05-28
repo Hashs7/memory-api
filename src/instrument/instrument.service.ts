@@ -4,22 +4,22 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Model } from 'mongoose';
-import { Instrument } from './instrument.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { CreateInstrumentDto } from './dto/create-instrument.dto';
-import { UpdateInstrumentDto } from './dto/update-instrument.dto';
+import {ConfigService} from '@nestjs/config';
+import {Model} from 'mongoose';
+import {Instrument} from './instrument.schema';
+import {InjectModel} from '@nestjs/mongoose';
+import {CreateInstrumentDto} from './dto/create-instrument.dto';
+import {UpdateInstrumentDto} from './dto/update-instrument.dto';
 import * as fs from 'fs';
 import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
-import { User } from '../user/user.schema';
-import { Memory } from './memory/memory.schema';
-import { rewritePath } from '../file/file.helper';
-import { FileService } from '../file/file.service';
-import { File } from '../file/file.schema';
-import { ContentType } from './memory/content/content.schema';
-import { randomBytes } from 'crypto';
+import {User} from '../user/user.schema';
+import {Memory} from './memory/memory.schema';
+import {rewritePath} from '../file/file.helper';
+import {FileService} from '../file/file.service';
+import {File} from '../file/file.schema';
+import {ContentType} from './memory/content/content.schema';
+import {randomBytes} from 'crypto';
 
 @Injectable()
 export class InstrumentService {
@@ -27,7 +27,8 @@ export class InstrumentService {
     private configService: ConfigService,
     private fileService: FileService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
-  ) {}
+  ) {
+  }
 
   private validateInstrumentOwner(instrument, user) {
     // @ts-ignore
@@ -40,19 +41,32 @@ export class InstrumentService {
    * Find all instruments
    */
   findAll() {
-    return this.instrumentModel.find();
+    return this.instrumentModel.find().select('-_id -memories -__v').populate([
+      'owner',
+      'image',
+      {
+        path: 'owner',
+        select: 'username -_id',
+        populate: {
+          path: 'thumbnail',
+        },
+      },
+    ]);
   }
 
   /**
    * Find one instrument with id
    * @param id
+   * @param user
    */
-  async findOne(id: string) {
-    const instrument = await this.instrumentModel.findOne({ id }).populate([
+  async findOne(id: string, user?: User) {
+
+    const instrument = await this.instrumentModel.findOne({id}).select('-__v -_id').populate([
       'owner',
       'image',
       {
         path: 'memories',
+        select: 'username -_id',
         populate: {
           path: 'contents',
           populate: {
@@ -63,18 +77,25 @@ export class InstrumentService {
       },
       {
         path: 'owner',
+        select: 'username',
         populate: {
           path: 'thumbnail',
         },
       },
     ]);
 
+    if (!user || !instrument.owner.equals(user._id)) {
+      instrument.memories = instrument.memories.filter((m) => {
+        if (m.visibility == 'Public') {
+          return m;
+        }
+      });
+    }
     instrument.owner.thumbnail?.rewritePath();
     instrument.image?.rewritePath();
     instrument.memories = instrument.memories.map((m) => {
       m.contents = m.contents.map((c) => {
         if (c.type !== ContentType.Text) {
-          console.log(c.file.path);
           c.file?.rewritePath();
         }
         return c;
@@ -94,10 +115,10 @@ export class InstrumentService {
       owner: user._id,
     });
     const oldInstruments = await this.instrumentModel.find({
-      oldOwners: { $in: user._id },
+      oldOwners: {$in: user._id},
     });
     const wishInstruments = await this.instrumentModel.find({
-      _id: { $in: user.wishList },
+      _id: {$in: user.wishList},
     });
 
     return {
@@ -133,7 +154,7 @@ export class InstrumentService {
     const img: string = await qrcode.toDataURL(url);
     const base64Data = img.split(';base64,').pop();
 
-    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
+    fs.writeFile('.tmp/qrcode.png', base64Data, {encoding: 'base64'}, () =>
       console.log('created'),
     );
 
@@ -153,7 +174,7 @@ export class InstrumentService {
     updateInstrumentDto: UpdateInstrumentDto,
     file?: Express.Multer.File,
   ) {
-    const instrument = await this.findOne(id);
+    const instrument = await this.findOne(id, user);
     if (!instrument) {
       throw new NotFoundException("L'instrument n'existe pas");
     }
@@ -162,7 +183,7 @@ export class InstrumentService {
       updateInstrumentDto.image = file.filename;
     }*/
     return this.instrumentModel
-      .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
+      .findOneAndUpdate({id}, updateInstrumentDto, {new: true})
       .exec();
   }
 
@@ -172,7 +193,7 @@ export class InstrumentService {
    * @param user
    */
   async initHandover(id: string, user: User): Promise<{ token: string }> {
-    const instrument = await this.findOne(id);
+    const instrument = await this.findOne(id, user);
     this.validateInstrumentOwner(instrument, user);
 
     if (!instrument.handoverToken) {
@@ -230,7 +251,7 @@ export class InstrumentService {
    * @param user
    */
   async remove(id: string, user: User) {
-    const instrument = await this.findOne(id);
+    const instrument = await this.findOne(id, user);
     // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException(
@@ -238,6 +259,6 @@ export class InstrumentService {
       );
     }
 
-    return this.instrumentModel.findOneAndDelete({ id });
+    return this.instrumentModel.findOneAndDelete({id});
   }
 }

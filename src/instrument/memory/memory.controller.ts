@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
+  UseGuards, ValidationPipe,
 } from '@nestjs/common';
 import { MemoryService } from './memory.service';
 import { CreateMemoryDto } from './dto/create-memory.dto';
@@ -27,8 +27,8 @@ export class MemoryController {
     status: 200,
     type: [Memory],
   })
-  findAll(@Param('instrument') instrument: string): Promise<Memory[]> {
-    return this.memoryService.findAll(instrument);
+  findAll(@Param('instrument') instrument: string, @GetUser() user: User): Promise<Memory[]> {
+    return this.memoryService.findAll(instrument, user);
   }
 
   @Get(':id')
@@ -49,7 +49,7 @@ export class MemoryController {
   create(
     @GetUser() user: User,
     @Param('instrument') instrument: string,
-    @Body() createMemoryDto: CreateMemoryDto,
+    @Body(ValidationPipe) createMemoryDto: CreateMemoryDto,
   ): Promise<Memory> {
     return this.memoryService.create(user._id, instrument, createMemoryDto);
   }
