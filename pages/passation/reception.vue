@@ -7,7 +7,6 @@
     <div v-if="error.hasError" class="error">
       <p>{{ error.message }}</p>
     </div>
-    <p>Token : {{ token }}</p>
 
     <div v-if="!$auth.loggedIn" class="">
       <p>Veuillez d'abord vous authentifier</p>
@@ -77,11 +76,7 @@ export default {
         console.log(res);
         this.validated = true;
       } catch (e) {
-        debugger;
-        console.log(e);
-        console.log(e.message, e.name);
-        console.log(e.message, e.description);
-        this.error.message = e.message;
+        this.error.message = e.response.data.message;
         this.error.hasError = true;
         this.validated = false;
       }

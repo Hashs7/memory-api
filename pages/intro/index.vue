@@ -75,6 +75,7 @@ export default {
 
 .o-page--intro .u-button {
   width: 100%;
+  margin-top: 0 !important;
 }
 
 .o-page--intro .u-button.half {

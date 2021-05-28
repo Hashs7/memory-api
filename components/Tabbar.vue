@@ -24,7 +24,7 @@ export default {
           path: '/feed',
         },
         {
-          label: 'Capture',
+          label: 'Ajouter',
           path: '/capture',
         },
         {

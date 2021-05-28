@@ -16,6 +16,10 @@
   @include hover {}
 }
 
+.u-button + .u-button {
+  margin-top: 8px;
+}
+
 .u-button--primary {
   background-color: $gray-darkest;
   color: $white;

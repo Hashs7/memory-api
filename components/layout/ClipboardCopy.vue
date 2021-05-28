@@ -19,6 +19,7 @@
     </transition>
   </div>
 </template>
+
 <script>
 import IcCopy from '@/assets/svg/ic_copy.svg?inline';
 
@@ -50,6 +51,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss">
 .clipboard-copy {
   position: relative;
