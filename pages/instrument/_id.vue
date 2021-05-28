@@ -58,9 +58,10 @@
         <template v-if="memoriesCount > 0">
           <MemoryPreview
             v-for="m in instrument.memories"
-            :key="m._id"
+            :key="m.id"
             :link="true"
             :memory="m"
+            :editable="isOwner"
           />
         </template>
         <template v-else>
@@ -104,13 +105,11 @@ export default {
       return this.instrument.memories.length;
     },
     isOwner() {
-      // return true;
       return this.instrument.owner._id === this.$auth.$state.user._id;
     },
     isFavorite() {
       if (this.isOwner) return false;
       return this.$auth.$state.user.wishList?.includes(this.instrument._id);
-      // return true;
     },
   },
   methods: {
@@ -121,7 +120,7 @@ export default {
         );
         this.$auth.setUser(res.data);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
   },

@@ -48,6 +48,10 @@ class ApiController {
     });
   }
 
+  getMemoryById(instrumentId, memoryId) {
+    return this.$axios.get(`/instrument/${instrumentId}/${memoryId}`);
+  }
+
   getInstruments() {
     return this.$axios.get('/instrument');
   }
