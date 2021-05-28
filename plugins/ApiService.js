@@ -36,20 +36,26 @@ class ApiController {
     return this.$axios.post('/chat/message', { ...payload });
   }
 
-  newInstrument(payload) {
-    return this.$axios.post('/instrument', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-  }
-
   newMemory(instrumentId, payload) {
     return this.$axios.post(`/instrument/${instrumentId}/memory`, {
       ...payload,
     });
   }
 
+  updateMemory(instrumentId, memoryId, payload) {
+    return this.$axios.patch(`/instrument/${instrumentId}/${memoryId}`, {
+      ...payload,
+    });
+  }
+
   getMemoryById(instrumentId, memoryId) {
     return this.$axios.get(`/instrument/${instrumentId}/${memoryId}`);
+  }
+
+  newInstrument(payload) {
+    return this.$axios.post('/instrument', payload, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
   }
 
   getInstruments() {
