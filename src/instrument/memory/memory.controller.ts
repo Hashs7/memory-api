@@ -22,7 +22,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class MemoryController {
   constructor(private readonly memoryService: MemoryService) {}
 
-  @Get('memory')
+  @Get()
   @ApiResponse({
     status: 200,
     type: [Memory],
@@ -31,7 +31,7 @@ export class MemoryController {
     return this.memoryService.findAll(instrument);
   }
 
-  @Get('memory/:id')
+  @Get(':id')
   @ApiResponse({
     status: 200,
     type: Memory,
@@ -40,7 +40,7 @@ export class MemoryController {
     return this.memoryService.findOne(id);
   }
 
-  @Post('memory')
+  @Post()
   @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
@@ -54,7 +54,7 @@ export class MemoryController {
     return this.memoryService.create(user._id, instrument, createMemoryDto);
   }
 
-  @Patch('memory/:id')
+  @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
@@ -69,7 +69,7 @@ export class MemoryController {
     return this.memoryService.update(id, user, instrument, updateMemoryDto);
   }
 
-  @Delete('memory/:id')
+  @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   remove(
     @GetUser() user: User,

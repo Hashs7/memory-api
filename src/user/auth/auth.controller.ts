@@ -1,15 +1,7 @@
-import {
-  Body,
-  Controller,
-  Post,
-  ValidationPipe,
-  UseInterceptors,
-  UploadedFile,
-} from '@nestjs/common';
+import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthResetDto } from './dto/auth-reset.dto';
 import { AuthForgotDto } from './dto/auth-forgot.dto';
