@@ -2,82 +2,86 @@
   <div class="o-page">
     <h1>Mon motel</h1>
     <section class="view view--instrument-list">
-      <b-tabs>
-        <b-tab-item v-if="userInstruments.length" label="Actuels">
-          <b-table
-            :data="userInstruments"
-            :columns="columns"
-            :selected.sync="selected"
-            focusable
-          >
-          </b-table>
-        </b-tab-item>
-        <b-tab-item v-if="oldInstruments.length" label="Passés">
-          <b-table
-            :data="oldInstruments"
-            :columns="columns"
-            :selected.sync="selected"
-            focusable
-          >
-          </b-table>
-        </b-tab-item>
-        <b-tab-item v-if="wishInstruments.length" label="Favoris">
-          <b-table
-            :data="wishInstruments"
-            :columns="columns"
-            :selected.sync="selected"
-            focusable
-          >
-          </b-table>
-        </b-tab-item>
-      </b-tabs>
+      <nav class="instrument-nav">
+        <button
+          v-for="(s, i) in sections"
+          :key="i"
+          :class="{ current: selectedSection === s.name }"
+          class="instrument-nav__item"
+          @click="showSection(s.name)"
+        >
+          {{ s.nav }}
+        </button>
+      </nav>
+      <div class="">
+        <section
+          v-for="(s, i) in sections"
+          :key="i"
+          :class="[s.class]"
+          class="instruments-container"
+        >
+          <div v-show="selectedSection === s.name" class="">
+            <NuxtLink
+              v-if="selectedSection === 'user'"
+              to="/instrument/creation"
+              class="u-button u-button--primary create-instrument"
+              >Ajouter un instrument</NuxtLink
+            >
+            <InstrumentPreview
+              v-for="ins in instruments[s.name]"
+              :key="ins.id"
+              :instrument="ins"
+            />
+          </div>
+        </section>
+      </div>
     </section>
-    <NuxtLink to="/instrument/creation" class="u-button u-button--primary"
-      >Ajouter un instrument</NuxtLink
-    >
   </div>
 </template>
 
 <script>
+import InstrumentPreview from '@/components/instrument/InstrumentPreview';
+
 export default {
+  components: { InstrumentPreview },
   middleware: 'auth',
   data() {
     return {
-      userInstruments: [],
-      oldInstruments: [],
-      wishInstruments: [],
-      selected: null,
-      columns: [
+      selectedSection: null,
+      sections: [
         {
-          field: 'id',
-          label: 'ID',
-          width: '40',
-          numeric: true,
+          name: 'user',
+          nav: 'Actuels',
+          class: 'user-instrument',
         },
         {
-          field: 'name',
-          label: 'Nom',
+          name: 'old',
+          nav: 'Anciens',
+          class: 'old-instrument',
         },
         {
-          field: 'specification',
-          label: 'Spécification',
-        },
-        {
-          field: 'type',
-          label: 'Type',
+          name: 'wish',
+          nav: 'Favoris',
+          class: 'wish-instrument',
         },
       ],
+      instruments: {
+        user: [],
+        old: [],
+        wish: [],
+      },
     };
   },
   async fetch() {
     try {
       const res = await this.$api.getUserInstruments();
-      console.log(res.data);
       const { userInstruments, oldInstruments, wishInstruments } = res.data;
-      console.log(userInstruments, oldInstruments, wishInstruments);
-      this.userInstruments = userInstruments;
-      this.oldInstruments = oldInstruments;
-      this.wishInstruments = wishInstruments;
+      this.instruments.user = userInstruments;
+      this.instruments.old = oldInstruments;
+      this.instruments.wish = wishInstruments;
+      if (userInstruments.length) {
+        this.showSection('user');
+      }
     } catch (e) {
       console.log(e);
     }
@@ -91,5 +95,33 @@ export default {
       });
     },
   },
+  methods: {
+    showSection(name) {
+      this.selectedSection = name;
+    },
+  },
 };
 </script>
+
+<style lang="scss" scoped>
+.create-instrument {
+  margin-bottom: 8px;
+}
+.instrument-nav {
+  display: flex;
+  margin: 20px 0;
+  font-weight: 500;
+  border-bottom: 1px solid $gray-dark;
+}
+.instrument-nav__item {
+  height: 32px;
+  margin-right: 20px;
+  border: none;
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+
+  &.current {
+    border-color: $gray-darkest;
+  }
+}
+</style>
