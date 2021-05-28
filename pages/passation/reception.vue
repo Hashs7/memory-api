@@ -4,7 +4,9 @@
     <h2 v-if="validated">
       Vous venez de faire l'acquisition de {{ instrument.name }}
     </h2>
-    <h2 v-else-if="validated === false">La passation a expirée</h2>
+    <div v-if="error.hasError" class="error">
+      <p>{{ error.message }}</p>
+    </div>
     <p>Token : {{ token }}</p>
 
     <div v-if="!$auth.loggedIn" class="">
@@ -15,10 +17,6 @@
       <NuxtLink :to="signUp" class="u-button u-button--primary"
         >Inscription</NuxtLink
       >
-    </div>
-
-    <div v-if="error" class="error">
-      <p>{{ error }}</p>
     </div>
   </div>
 </template>
@@ -31,7 +29,10 @@ path: /instrument/:id/passation/reception
 export default {
   data() {
     return {
-      error: null,
+      error: {
+        hasError: null,
+        message: '',
+      },
       instrument: null,
       validated: null,
     };
@@ -65,8 +66,9 @@ export default {
     },
     async validateToken() {
       if (!this.$route.query.token) {
-        this.error = "Votre jeton n'est pas valide";
+        this.error.message = "Votre jeton n'est pas valide";
         this.validated = false;
+        this.error.hasError = true;
         return;
       }
 
@@ -75,6 +77,12 @@ export default {
         console.log(res);
         this.validated = true;
       } catch (e) {
+        debugger;
+        console.log(e);
+        console.log(e.message, e.name);
+        console.log(e.message, e.description);
+        this.error.message = e.message;
+        this.error.hasError = true;
         this.validated = false;
       }
     },

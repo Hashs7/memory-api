@@ -1,16 +1,16 @@
 <template>
   <section>
-    <b-field>
+    <b-field class="file-field">
       <b-upload v-model="dropFiles" :multiple="multiple" drag-drop>
         <section class="section">
           <div class="content has-text-centered">
             <p>
               <b-icon icon="camera" size="is-large"> </b-icon>
             </p>
-            <p v-if="label">{{ labelText }}</p>
           </div>
         </section>
       </b-upload>
+      <p v-if="label">{{ labelText }}</p>
     </b-field>
 
     <div class="tags">
@@ -76,3 +76,16 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.file-field {
+  text-align: center;
+
+  .upload {
+    display: block;
+  }
+  .field.has-addons {
+    display: block;
+  }
+}
+</style>

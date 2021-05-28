@@ -8,12 +8,24 @@
       <div v-show="step === 1" class="step step-2">
         <canvas ref="canvas"></canvas>
         <p class="">Invitez le nouveau propriétaire</p>
-        <p>{{ url }}</p>
+        <ClipboardCopy v-if="url" :value="url">Copier le lien</ClipboardCopy>
       </div>
     </div>
-    <button v-if="step !== MAX_STEP" @click="requestHandover">Suivant</button>
-    <button v-else>Terminer</button>
-    <button v-if="step !== 0" @click="stepBack">Retour</button>
+    <button
+      v-if="step !== 0"
+      class="u-button u-button--outline"
+      @click="stepBack"
+    >
+      Retour
+    </button>
+    <button
+      v-if="step !== MAX_STEP"
+      class="u-button u-button--primary"
+      @click="requestHandover"
+    >
+      Suivant
+    </button>
+    <button v-else class="u-button u-button--primary">Terminer</button>
   </div>
 </template>
 
@@ -23,8 +35,10 @@ path: /instrument/:id/passation
 
 <script>
 import QRCode from 'qrcode';
+import ClipboardCopy from '../../components/layout/ClipboardCopy';
 
 export default {
+  components: { ClipboardCopy },
   data() {
     return {
       MAX_STEP: 1,

@@ -1,6 +1,8 @@
 <template>
   <form ref="form" class="instrument-short-form">
-    <FileUpload ref="files" :label="false" />
+    <div class="round-upload">
+      <FileUpload ref="files" :label="false" />
+    </div>
 
     <div class="form__group">
       <b-field label="Nom">
@@ -57,25 +59,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.instrument-short-form {
-  .upload {
-    display: block;
-    margin: auto;
-    width: 158px;
-    height: 158px;
-    padding: 8px;
-    border: 1px solid #eee7ce;
-    border-radius: 50%;
-  }
-  .upload-draggable {
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 50%;
-    background-color: #eee7ce;
-  }
-}
-</style>

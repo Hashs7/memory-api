@@ -9,11 +9,23 @@
     </div>
     <IconPartition class="icon--partition" />
     <div class="o-page__actions">
-      <NuxtLink to="/connexion" class="u-button u-button--outline"
+      <NuxtLink
+        v-if="!$auth.loggedIn"
+        to="/connexion"
+        class="u-button u-button--outline half"
         >Se connecter</NuxtLink
       >
-      <NuxtLink to="/inscription" class="u-button u-button--primary"
+      <NuxtLink
+        v-if="!$auth.loggedIn"
+        to="/inscription"
+        class="u-button u-button--primary half"
         >S'inscrire</NuxtLink
+      >
+      <NuxtLink
+        v-if="$auth.loggedIn"
+        to="/profil/infos"
+        class="u-button u-button--primary"
+        >C'est parti</NuxtLink
       >
     </div>
   </div>
@@ -62,6 +74,10 @@ export default {
 }
 
 .o-page--intro .u-button {
+  width: 100%;
+}
+
+.o-page--intro .u-button.half {
   width: calc(50% - 4px);
   padding: 0;
 }

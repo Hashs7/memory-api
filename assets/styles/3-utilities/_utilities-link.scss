@@ -10,8 +10,9 @@
   padding-bottom: 5px;
   color: $primary;
   text-decoration: none;
-
   transition: all .3s ease-in-out;
+  background-color: transparent;
+  border: none;
 
   @include hover{
   }

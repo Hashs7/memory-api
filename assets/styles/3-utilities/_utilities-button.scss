@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------------
 
 .u-button {
+  display: block;
   font-size: 16px;
   height: 48px;
   line-height: 48px;
@@ -20,9 +21,11 @@
   color: $white;
   border: none;
 }
+
 .u-button--outline {
   border: 1px solid $gray-darkest;
   line-height: 46px;
+  background-color: transparent;
 }
 
 .u-button--round {

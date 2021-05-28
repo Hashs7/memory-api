@@ -28,6 +28,11 @@ input {
   border-radius: 6px;
   border: none;
   outline: none;
+  font-family: $font-primary;
+
+  &::placeholder {
+    font-family: $font-primary;
+  }
 }
 
 table {

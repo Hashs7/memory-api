@@ -1,5 +1,5 @@
 <template>
-  <button type="submit" class="button" @click="logout">
+  <button type="submit" class="u-button u-button--outline" @click="logout">
     <slot />
   </button>
 </template>

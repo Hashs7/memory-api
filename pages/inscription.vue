@@ -5,8 +5,8 @@
       <span class="o-page__title">Création de compte</span>
       <h1 class="o-page__subtitle">Commençons par vous !</h1>
     </div>
-    <div class="create">
-      <form @submit="submit">
+    <form class="register__form" @submit="submit">
+      <div class="register__container">
         <div class="form__group">
           <b-field>
             <b-input
@@ -47,10 +47,16 @@
             </b-input>
           </b-field>
         </div>
-        <button type="submit" class="button is-primary">S'inscrire</button>
-        <NuxtLink to="/connexion">J'ai déjà un compte</NuxtLink>
-      </form>
-    </div>
+      </div>
+      <div class="form__actions">
+        <button type="submit" class="u-button u-button--primary">
+          S'inscrire
+        </button>
+        <NuxtLink to="/connexion" class="u-button u-button--outline"
+          >J'ai déjà un compte</NuxtLink
+        >
+      </div>
+    </form>
   </div>
 </template>
 
@@ -118,6 +124,17 @@ export default {
 <style lang="scss" scoped>
 .o-page__header {
   margin: 144px 0 64px 0;
+  padding: 0 72px;
+}
+
+.register__form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.register__container {
+  flex-grow: 1;
 }
 
 .logo {
@@ -127,5 +144,11 @@ export default {
   right: 0;
   width: 64px;
   margin: auto;
+}
+
+.form__actions {
+  .u-button {
+    width: 100%;
+  }
 }
 </style>
