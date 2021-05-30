@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './user.schema';
 import * as shortid from 'shortid';
 import { CreateUserDto } from './auth/dto/create-user.dto';
@@ -16,6 +16,19 @@ export class UserService {
 
   async findUserbyEmail(email: string): Promise<User> {
     return this.userModel.findOne({ email });
+  }
+
+  async findUserByUsername(username: string): Promise<User> {
+    const user = await this.userModel
+      .findOne({ username })
+      .populate('thumbnail');
+    if (!user) {
+      throw new NotFoundException('Aucun utilisateur trouvé');
+    }
+    delete user.password;
+    delete user.salt;
+    user.thumbnail?.rewritePath();
+    return user;
   }
 
   async findUser(id: string): Promise<User> {

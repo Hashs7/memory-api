@@ -3,8 +3,10 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Logger,
   Param,
   Patch,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -29,6 +31,7 @@ import { ObjectId } from 'mongoose';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  /*
   @Get()
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -48,6 +51,16 @@ export class UserController {
         return u;
       })
       .filter((u) => u.id !== user.id);
+  }
+  */
+
+  @Get()
+  @ApiResponse({
+    status: 200,
+    type: [User],
+  })
+  async findUsers(@Query('username') username: string): Promise<User> {
+    return this.userService.findUserByUsername(username);
   }
 
   @Get('/me')

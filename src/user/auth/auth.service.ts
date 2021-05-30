@@ -32,11 +32,15 @@ export class AuthService {
    * @param createUserDto
    */
   async signUp(createUserDto: CreateUserDto) {
-    const { email, password } = createUserDto;
-    const exist = await this.userService.findUserbyEmail(email);
+    const { email, password, username } = createUserDto;
+    const existEmail = await this.userService.findUserbyEmail(email);
+    const existUsername = await this.userService.findUserByUsername(username);
 
-    if (exist) {
-      throw new BadRequestException('email already taken');
+    if (existEmail) {
+      throw new BadRequestException("L'email est déjà utilisé");
+    }
+    if (existUsername) {
+      throw new BadRequestException('Le pseudo est déjà utilisé');
     }
 
     const salt = await bcrypt.genSalt();

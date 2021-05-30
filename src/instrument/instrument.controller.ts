@@ -51,13 +51,17 @@ export class InstrumentController {
     status: 200,
     type: [Instrument],
   })
-  findForUser(@GetUser() user: User) {
+  findForUser(@GetUser() user: User, @Query('username') username: string) {
+    if (username) {
+      return this.instrumentService.findForUsername(username);
+    }
     return this.instrumentService.findForUser(user);
   }
 
   @Get(':id')
   // @UseInterceptors(ClassSerializerInterceptor)
-  @AllowAny()
+  // @AllowAny()
+  @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
     type: Instrument,

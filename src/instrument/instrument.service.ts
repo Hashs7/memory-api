@@ -20,12 +20,14 @@ import { FileService } from '../file/file.service';
 import { File } from '../file/file.schema';
 import { ContentType } from './memory/content/content.schema';
 import { randomBytes } from 'crypto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class InstrumentService {
   constructor(
     private configService: ConfigService,
     private fileService: FileService,
+    private userService: UserService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
@@ -64,13 +66,13 @@ export class InstrumentService {
   async findOne(id: string, user?: User) {
     const instrument = await this.instrumentModel
       .findOne({ id })
-      .select('-__v')
+      // .select('-__v')
       .populate([
         'owner',
         'image',
         {
           path: 'memories',
-          select: 'username -_id',
+          // select: 'username',
           populate: {
             path: 'contents',
             populate: {
@@ -81,7 +83,7 @@ export class InstrumentService {
         },
         {
           path: 'owner',
-          select: 'username',
+          // select: 'username',
           populate: {
             path: 'thumbnail',
           },
@@ -115,14 +117,26 @@ export class InstrumentService {
    * @param user
    */
   async findForUser(user: User) {
-    const userInstruments = await this.instrumentModel.find({
-      owner: user._id,
-    });
-    const oldInstruments = await this.instrumentModel.find({
-      oldOwners: { $in: user._id },
-    });
-    const wishInstruments = await this.instrumentModel.find({
-      _id: { $in: user.wishList },
+    const userInstruments = await this.instrumentModel
+      .find({
+        owner: user._id,
+      })
+      .populate('image');
+    const oldInstruments = await this.instrumentModel
+      .find({
+        oldOwners: { $in: user._id },
+      })
+      .populate('image');
+    const wishInstruments = await this.instrumentModel
+      .find({
+        _id: { $in: user.wishList },
+      })
+      .populate('image');
+
+    [userInstruments, oldInstruments, wishInstruments].forEach((arr) => {
+      arr.forEach((instrument) => {
+        instrument.image?.rewritePath();
+      });
     });
 
     return {
@@ -130,6 +144,15 @@ export class InstrumentService {
       oldInstruments,
       wishInstruments,
     };
+  }
+
+  /**
+   * Find user instruments
+   * @param username
+   */
+  async findForUsername(username: string) {
+    const user = await this.userService.findUserByUsername(username);
+    return this.findForUser(user);
   }
 
   /**
@@ -150,17 +173,10 @@ export class InstrumentService {
         image: (await this.fileService.create(file, user._id))._id,
       }),
       id,
+      createdAt: new Date(),
       owner: user._id,
       memories: [],
     });
-
-    const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
-    const img: string = await qrcode.toDataURL(url);
-    const base64Data = img.split(';base64,').pop();
-
-    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
-      console.log('created'),
-    );
 
     return instrument;
   }
@@ -201,7 +217,7 @@ export class InstrumentService {
     this.validateInstrumentOwner(instrument, user);
 
     if (!instrument.handoverToken) {
-      instrument.handoverToken = randomBytes(20).toString('hex');
+      instrument.handoverToken = randomBytes(10).toString('hex');
     }
 
     const expire = new Date();
@@ -223,6 +239,9 @@ export class InstrumentService {
 
     if (!instrument || instrument.handoverExpire < new Date()) {
       throw new UnauthorizedException('La passation a expiré');
+    }
+    if (instrument.owner.equals(user._id)) {
+      throw new UnauthorizedException('Vous êtes déjà le propriétaire');
     }
 
     instrument.handoverToken = null;
