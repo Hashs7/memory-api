@@ -24,6 +24,10 @@ class ApiController {
     return this.$axios.get('/file/user');
   }
 
+  getUserByUsername(username) {
+    return this.$axios.get(`/user?username=${username}`);
+  }
+
   getUserConversations() {
     return this.$axios.get('/chat/conversation');
   }
@@ -54,6 +58,10 @@ class ApiController {
 
   getUserInstruments() {
     return this.$axios.get('/instrument/user');
+  }
+
+  getUserInstrumentsByUsername(username) {
+    return this.$axios.get(`/instrument/user?username=${username}`);
   }
 
   getInstrumentById(id) {
