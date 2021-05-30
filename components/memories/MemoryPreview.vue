@@ -49,10 +49,8 @@ export default {
       return this.$store.state.user;
     },
     thumbnail() {
-      console.log(this.memory);
       const image = this.memory.contents.find((c) => c.type === 'media')?.file
         .path;
-      console.log(image);
       return image;
     },
   },

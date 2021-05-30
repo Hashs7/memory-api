@@ -8,10 +8,10 @@
       <IcCopy />
     </button>
     <input
+      ref="input"
       class="clipboard-copy__input"
       type="text"
       :value="value"
-      ref="input"
       aria-hidden="true"
     />
     <transition name="clipboard-copy-tooltip">

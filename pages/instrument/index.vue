@@ -96,7 +96,7 @@ export default {
         this.showSection('user');
       }
     } catch (e) {
-      console.log(e);
+      throw new Error(e);
     }
   },
   fetchOnServer: false,

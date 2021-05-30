@@ -32,7 +32,7 @@ export default {
       const res = await this.$api.getInstruments();
       this.instruments = res.data;
     } catch (e) {
-      console.log(e);
+      throw new Error(e);
     }
   },
   computed: {

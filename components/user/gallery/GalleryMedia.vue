@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     selectHandler() {
-      console.log('click');
       if (!this.selectable) return;
       this.selected = !this.selected;
       if (this.selected) {
@@ -46,7 +45,6 @@ export default {
       } else {
         this.hideTransition();
       }
-      console.log('clicked', this.selected);
     },
     showTransition() {
       // gsap.to(this.$refs.media);

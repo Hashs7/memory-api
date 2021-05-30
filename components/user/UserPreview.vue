@@ -57,13 +57,11 @@ export default {
       if (this.user.firstName) {
         txt += this.user.firstName;
       }
-      console.log(this.short);
       if (this.short) {
         txt += ` ${this.user.lastName.charAt(0)}.`;
         return txt;
       }
       txt += ` ${this.user.lastName}`;
-      console.log(txt);
       return txt;
     },
   },

@@ -1,9 +1,9 @@
 <template>
   <div
     ref="card"
-    class="memory-card"
     v-hammer:pan="pan"
     v-hammer:panend="panEnd"
+    class="memory-card"
   >
     <slot />
   </div>

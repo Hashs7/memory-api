@@ -49,7 +49,7 @@
       />
     </div>
 
-    <NuxtChild :isOwner="isOwner" :instrument="instrument" />
+    <NuxtChild :is-owner="isOwner" :instrument="instrument" />
   </div>
 </template>
 
@@ -98,7 +98,7 @@ export default {
         );
         this.$auth.setUser(res.data);
       } catch (e) {
-        console.log(e);
+        throw new Error(e);
       }
     },
   },
