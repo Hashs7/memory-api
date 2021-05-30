@@ -13,7 +13,8 @@
           {{ s.nav }}
         </button>
       </nav>
-      <div class="">
+
+      <div class="instrument-sections">
         <section
           v-for="(s, i) in sections"
           :key="i"
@@ -24,9 +25,14 @@
             <NuxtLink
               v-if="selectedSection === 'user'"
               to="/instrument/creation"
-              class="u-button u-button--primary create-instrument"
-              >Ajouter un instrument</NuxtLink
+              class="u-button u-button--background create-instrument"
             >
+              <div class="u-button__content">
+                <IconAdd />
+                <span>Ajouter</span>
+              </div>
+              <IconRectangle class="u-button__bg" />
+            </NuxtLink>
             <InstrumentPreview
               v-for="ins in instruments[s.name]"
               :key="ins.id"
@@ -40,10 +46,12 @@
 </template>
 
 <script>
+import IconRectangle from '@/assets/svg/ic_rectangle.svg?inline';
+import IconAdd from '@/assets/svg/ic_add.svg?inline';
 import InstrumentPreview from '@/components/instrument/InstrumentPreview';
 
 export default {
-  components: { InstrumentPreview },
+  components: { InstrumentPreview, IconRectangle, IconAdd },
   middleware: 'auth',
   data() {
     return {
@@ -123,5 +131,9 @@ export default {
   &.current {
     border-color: $gray-darkest;
   }
+}
+
+.create-instrument {
+  width: 100%;
 }
 </style>
