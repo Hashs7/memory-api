@@ -28,7 +28,7 @@ export default {
   mounted() {
     const { x, y, width, height } = this.$refs.card.getBoundingClientRect();
     this.origin = { x, y };
-    this.xMax = x + width;
+    this.xMax = x + width * 1.5;
     this.yMax = y + height;
   },
   methods: {
@@ -60,8 +60,78 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .memory-card {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-height: 636px;
+  height: 100%;
+  padding: 32px;
+  background-color: #fff;
   transform-origin: center;
+  box-shadow: $shadow--first;
+  overflow: hidden;
+  border-radius: 8px;
+
+  &.media {
+    padding: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &.video {
+      display: flex;
+      align-items: center;
+      background-color: #000;
+    }
+  }
+
+  &.active {
+    z-index: 10;
+  }
+  &.next {
+    transform: scale(0.98) translateX(24px);
+    z-index: 9;
+  }
+  &.next--second {
+    transform: scale(0.96) translateX(44px);
+    z-index: 8;
+  }
+  &.previous {
+    transform: scale(0.98) translateX(-24px);
+    z-index: 9;
+  }
+  &.previous--second {
+    transform: scale(0.96) translateX(-44px);
+    z-index: 8;
+  }
+}
+
+.memory__description {
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.memory-card__tag-container {
+  font-size: 0;
+}
+.memory-card__tag {
+  display: inline-block;
+  padding: 8px 10px;
+  line-height: 1;
+  font-size: 14px;
+  font-weight: 400;
+  background-color: $background-darker;
+  border-radius: 4px;
+  margin-right: 4px;
 }
 </style>

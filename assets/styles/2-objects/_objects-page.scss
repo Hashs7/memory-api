@@ -7,6 +7,11 @@
   padding: 16px;
 }
 
+.o-page__container {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
 .o-page--full {
   position: fixed;
   top: 0;
@@ -146,4 +151,3 @@
   font-size: 13px;
   color: #C0C0C0;
 }
-

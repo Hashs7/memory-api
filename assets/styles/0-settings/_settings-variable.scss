@@ -35,6 +35,7 @@ $secondary-lightest:     lighten($secondary, 25%);
 
 
 $background: #FFF9E2;
+$background-darker: #E7E0C5;
 $date: #CED5DB;
 $date-light: rgba(206, 213, 219, .25);
 $color-body:      $white;
@@ -59,6 +60,7 @@ $grid-gap: 16px;
  * [ settings / miscellaneous ]
  */
 $shadow--first: 0 4px 20px rgba(0,0,0,0.15);
-$shadow--second: 0 0 9px rgba(0,0,0,0.15);
+$shadow--second: 0 0 8px rgba(0,0,0,0.15);
+$shadow--third: 0 4px 8px rgba(0,0,0,0.15);
 $transition: 0.25s ease-out;
 $radius: 8px;

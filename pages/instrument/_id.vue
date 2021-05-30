@@ -1,10 +1,10 @@
 <template>
   <div class="instrument">
     <div v-if="instrument">
-      <div v-if="instrument.image" class="instrument__image">
-        <img :src="instrument.image.path" alt="" />
+      <div v-if="instrument.image" class="instrument__image-container">
+        <img class="instrument__image" :src="instrument.image.path" alt="" />
       </div>
-      <div class="instrument__container">
+      <div class="instrument__container o-page__container">
         <div class="instrument__head">
           <h1 class="instrument__title">{{ instrument.name }}</h1>
           <h2
@@ -43,32 +43,22 @@
         </div>
       </div>
 
-      <div class="memories">
-        <h3>Souvenirs ({{ memoriesCount }})</h3>
-        <template v-if="memoriesCount > 0">
-          <MemoryPreview
-            v-for="m in instrument.memories"
-            :key="m._id"
-            :link="true"
-            :memory="m"
-          />
-        </template>
-        <template v-else>
-          <p>Rip il n'y a pas de souvenirs. Pue la mort.</p>
-        </template>
-      </div>
+      <MemorySection
+        :memories="instrument.memories"
+        class="o-page__container"
+      />
     </div>
 
-    <NuxtChild :instrument="instrument" />
+    <NuxtChild :isOwner="isOwner" :instrument="instrument" />
   </div>
 </template>
 
 <script>
-import MemoryPreview from '@/components/memories/MemoryPreview';
 import UserPreview from '../../components/user/UserPreview';
+import MemorySection from '../../components/memories/MemorySection';
 
 export default {
-  components: { UserPreview, MemoryPreview },
+  components: { MemorySection, UserPreview },
   layout(ctx) {
     let layout = 'default';
     if (ctx.route.params.memoryId) {
@@ -82,15 +72,6 @@ export default {
       instrument,
     };
   },
-  mounted() {
-    console.log(this.instrument);
-    console.log(this.$fetch);
-  },
-  data() {
-    return {
-      instrument: null,
-    };
-  },
   fetchOnServer: false,
   computed: {
     addMemory() {
@@ -101,17 +82,12 @@ export default {
       const { id } = this.$route.params;
       return `/instrument/${id}/passation`;
     },
-    memoriesCount() {
-      return this.instrument.memories.length;
-    },
     isOwner() {
-      // return true;
       return this.instrument.owner._id === this.$auth.$state.user?._id;
     },
     isFavorite() {
       if (this.isOwner) return false;
       return this.$auth.$state.user?.wishList?.includes(this.instrument._id);
-      // return true;
     },
   },
   methods: {
@@ -129,25 +105,33 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .instrument__container {
   position: relative;
   z-index: 1;
-  margin-top: -32px;
   padding-top: 22px;
-  border-radius: 32px 32px 0 0;
-  background-color: #fff;
 }
 .instrument__head {
   text-align: center;
   margin-bottom: 20px;
 }
+.instrument__image-container {
+  height: 100vw;
+}
+.instrument__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
 .instrument__title {
   font-size: 26px;
 }
 .instrument__description {
+  margin-top: 4px;
   font-size: 16px;
   font-weight: 400;
+  font-family: $font-primary;
 }
 .instrument__owner {
   text-align: center;

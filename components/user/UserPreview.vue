@@ -7,7 +7,7 @@
       />
     </div>
     <div v-if="user.firstName || user.lastName" class="user__infos">
-      {{ user.firstName }} {{ user.lastName }}
+      {{ name }}
     </div>
   </NuxtLink>
 </template>
@@ -16,6 +16,10 @@
 export default {
   name: 'UserPreview',
   props: {
+    short: {
+      type: Boolean,
+      default: false,
+    },
     user: {
       type: Object,
       required: true,
@@ -45,20 +49,37 @@ export default {
     link() {
       return `/${this.user.username}`;
     },
+    name() {
+      let txt = '';
+      if (!this.user.firstName && this.user.lastName) {
+        return this.user.username;
+      }
+      if (this.user.firstName) {
+        txt += this.user.firstName;
+      }
+      console.log(this.short);
+      if (this.short) {
+        txt += ` ${this.user.lastName.charAt(0)}.`;
+        return txt;
+      }
+      txt += ` ${this.user.lastName}`;
+      console.log(txt);
+      return txt;
+    },
   },
 };
 </script>
 
 <style scoped>
 .user {
-  display: flex;
+  display: inline-flex;
   align-items: center;
 }
 
 .user__picture {
-  width: 50px;
-  height: 50px;
-  margin-right: 12px;
+  width: 38px;
+  height: 38px;
+  margin-right: 8px;
   border-radius: 50%;
   overflow: hidden;
 }
