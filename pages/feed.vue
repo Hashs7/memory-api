@@ -21,6 +21,10 @@
   </div>
 </template>
 
+<router>
+  path: /decouvrir
+</router>
+
 <script>
 export default {
   async fetch() {

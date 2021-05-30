@@ -20,17 +20,7 @@
         </div>
 
         <div class="instrument__owner">
-          <div class="user">
-            <div v-if="instrument.owner.thumbnail" class="user__picture">
-              <img
-                :src="instrument.owner.thumbnail.path"
-                alt="photo de profile"
-              />
-            </div>
-            <div class="user__infos">
-              {{ instrument.owner.firstName }} {{ instrument.owner.lastName }}
-            </div>
-          </div>
+          <UserPreview :user="instrument.owner" />
         </div>
 
         <div v-if="isOwner">
@@ -75,9 +65,10 @@
 
 <script>
 import MemoryPreview from '@/components/memories/MemoryPreview';
+import UserPreview from '../../components/user/UserPreview';
 
 export default {
-  components: { MemoryPreview },
+  components: { UserPreview, MemoryPreview },
   layout(ctx) {
     let layout = 'default';
     if (ctx.route.params.memoryId) {
@@ -91,6 +82,16 @@ export default {
       instrument,
     };
   },
+  mounted() {
+    console.log(this.instrument);
+    console.log(this.$fetch);
+  },
+  data() {
+    return {
+      instrument: null,
+    };
+  },
+  fetchOnServer: false,
   computed: {
     addMemory() {
       const { id } = this.$route.params;
@@ -105,11 +106,11 @@ export default {
     },
     isOwner() {
       // return true;
-      return this.instrument.owner._id === this.$auth.$state.user._id;
+      return this.instrument.owner._id === this.$auth.$state.user?._id;
     },
     isFavorite() {
       if (this.isOwner) return false;
-      return this.$auth.$state.user.wishList?.includes(this.instrument._id);
+      return this.$auth.$state.user?.wishList?.includes(this.instrument._id);
       // return true;
     },
   },
@@ -151,18 +152,5 @@ export default {
 .instrument__owner {
   text-align: center;
   margin-bottom: 20px;
-}
-
-.user {
-  display: flex;
-  align-items: center;
-}
-
-.user__picture {
-  width: 50px;
-  height: 50px;
-  margin-right: 12px;
-  border-radius: 50%;
-  overflow: hidden;
 }
 </style>

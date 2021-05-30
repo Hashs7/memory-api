@@ -1,15 +1,15 @@
 <template>
   <NuxtLink :to="link" class="instrument-preview">
     <img
-      v-if="instrument.image"
-      :src="instrument.image.path"
+      v-if="data.image"
+      :src="data.image.path"
       alt=""
       class="instrument-preview__img"
     />
     <div class="instrument-preview__content">
-      <p class="instrument-preview__name">{{ instrument.name }}</p>
-      <p v-if="instrument.buyDate" class="instrument-preview__name">
-        Ajouté en {{ instrument.buyDate }}
+      <p class="instrument-preview__name">{{ data.name }}</p>
+      <p v-if="data.createdAt" class="instrument-preview__date">
+        Ajouté en {{ date }}
       </p>
     </div>
   </NuxtLink>
@@ -19,7 +19,7 @@
 export default {
   name: 'InstrumentPreview',
   props: {
-    instrument: {
+    data: {
       type: Object,
       required: true,
 
@@ -38,8 +38,15 @@ export default {
     link() {
       return {
         name: 'instrument-id',
-        params: { id: this.instrument.id },
+        params: { id: this.data.id },
       };
+    },
+    date() {
+      const date = new Date(this.data.createdAt);
+      const year = date.getFullYear();
+      const month =
+        date.getMonth() > 9 ? date.getMonth() : `0${date.getMonth()}`;
+      return `${month}/${year}`;
     },
   },
 };
@@ -97,5 +104,9 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.instrument-preview__date {
+  font-size: 14px;
+  line-height: 1;
 }
 </style>

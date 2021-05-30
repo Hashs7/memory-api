@@ -38,7 +38,7 @@ export default {
         {
           slug: 'discover',
           label: 'Découvrir',
-          path: '/feed',
+          path: '/decouvrir',
           icon: 'IconDiscover',
         },
         {
@@ -50,7 +50,7 @@ export default {
         {
           slug: 'motel',
           label: 'Mon motel',
-          path: '/instrument',
+          path: '/motel',
           icon: 'IconMotel',
         },
       ],
@@ -69,7 +69,7 @@ export default {
   height: 72px;
   display: flex;
   padding: 0 0 env(safe-area-inset-bottom, 0) 0; // Avoid iOS notch
-  background-color: #fff9e2;
+  background-color: $background;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
   &__item {
@@ -136,7 +136,7 @@ export default {
       height: 22px;
     }
     rect {
-      fill: #fff9e2;
+      fill: $background;
     }
   }
 }

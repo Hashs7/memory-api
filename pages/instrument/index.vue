@@ -36,7 +36,7 @@
             <InstrumentPreview
               v-for="ins in instruments[s.name]"
               :key="ins.id"
-              :instrument="ins"
+              :data="ins"
             />
           </div>
         </section>
@@ -44,6 +44,11 @@
     </section>
   </div>
 </template>
+
+<router>
+  alias:
+    - /motel
+</router>
 
 <script>
 import IconRectangle from '@/assets/svg/ic_rectangle.svg?inline';
@@ -95,14 +100,6 @@ export default {
     }
   },
   fetchOnServer: false,
-  watch: {
-    async selected(newVal) {
-      await this.$router.push({
-        name: 'instrument-id',
-        params: { id: newVal.id },
-      });
-    },
-  },
   methods: {
     showSection(name) {
       this.selectedSection = name;
