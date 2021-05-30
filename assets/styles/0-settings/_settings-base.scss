@@ -15,6 +15,7 @@ html {
   text-rendering: optimizeLegibility;
   color: $color-text;
   font-size: 18px;
+  background-color: $background;
   //@include fluid(font-size, $desktop-m, $desktop-l, 18px, 22px);
   //@include fluid(font-size, $mobile-s, $tablet-m, 16px, 18px);
 }

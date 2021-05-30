@@ -5,7 +5,7 @@
     </div>
     <div class="conversation-input">
       <label>
-        <input type="text" v-model="text">
+        <input v-model="text" type="text" />
       </label>
       <button @click="sendMessage">Envoyer</button>
     </div>
@@ -13,29 +13,27 @@
 </template>
 
 <script>
-	export default {
-		name: "Conversation",
-		props: {
-			conversation: {
-				id: {
-					type: String,
-					required: true,
-        }
-			},
-		},
-    data() {
-			return {
-				text: null,
-      }
+export default {
+  name: 'Conversation',
+  props: {
+    conversation: {
+      id: {
+        type: String,
+        required: true,
+      },
     },
-		methods: {
-			sendMessage() {
-				console.log();
-			}
-		},
-	}
+  },
+  data() {
+    return {
+      text: null,
+    };
+  },
+  methods: {
+    sendMessage() {
+      // TODO
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

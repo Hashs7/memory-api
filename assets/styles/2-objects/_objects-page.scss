@@ -3,8 +3,13 @@
   flex-direction: column;
   // Remove navbar height
   min-height: calc(100vh - 3.25rem);
-  background-color: #FFF9E2;
+  background-color: $background;
   padding: 16px;
+}
+
+.o-page__container {
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .o-page--full {
@@ -146,4 +151,3 @@
   font-size: 13px;
   color: #C0C0C0;
 }
-

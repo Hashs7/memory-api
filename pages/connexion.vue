@@ -48,9 +48,6 @@ export default {
       return this.$store.state.user;
     },
   },
-  mounted() {
-    console.log(this.$auth);
-  },
   methods: {
     async userLogin() {
       try {

@@ -5,16 +5,18 @@
 // -----------------------------------------------------------------------------
 
 .o-section {
+  padding-top: 52px;
+  padding-bottom: 52px;
 }
 
 .o-section__head {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid $gray-darkest;
-  font-size: 14px;
+  padding-bottom: 8px;
+}
 
-  .u-link {
-    font-size: 14px;
-
-  }
+.o-section__title {
+  font-weight: 500;
+  font-family: $font-primary;
 }
