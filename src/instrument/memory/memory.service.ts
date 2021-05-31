@@ -11,11 +11,12 @@ import { UserService } from '../../user/user.service';
 import { Model, Schema } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../../user/user.schema';
-import { MemoryContent } from './content/content.schema';
+import { ContentType, MemoryContent } from './content/content.schema';
 import * as shortid from 'shortid';
 
 import { Instrument } from '../instrument.schema';
 import { CategoryService } from './category/category.service';
+import { File } from '../../file/file.schema';
 
 @Injectable()
 export class MemoryService {
@@ -43,8 +44,23 @@ export class MemoryService {
    * Find memory with id
    * @param id
    */
-  findOne(id: string): Promise<Memory> {
-    return this.memoryModel.findOne({ id }).exec();
+  async findOne(id: string): Promise<Memory> {
+    const memory = await this.memoryModel.findOne({ id }).populate([
+      {
+        path: 'contents',
+        populate: {
+          path: 'file',
+          model: File.name,
+        },
+      },
+    ]);
+    memory.contents = memory.contents.map((c) => {
+      if (c.type !== ContentType.Text) {
+        c.file?.rewritePath();
+      }
+      return c;
+    });
+    return memory;
   }
 
   /**
