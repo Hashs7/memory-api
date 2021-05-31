@@ -31,6 +31,10 @@
           <NuxtLink :to="handover" class="u-button u-button--primary"
             >Vendre</NuxtLink
           >
+
+          <NuxtLink :to="edit" class="u-button u-button--primary"
+            >Modifier les informations</NuxtLink
+          >
         </div>
         <div v-else class="instrument__not-owner">
           <button
@@ -81,6 +85,10 @@ export default {
     handover() {
       const { id } = this.$route.params;
       return `/instrument/${id}/passation`;
+    },
+    edit() {
+      const { id } = this.$route.params;
+      return `/instrument/${id}/edit`;
     },
     isOwner() {
       return this.instrument.owner._id === this.$auth.$state.user?._id;

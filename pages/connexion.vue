@@ -41,7 +41,14 @@ import IconLogo from '~/assets/svg/ic_logo.svg?inline';
 export default {
   name: 'Login',
   components: { Logout, IconLogo },
-  layout: 'none',
+  layout(ctx) {
+    console.log(ctx.app.$auth.loggedIn, 'ctx');
+    let layout = 'default';
+    if (!ctx.$auth.loggedIn) {
+      layout = 'none';
+    }
+    return layout;
+  },
   data() {
     return {
       login: {

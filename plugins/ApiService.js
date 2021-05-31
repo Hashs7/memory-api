@@ -68,6 +68,10 @@ class ApiController {
     return this.$axios.get(`/instrument/${id}`);
   }
 
+  updateInstrument(id, payload) {
+    return this.$axios.patch(`/instrument/${id}`, payload);
+  }
+
   toggleInstrumentToWishlist(id) {
     return this.$axios.patch(`/user/wishlist/${id}`);
   }
