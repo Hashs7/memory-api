@@ -11,6 +11,8 @@ import { MailModule } from './mail/mail.module';
 import { AuthModule } from './user/auth/auth.module';
 import { CategoryModule } from './instrument/memory/category/category.module';
 import { CommandModule } from 'nestjs-command';
+import { APP_GUARD, Reflector } from '@nestjs/core';
+import { JwtAuthGuard } from './user/auth/JwtAuthGuard';
 
 @Module({
   imports: [
@@ -29,5 +31,12 @@ import { CommandModule } from 'nestjs-command';
     CategoryModule,
   ],
   controllers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useFactory: (ref) => new JwtAuthGuard(ref),
+      inject: [Reflector],
+    },
+  ],
 })
 export class AppModule {}

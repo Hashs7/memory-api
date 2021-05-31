@@ -8,11 +8,6 @@ import { MemoryCategory } from './category/category.schema';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const timestamps2 = require('mongoose-timestamp2');
 
-export enum MemoryType {
-  Concert = 'Concert',
-  Rehearsal = 'Rehearsal',
-}
-
 export enum MemoryVisibility {
   Private = 'Private',
   UrlOnly = 'UrlOnly',
@@ -42,7 +37,7 @@ export class Memory extends Types.Subdocument {
   @ApiProperty()
   date: Date;
 
-  @Prop()
+  @Prop({ default: MemoryVisibility.Private })
   @ApiProperty({
     enum: Object.values(MemoryVisibility),
     default: MemoryVisibility.Private,
