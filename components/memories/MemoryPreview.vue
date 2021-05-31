@@ -3,7 +3,7 @@
     :is="link ? 'nuxt-link' : 'div'"
     :to="linkUrl"
     class="memory-preview"
-    @click="$emit('click')
+    @click="$emit('click')"
   >
     <div class="memory-preview__image-container">
       <img
@@ -15,6 +15,9 @@
     <div class="memory-preview__body">
       <h4 class="memory-preview__name">{{ memory.name }}</h4>
       <p class="memory-preview__date">{{ memory.date }}</p>
+      <nuxt-link v-if="isOwner" :to="editLinkUrl" class="btn">
+        Modifier
+      </nuxt-link>
     </div>
   </component>
 </template>
@@ -43,10 +46,6 @@ export default {
         required: true,
       },
     },
-    editable: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     linkUrl() {
@@ -58,6 +57,9 @@ export default {
     },
     user() {
       return this.$store.state.user;
+    },
+    isOwner() {
+      return this.memory.createdBy === this.$auth.$state.user?._id;
     },
     thumbnail() {
       const image = this.memory.contents.find((c) => c.type === 'media')?.file
