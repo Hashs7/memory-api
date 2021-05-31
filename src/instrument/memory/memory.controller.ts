@@ -6,7 +6,8 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, ValidationPipe,
+  UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MemoryService } from './memory.service';
 import { CreateMemoryDto } from './dto/create-memory.dto';
@@ -27,11 +28,14 @@ export class MemoryController {
     status: 200,
     type: [Memory],
   })
-  findAll(@Param('instrument') instrument: string, @GetUser() user: User): Promise<Memory[]> {
+  findAll(
+    @Param('instrument') instrument: string,
+    @GetUser() user: User,
+  ): Promise<Memory[]> {
     return this.memoryService.findAll(instrument, user);
   }
 
-  @Get(':id')
+  @Get('memory/:id')
   @ApiResponse({
     status: 200,
     type: Memory,
@@ -40,7 +44,7 @@ export class MemoryController {
     return this.memoryService.findOne(id);
   }
 
-  @Post()
+  @Post('memory')
   @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
@@ -54,7 +58,7 @@ export class MemoryController {
     return this.memoryService.create(user._id, instrument, createMemoryDto);
   }
 
-  @Patch(':id')
+  @Patch('memory/:id')
   @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
@@ -69,7 +73,7 @@ export class MemoryController {
     return this.memoryService.update(id, user, instrument, updateMemoryDto);
   }
 
-  @Delete(':id')
+  @Delete('memory/:id')
   @UseGuards(AuthGuard('jwt'))
   remove(
     @GetUser() user: User,

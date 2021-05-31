@@ -1,10 +1,10 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {ApiProperty} from '@nestjs/swagger';
-import {Schema as MongooseSchema, Types} from 'mongoose';
-import {CreateMemoryDto} from './dto/create-memory.dto';
-import {User} from '../../user/user.schema';
-import {IsArray} from 'class-validator';
-import {MemoryContent} from './content/content.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
+import { Schema as MongooseSchema, Types } from 'mongoose';
+import { CreateMemoryDto } from './dto/create-memory.dto';
+import { User } from '../../user/user.schema';
+import { IsArray } from 'class-validator';
+import { MemoryContent } from './content/content.schema';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const timestamps2 = require('mongoose-timestamp2');
 
@@ -21,7 +21,7 @@ export enum MemoryVisibility {
 
 @Schema()
 export class Memory extends Types.Subdocument {
-  @Prop({required: true})
+  @Prop({ required: true })
   id: string;
 
   @Prop()
@@ -38,7 +38,7 @@ export class Memory extends Types.Subdocument {
   @ApiProperty()
   template: string;
 
-  @Prop({type: Date})
+  @Prop({ type: Date })
   @ApiProperty()
   date: Date;
 
