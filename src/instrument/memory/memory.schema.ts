@@ -37,7 +37,7 @@ export class Memory extends Types.Subdocument {
   @ApiProperty()
   date: Date;
 
-  @Prop()
+  @Prop({ default: MemoryVisibility.Private })
   @ApiProperty({
     enum: Object.values(MemoryVisibility),
     default: MemoryVisibility.Private,
