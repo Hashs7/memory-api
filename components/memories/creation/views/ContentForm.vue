@@ -10,9 +10,13 @@
     <form class="o-page__body">
       <div class="slider">
         <SlideIntro />
-
-        <div v-for="(c, i) in contents" :key="i" class="slider__item">
-          <component :is="c.component" v-if="c.component" :key="i" :index="i" />
+        <div v-for="(content, i) in contents" :key="i" class="slider__item">
+          <component
+            :is="contentType[content.type].component"
+            :key="i"
+            :value="content"
+            :index="i"
+          />
           <button type="button" class="slider__close" @click="removeItem(i)">
             x
           </button>
@@ -46,7 +50,7 @@
       <button
         type="button"
         class="button u-button u-button--round actions__submit"
-        @click="$emit('next')"
+        @click="$emit(edit ? 'back' : 'next')"
       >
         <IconCheck />
       </button>
@@ -55,7 +59,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import SlideIntro from '@/components/memories/creation/slider/SlideIntro';
 import SliderAdd from '@/components/memories/creation/slider/SliderAdd';
 import TextContent from '@/components/memories/creation/contents/TextContent';
@@ -67,8 +71,10 @@ import IconCheck from '@/assets/svg/ic_check.svg?inline';
 import IconBrush from '@/assets/svg/ic_brush.svg?inline';
 import IconChevron from '@/assets/svg/ic_chevron.svg?inline';
 
+import { CONTENT_TYPE } from '@/const/memory';
+
 export default {
-  name: 'CreateForm',
+  name: 'ContentForm',
   components: {
     ThemeSelector,
     SlideIntro,
@@ -81,26 +87,28 @@ export default {
     IconBrush,
     IconChevron,
   },
+  props: {
+    edit: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
+      contentType: CONTENT_TYPE,
       showThemes: false,
     };
   },
   computed: {
-    ...mapState({
-      contents: (state) => state.memory.contents,
-      themes: (state) => state.memory.themes,
-    }),
+    ...mapGetters('memory', ['contents']),
+    memory: {
+      get() {
+        return this.$store.state.memory;
+      },
+      set(newValue) {},
+    },
   },
   methods: {
-    // Instrument created callback
-    createdHandler() {
-      this.$buefy.toast.open({
-        message: "Le souvenir vient d'être créé",
-        type: 'is-success',
-      });
-    },
-
     removeItem(index) {
       this.$store.commit('memory/removeContent', index);
     },

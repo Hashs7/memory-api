@@ -4,24 +4,26 @@
       <button class="o-page__header-btn icon" @click="$emit('back')">
         <IconChevron />
       </button>
-      <span>Enregistrer</span>
+      <span>Résumé</span>
       <button class="o-page__header-btn primary" @click="$emit('submit')">
-        Poster
+        <template v-if="!edit">Poster</template>
+        <template v-else>Enregistrer</template>
       </button>
     </div>
     <div class="o-page__body">
-      <MemoryPreview :data="memory" />
+      <MemoryPreview :data="memory" @click="edit ? $emit('open-form') : ''" />
 
       <div class="o-cells">
         <label class="o-cells__label">Date</label>
         <client-only>
           <b-field>
             <b-datepicker
-              v-model="date"
+              :value="new Date(memory.date)"
               locale="fr"
               placeholder="Sélectionner une date"
               icon="calendar-today"
               trap-focus
+              @input="updateDate($event.toISOString())"
             >
             </b-datepicker>
           </b-field>
@@ -45,7 +47,7 @@
         </div>
       </div>
 
-      <div class="o-cells">
+      <div v-if="!edit" class="o-cells">
         <label class="o-cells__label">Partager</label>
         <div class="o-cells__container">
           <button class="o-cells__item">Facebook</button>
@@ -58,7 +60,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapMutations } from 'vuex';
 import { VISIBILITY } from '@/const/memory';
 import MemoryPreview from '../../MemoryPreview';
 import IconChevron from '~/assets/svg/ic_chevron.svg?inline';
@@ -69,31 +71,30 @@ export default {
     MemoryPreview,
     IconChevron,
   },
+  props: {
+    edit: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
-    ...mapState({
-      name: (state) => state.memory.name,
-      type: (state) => state.memory.type,
-      contents: (state) => state.memory.contents,
-      themes: (state) => state.memory.themes,
-      visibility: (state) => state.memory.visibility,
-    }),
-    date: {
+    memory: {
       get() {
-        return this.$store.state.memory.date;
+        return this.$store.state.memory.data;
       },
       set(value) {
-        this.$store.commit('memory/updateDate', value);
+        this.$store.commit('memory/updateMemory', value);
       },
-    },
-    memory() {
-      return {
-        name: this.name,
-        date: this.date,
-      };
     },
     visibilityItem() {
       if (!this.visibility) return null;
       return VISIBILITY[this.visibility];
+    },
+  },
+  methods: {
+    ...mapMutations('memory', ['updateDate']),
+    handleChanges(value) {
+      this.$store.commit('memory/updateMemory', value);
     },
   },
 };

@@ -16,7 +16,7 @@ export default {
   computed: {
     html: {
       get() {
-        return this.$store.state.memory.contents[this.index].content;
+        return this.$store.state.memory.data.contents[this.index].content;
       },
       set(value) {
         this.$store.commit('memory/updateContent', {

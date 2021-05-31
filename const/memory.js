@@ -1,3 +1,13 @@
+export const emptyMemory = {
+  id: null,
+  name: '',
+  date: [],
+  contents: [],
+  tags: [],
+  visibility: null,
+  theme: null,
+};
+
 export const CONTENT_TYPE = {
   media: {
     type: 'media',
