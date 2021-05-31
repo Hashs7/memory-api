@@ -4,21 +4,24 @@
       <div class="o-section__head">
         <h4 class="o-section__title">Ajouter une photo</h4>
       </div>
-      <ul class="o-section__pictures">
-        <li class="instrument-picture">
-          <FileUpload ref="files" />
-        </li>
-        <li class="instrument-picture">
-          <button>Ajouter</button>
-        </li>
-        <li
-          v-for="img in data.images"
-          :key="img._id"
-          class="instrument-picture"
-        >
-          <img :src="img.path" alt="" />
-        </li>
-      </ul>
+      <div class="o-section__pictures o-page__outside">
+        <vue-scroll :ops="ops">
+          <div class="instrument-picture">
+            <FileUpload ref="files" />
+          </div>
+          <div class="instrument-picture add">
+            <IconAdd />
+            <button>Ajouter</button>
+          </div>
+          <div
+            v-for="img in data.images"
+            :key="img._id"
+            class="instrument-picture"
+          >
+            <img :src="img.path" alt="" />
+          </div>
+        </vue-scroll>
+      </div>
     </section>
 
     <section class="o-section">
@@ -91,12 +94,14 @@
 </template>
 
 <script>
-import FileUpload from '@/components/FileUpload';
+// import FileUpload from '@/components/FileUpload';
+import IconAdd from '@/assets/svg/ic_add.svg?inline';
 
 export default {
   name: 'InstrumentForm',
   components: {
-    FileUpload,
+    // FileUpload,
+    IconAdd,
   },
   middleware: 'auth',
   props: {
@@ -111,6 +116,14 @@ export default {
       type: '',
       specification: '',
       brand: '',
+      ops: {
+        vuescroll: {
+          locking: true,
+        },
+        scrollPanel: {},
+        rail: {},
+        bar: {},
+      },
     };
   },
   created() {
@@ -175,10 +188,24 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+.o-section__pictures {
+  .__view {
+    display: flex;
+    padding: 0 16px;
+  }
+}
+
 .instrument-picture {
   width: 156px;
   height: 156px;
   margin-right: 12px;
+  &.add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid $black;
+  }
 }
 </style>

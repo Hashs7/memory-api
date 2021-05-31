@@ -21,7 +21,8 @@
     "qrcode": "^1.4.4",
     "vue-audio-recorder": "^3.0.1",
     "vue-wysiwyg": "^1.7.2",
-    "vue2-hammer": "^2.1.2"
+    "vue2-hammer": "^2.1.2",
+    "vuescroll": "^4.17.3"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^6.0.0",

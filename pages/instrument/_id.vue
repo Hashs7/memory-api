@@ -1,8 +1,8 @@
 <template>
   <div class="instrument">
     <div v-if="instrument">
-      <div v-if="instrument.image" class="instrument__image-container">
-        <img class="instrument__image" :src="instrument.image.path" alt="" />
+      <div v-if="thumbnail" class="instrument__image-container">
+        <img class="instrument__image" :src="thumbnail" alt="" />
       </div>
       <div class="instrument__container o-page__container">
         <div class="instrument__head">
@@ -96,6 +96,9 @@ export default {
     isFavorite() {
       if (this.isOwner) return false;
       return this.$auth.$state.user?.wishList?.includes(this.instrument._id);
+    },
+    thumbnail() {
+      return this.instrument.images[0]?.path;
     },
   },
   methods: {

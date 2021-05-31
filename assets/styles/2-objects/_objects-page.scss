@@ -9,6 +9,13 @@
   background-color: $background;
 }
 
+.o-page__outside {
+  margin-left: -16px;
+  margin-right: -16px;
+  //padding-left: 32px;
+  //padding-right: 32px;
+}
+
 .o-page__container {
   padding-left: 16px;
   padding-right: 16px;

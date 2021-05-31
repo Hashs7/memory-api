@@ -1,8 +1,8 @@
 <template>
   <NuxtLink :to="link" class="instrument-preview">
     <img
-      v-if="data.image"
-      :src="data.image.path"
+      v-if="thumbnail"
+      :src="thumbnail"
       alt=""
       class="instrument-preview__img"
     />
@@ -72,6 +72,9 @@ export default {
       const month =
         date.getMonth() > 9 ? date.getMonth() : `0${date.getMonth()}`;
       return `${month}/${year}`;
+    },
+    thumbnail() {
+      return this.data.images[0]?.path;
     },
   },
   methods: {

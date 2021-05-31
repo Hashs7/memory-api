@@ -30,6 +30,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/ApiService.js' },
+    { src: '~/plugins/vue-scroll.js' },
     { src: '~/plugins/hammer.js', mode: 'client' },
     { src: '~/plugins/audio-recorder.js', mode: 'client' },
     { src: '~/plugins/wysiwyg.js', mode: 'client' },
