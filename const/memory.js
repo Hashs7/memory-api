@@ -39,11 +39,6 @@ export const VISIBILITY = {
     text: 'Non répertorié',
     helper: 'Seul les personnes disposant du lien y ont accès',
   },
-  fans: {
-    slug: 'fans',
-    text: 'Fans seulement',
-    helper: 'Seuls vos amis pourront voir ce souvenir',
-  },
   public: {
     slug: 'public',
     text: 'Tout le monde',

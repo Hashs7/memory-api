@@ -38,7 +38,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('memory', ['memory']),
+    ...mapState('memory', ['data']),
     selectedTheme() {
       return this.themes.find((el) => el.selected)?.slug;
     },
@@ -54,7 +54,7 @@ export default {
     async submit() {
       try {
         await this.$api.newMemory(this.instrumentId, {
-          ...this.memory,
+          ...this.data,
         });
         this.createdHandler();
       } catch (e) {

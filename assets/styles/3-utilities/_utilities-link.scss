@@ -17,7 +17,7 @@
   @include hover{
   }
 
-  &--secondary {
+ /* &--secondary {
     @extend .u-link;
     color: $secondary-dark;
     box-shadow:
@@ -79,5 +79,5 @@
         0 -2px 0 0 $primary inset,
         0 -4px 0 0 transparent inset ;
     }
-  }
+  }*/
 }

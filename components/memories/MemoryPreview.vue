@@ -15,9 +15,11 @@
     <div class="memory-preview__body">
       <h4 class="memory-preview__name">{{ data.name }}</h4>
       <p class="memory-preview__date">{{ data.date }}</p>
-      <nuxt-link v-if="editable && isOwner" :to="editLinkUrl" class="btn">
-        Modifier
-      </nuxt-link>
+      <client-only>
+        <nuxt-link v-if="editable && isOwner" :to="editLinkUrl" class="u-link">
+          Modifier
+        </nuxt-link>
+      </client-only>
     </div>
   </component>
 </template>
