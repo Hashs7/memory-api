@@ -27,7 +27,9 @@
 </template>
 
 <router>
-  path: /instrument/:id/souvenir/:memoryId
+{
+  path: '/instrument/:id/souvenir/:memoryId'
+}
 </router>
 
 <script>
@@ -49,7 +51,7 @@ export default {
   computed: {
     memory() {
       const { memoryId } = this.$route.params;
-      return this.instrument?.memories.find((m) => m._id === memoryId);
+      return this.instrument?.memories.find((m) => m.id === memoryId);
     },
 
     closeMemory() {
@@ -68,7 +70,7 @@ export default {
   },
   methods: {
     mediaType(file) {
-      return file.mimetype.split('/')[0];
+      return file?.mimetype.split('/')[0];
     },
 
     previous() {

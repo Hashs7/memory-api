@@ -1,12 +1,16 @@
 <template>
-  <CreateForm v-if="!showSummary" @next="showSummary = true" />
+  <ContentForm
+    v-if="!showSummary"
+    @next="showSummary = true"
+    @back="$router.back()"
+  />
   <Summary
-    v-else-if="!showConfidentiality"
+    v-else-if="!showVisibility"
     @back="showSummary = false"
     @submit="submit"
-    @params="showConfidentiality = true"
+    @params="showVisibility = true"
   />
-  <Confidentiality v-else @back="showConfidentiality = false" />
+  <Visibility v-else @back="showVisibility = false" />
 </template>
 
 <router>
@@ -15,33 +19,26 @@ path: /instrument/:id/souvenir/creation
 
 <script>
 import { mapState } from 'vuex';
-import CreateForm from '@/components/memories/creation/views/CreateForm';
 import Summary from '@/components/memories/creation/views/Summary';
-import Confidentiality from '@/components/memories/creation/views/Confidentiality';
-import { formatContentType } from '@/const/memory';
+import Visibility from '@/components/memories/creation/views/Visibility';
+import ContentForm from '../../components/memories/creation/views/ContentForm';
 
 export default {
   name: 'NewInstrument',
   components: {
-    CreateForm,
+    ContentForm,
+    Visibility,
     Summary,
-    Confidentiality,
   },
   data() {
     return {
       success: false,
       showSummary: false,
-      showConfidentiality: false,
+      showVisibility: false,
     };
   },
   computed: {
-    ...mapState({
-      name: (state) => state.memory.name,
-      date: (state) => state.memory.date,
-      type: (state) => state.memory.type,
-      contents: (state) => state.memory.contents,
-      themes: (state) => state.memory.themes,
-    }),
+    ...mapState('memory', ['memory']),
     selectedTheme() {
       return this.themes.find((el) => el.selected)?.slug;
     },
@@ -49,16 +46,15 @@ export default {
       return this.$route.params.id;
     },
   },
+  created() {
+    this.$store.commit('memory/resetState');
+  },
   methods: {
     // Form submitted event
     async submit() {
       try {
         await this.$api.newMemory(this.instrumentId, {
-          name: this.name,
-          date: this.date,
-          type: this.type,
-          template: this.selectedTheme,
-          contents: formatContentType(this.contents),
+          ...this.memory,
         });
         this.createdHandler();
       } catch (e) {

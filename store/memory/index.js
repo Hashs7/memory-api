@@ -1,51 +1,50 @@
-import { CONTENT_TYPE, THEMES } from '@/const/memory';
-
-const initialState = {
-  name: '',
-  date: [],
-  type: 'Concert',
-  visibility: null,
-  contents: [],
-  themes: [...THEMES],
-};
+import { CONTENT_TYPE, emptyMemory } from '@/const/memory';
 
 // Add memory store
 export const state = () => ({
-  ...initialState,
+  memory: { ...emptyMemory },
 });
+
+export const getters = {
+  contents: (state) => state.memory.contents,
+};
 
 export const mutations = {
   addContent(state, type) {
-    state.contents.push(CONTENT_TYPE[type]);
+    state.memory.contents.push(CONTENT_TYPE[type]);
   },
 
   updateName(state, value) {
-    state.name = value;
+    state.memory.name = value;
   },
 
   updateDate(state, value) {
-    state.date = value;
+    state.memory.date = value;
   },
 
   updateVisibility(state, value) {
-    state.visibility = value;
+    state.memory.visibility = value;
+  },
+
+  setMemory(state, memory) {
+    state.memory = { ...memory };
   },
 
   updateContent(state, { index, value, file }) {
     if (value) {
-      state.contents[index].content = value;
+      state.memory.contents[index].content = value;
     }
     if (file) {
-      state.contents[index].file = file;
+      state.memory.contents[index].file = file;
     }
   },
 
   resetState(state) {
-    state = { ...initialState };
+    state.memory = { ...emptyMemory };
   },
 
   removeContent(state, index) {
-    state.contents.splice(index, 1);
+    state.memory.contents.splice(index, 1);
   },
 
   selectTheme(state, slug) {
@@ -54,5 +53,3 @@ export const mutations = {
     theme.selected = true;
   },
 };
-
-export const actions = {};

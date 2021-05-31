@@ -1,9 +1,19 @@
 <template>
   <nuxt-link v-if="link" :to="linkUrl" class="memory-preview">
-    <h4>{{ memory.name }}</h4>
+    <div class="memory-preview__header">
+      <h4 class="memory-preview__name">{{ memory.name }}</h4>
+      <nuxt-link v-if="editable" :to="editLinkUrl" class="btn">
+        <IconBrush />
+      </nuxt-link>
+    </div>
   </nuxt-link>
-  <div v-else class="memory-preview">
-    <h4>{{ memory.name }}</h4>
+  <div v-else class="memory-preview" @click="$emit('click')">
+    <div class="memory-preview__header">
+      <h4 class="memory-preview__name">{{ memory.name }}</h4>
+      <nuxt-link v-if="editable" to="">
+        <IconBrush />
+      </nuxt-link>
+    </div>
     <div v-if="user" class="memory-preview__user">
       <span>Souvenir de {{ user.firstName }} {{ user.lastName }}</span>
     </div>
@@ -11,8 +21,11 @@
 </template>
 
 <script>
+import IconBrush from '@/assets/svg/ic_brush.svg?inline';
+
 export default {
   name: 'MemoryPreview',
+  components: { IconBrush },
   props: {
     link: {
       type: Boolean,
@@ -31,11 +44,18 @@ export default {
         required: true,
       },
     },
+    editable: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     linkUrl() {
       const { id } = this.$route.params;
-      return `/instrument/${id}/souvenir/${this.memory._id}`;
+      return `/instrument/${id}/souvenir/${this.memory.id}`;
+    },
+    editLinkUrl() {
+      return `${this.linkUrl}/edit`;
     },
     user() {
       return this.$store.state.user;
@@ -64,9 +84,13 @@ export default {
   &:not(:last-child) {
     margin-bottom: 16px;
   }
-}
 
-.memory-preview__user {
-  font-size: 13px;
+  &__header {
+    display: flex;
+  }
+
+  &__user {
+    font-size: 13px;
+  }
 }
 </style>
