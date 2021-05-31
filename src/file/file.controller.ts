@@ -28,6 +28,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Instrument } from '../instrument/instrument.schema';
 import { GetUser } from '../user/auth/get-user.decorator';
 import { User } from '../user/user.schema';
+import { AllowAny } from '../user/auth/JwtAuthGuard';
 
 // process.env.NODE_ENV = 'production';
 
@@ -107,6 +108,7 @@ export class FileController {
     return this.fileService.findForUser(user);
   }
 
+  @AllowAny()
   @Get(':imageName')
   getImage(@Param('imageName') image, @Res() res) {
     const response = res.sendFile(image, { root: './uploads' });
@@ -122,6 +124,7 @@ export class FileController {
    * @param id
    * @param res
    */
+  @AllowAny()
   @Get('id/:id')
   async getImageById(@Param('id') id, @Res() res) {
     let response;

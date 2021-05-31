@@ -1,6 +1,5 @@
 import {
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -15,7 +14,6 @@ import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
 import { User } from '../user/user.schema';
 import { Memory } from './memory/memory.schema';
-import { rewritePath } from '../file/file.helper';
 import { FileService } from '../file/file.service';
 import { File } from '../file/file.schema';
 import { ContentType } from './memory/content/content.schema';
@@ -66,13 +64,13 @@ export class InstrumentService {
   async findOne(id: string, user?: User) {
     const instrument = await this.instrumentModel
       .findOne({ id })
-      // .select('-__v')
+      .select('-__v')
       .populate([
         'owner',
         'image',
         {
           path: 'memories',
-          // select: 'username',
+          select: 'username',
           populate: {
             path: 'contents',
             populate: {
@@ -83,23 +81,13 @@ export class InstrumentService {
         },
         {
           path: 'owner',
-          // select: 'username',
+          select: 'username',
           populate: {
             path: 'thumbnail',
           },
         },
       ]);
 
-    this.filterMemories(instrument, user);
-    this.rewriteMemories(instrument);
-
-    instrument.owner.thumbnail?.rewritePath();
-    instrument.image?.rewritePath();
-
-    return instrument;
-  }
-
-  filterMemories(instrument: Instrument, user: User) {
     if (!user || !instrument.owner.equals(user._id)) {
       instrument.memories = instrument.memories.filter((m) => {
         if (m.visibility == 'Public') {
@@ -107,9 +95,8 @@ export class InstrumentService {
         }
       });
     }
-  }
-
-  rewriteMemories(instrument: Instrument) {
+    instrument.owner.thumbnail?.rewritePath();
+    instrument.image?.rewritePath();
     instrument.memories = instrument.memories.map((m) => {
       m.contents = m.contents.map((c) => {
         if (c.type !== ContentType.Text) {
@@ -119,6 +106,8 @@ export class InstrumentService {
       });
       return m;
     });
+
+    return instrument;
   }
 
   /**
@@ -126,43 +115,14 @@ export class InstrumentService {
    * @param user
    */
   async findForUser(user: User) {
-    const userInstruments = await this.instrumentModel
-      .find({
-        owner: user._id,
-      })
-      .populate([
-        'image',
-        {
-          path: 'memories',
-          // select: 'username',
-          populate: {
-            path: 'contents',
-            populate: {
-              path: 'file',
-              model: File.name,
-            },
-          },
-        },
-      ]);
-
-    userInstruments.forEach((ins) => this.filterMemories(ins, user));
-    userInstruments.forEach((ins) => this.rewriteMemories(ins));
-
-    const oldInstruments = await this.instrumentModel
-      .find({
-        oldOwners: { $in: user._id },
-      })
-      .populate('image');
-    const wishInstruments = await this.instrumentModel
-      .find({
-        _id: { $in: user.wishList },
-      })
-      .populate('image');
-
-    [userInstruments, oldInstruments, wishInstruments].forEach((arr) => {
-      arr.forEach((instrument) => {
-        instrument.image?.rewritePath();
-      });
+    const userInstruments = await this.instrumentModel.find({
+      owner: user._id,
+    });
+    const oldInstruments = await this.instrumentModel.find({
+      oldOwners: { $in: user._id },
+    });
+    const wishInstruments = await this.instrumentModel.find({
+      _id: { $in: user.wishList },
     });
 
     return {
@@ -199,10 +159,17 @@ export class InstrumentService {
         image: (await this.fileService.create(file, user._id))._id,
       }),
       id,
-      createdAt: new Date(),
       owner: user._id,
       memories: [],
     });
+
+    const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
+    const img: string = await qrcode.toDataURL(url);
+    const base64Data = img.split(';base64,').pop();
+
+    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
+      console.log('created'),
+    );
 
     return instrument;
   }
@@ -243,7 +210,7 @@ export class InstrumentService {
     this.validateInstrumentOwner(instrument, user);
 
     if (!instrument.handoverToken) {
-      instrument.handoverToken = randomBytes(10).toString('hex');
+      instrument.handoverToken = randomBytes(20).toString('hex');
     }
 
     const expire = new Date();
@@ -265,9 +232,6 @@ export class InstrumentService {
 
     if (!instrument || instrument.handoverExpire < new Date()) {
       throw new UnauthorizedException('La passation a expiré');
-    }
-    if (instrument.owner.equals(user._id)) {
-      throw new UnauthorizedException('Vous êtes déjà le propriétaire');
     }
 
     instrument.handoverToken = null;
@@ -307,7 +271,6 @@ export class InstrumentService {
         "L'utilisateur n'est pas propriétaire de l'instrument",
       );
     }
-
     return this.instrumentModel.findOneAndDelete({ id });
   }
 }

@@ -9,14 +9,15 @@ import { UserModule } from './user/user.module';
 import { ChatModule } from './chat/chat.module';
 import { MailModule } from './mail/mail.module';
 import { AuthModule } from './user/auth/auth.module';
-import { JwtAuthGuard } from './user/auth/JwtAuthGuard';
-import { APP_GUARD, Reflector } from '@nestjs/core';
+import { CategoryModule } from './instrument/memory/category/category.module';
+import { CommandModule } from 'nestjs-command';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync(mongooseConfig),
     AuthModule,
+    CommandModule,
     InstrumentModule,
     FileModule,
     MulterModule.register({
@@ -25,14 +26,8 @@ import { APP_GUARD, Reflector } from '@nestjs/core';
     UserModule,
     ChatModule,
     MailModule,
+    CategoryModule,
   ],
   controllers: [],
-  /*providers: [
-    {
-      provide: APP_GUARD,
-      useFactory: (ref) => new JwtAuthGuard(ref),
-      inject: [Reflector],
-    },
-  ],*/
 })
 export class AppModule {}

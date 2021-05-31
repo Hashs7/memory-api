@@ -1,13 +1,7 @@
-import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {
-  IsDate,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import {MemoryContent} from '../content/content.schema';
-import {MemoryVisibility} from "../memory.schema";
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { MemoryContent } from '../content/content.schema';
+import { MemoryVisibility } from '../memory.schema';
 
 export class CreateMemoryDto {
   @IsNotEmpty()
@@ -28,14 +22,6 @@ export class CreateMemoryDto {
   @IsNotEmpty()
   @ApiProperty()
   date: Date;
-
-  @IsOptional()
-  @IsString()
-  // @IsEnum(MemoryType)
-  @ApiProperty({
-    // enum: Object.values(MemoryType),
-  })
-  type?: string;
 
   @IsOptional()
   @IsString()
@@ -65,4 +51,12 @@ export class CreateMemoryDto {
   @IsOptional()
   @ApiProperty()
   contents?: MemoryContent[];
+
+  @IsOptional()
+  @ApiProperty({
+    title: 'Array of Categories ObjectId',
+    example: ['606300aa1642981aa1aaaa8e'],
+    type: [String],
+  })
+  categories?: string[];
 }

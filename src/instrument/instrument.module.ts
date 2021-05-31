@@ -7,13 +7,11 @@ import { MemoryModule } from './memory/memory.module';
 import { File, FileSchema } from '../file/file.schema';
 import { FileService } from '../file/file.service';
 import { UserService } from '../user/user.service';
-import { UserModule } from '../user/user.module';
 import { User, UserSchema } from '../user/user.schema';
 
 @Module({
   imports: [
     MemoryModule,
-    UserModule,
     MongooseModule.forFeature([
       { name: File.name, schema: FileSchema },
       { name: User.name, schema: UserSchema },
