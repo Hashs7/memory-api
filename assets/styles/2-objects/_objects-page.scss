@@ -3,8 +3,13 @@
   flex-direction: column;
   // Remove navbar height
   min-height: calc(100vh - 3.25rem);
-  background-color: #FFF9E2;
+  background-color: $background;
   padding: 16px;
+}
+
+.o-page__container {
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .o-page--full {
@@ -64,6 +69,17 @@
   text-align: center;
 }
 
+.o-page__title {
+  //font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.o-page__subtitle {
+  font-size: 24px;
+}
+
 .o-page__container {
   position: relative;
   z-index: 10;
@@ -74,9 +90,6 @@
   flex-grow: 1;
 }
 
-.o-page__title {
-  margin-bottom: 20px;
-}
 
 .o-page--summary .o-page__body {
   padding: 0 8px;
@@ -137,9 +150,4 @@
   line-height: 1;
   font-size: 13px;
   color: #C0C0C0;
-}
-
-.o-page__subtitle {
-  font-size: 14px;
-  text-align: center;
 }

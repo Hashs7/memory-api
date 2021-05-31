@@ -10,7 +10,7 @@
           v-for="(c, i) in conversations"
           :key="i"
           :users="c.users"
-          :lastMessage="lastMessage(c.messages)"
+          :last-message="lastMessage(c.messages)"
           @click.native="selectConv(i)"
         />
       </div>
@@ -82,7 +82,6 @@ export default {
     },
     // TODO
     isSender(id) {
-      console.log(this.$store.state.user._id, id);
       return this.$store.state.user._id === id;
     },
     sendMessage() {

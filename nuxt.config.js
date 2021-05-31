@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Jamies',
+    title: 'Memory Motel',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -19,6 +19,7 @@ export default {
   styleResources: {
     scss: [
       '@/assets/styles/0-settings/_settings-mixins.scss',
+      '@/assets/styles/0-settings/_settings-fonts.scss',
       '@/assets/styles/0-settings/_settings-variable.scss',
       '@/assets/styles/0-settings/_settings-typography.scss',
       '@/assets/styles/0-settings/_settings-media.scss',

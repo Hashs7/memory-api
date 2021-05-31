@@ -1,35 +1,57 @@
 <template>
   <nav class="tabbar">
-    <nuxt-link
-      v-for="navItem in nav"
-      :key="navItem.path"
-      :to="navItem.path"
-      class="tabbar__item"
-      :class="{ 'tabbar__item--current': $route.path === navItem.path }"
-    >
-      <span class="tabbar__icon"></span>
-      <span class="tabbar__text">{{ navItem.label }}</span>
-    </nuxt-link>
+    <div class="tabbar__container">
+      <nuxt-link
+        v-for="navItem in nav"
+        :key="navItem.path"
+        :to="navItem.path"
+        class="tabbar__item"
+        :class="[
+          navItem.slug,
+          { 'tabbar__item--current': $route.path === navItem.path },
+        ]"
+      >
+        <span class="tabbar__icon">
+          <component :is="navItem.icon" />
+        </span>
+        <span class="tabbar__text">{{ navItem.label }}</span>
+      </nuxt-link>
+    </div>
   </nav>
 </template>
 
 <script>
+import IconMotel from '@/assets/svg/ic_nav-motel.svg?inline';
+import IconDiscover from '@/assets/svg/ic_nav-discover.svg?inline';
+import IconAdd from '@/assets/svg/ic_add.svg?inline';
+
 export default {
   name: 'Tabbar',
+  components: {
+    IconMotel,
+    IconDiscover,
+    IconAdd,
+  },
   data() {
     return {
       nav: [
         {
+          slug: 'discover',
           label: 'Découvrir',
-          path: '/feed',
+          path: '/decouvrir',
+          icon: 'IconDiscover',
         },
         {
-          label: 'Capture',
+          slug: 'add',
+          label: 'Ajouter',
           path: '/capture',
+          icon: 'IconAdd',
         },
         {
-          label: 'Instruments',
-          path: '/instrument',
+          slug: 'motel',
+          label: 'Mon motel',
+          path: '/motel',
+          icon: 'IconMotel',
         },
       ],
     };
@@ -39,38 +61,83 @@ export default {
 
 <style lang="scss">
 .tabbar {
+  z-index: 100;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  height: 72px;
   display: flex;
-  justify-content: space-around;
-  padding: 0.5rem 0 env(safe-area-inset-bottom, 0) 0; // Avoid iOS notch
-  background-color: white;
-  box-shadow: 0px -0.3rem 0.5rem 0 rgba(100, 100, 100, 0.05);
+  padding: 0 0 env(safe-area-inset-bottom, 0) 0; // Avoid iOS notch
+  background-color: $background;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
   &__item {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 
-    &--current {
-      .tabbar__icon {
-        background-color: gray;
-      }
+    svg {
+      opacity: 0.5;
+    }
+
+    &--current .tabbar__text,
+    &--current svg {
+      opacity: 1;
     }
   }
 
   &__icon {
     width: 1.6rem;
     height: 1.6rem;
-    border-radius: 100%;
-    background-color: lightgray;
+    margin-bottom: 8px;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &__text {
-    font-size: 0.6rem;
+    opacity: 0.5;
+    line-height: 1;
+    font-size: 12px;
+  }
+}
+
+.tabbar__container {
+  margin: auto;
+  width: 100%;
+  //height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  //padding-bottom: 16px;
+}
+
+.tabbar__item.add {
+  opacity: 1;
+
+  .tabbar__icon {
+    display: flex;
+    position: absolute;
+    top: 0;
+    width: 48px;
+    height: 48px;
+    background-color: $gray-darkest;
+    border-radius: 4px;
+    transform: translateY(-24px);
+
+    svg {
+      opacity: 1;
+      margin: auto;
+      width: 22px;
+      height: 22px;
+    }
+    rect {
+      fill: $background;
+    }
   }
 }
 </style>

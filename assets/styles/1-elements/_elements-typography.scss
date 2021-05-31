@@ -6,8 +6,9 @@
 
 h1, h2, h3, h4, h5, h6 {
   line-height: $line-height-headings;
-  font-family: $font-primary;
+  font-family: $font-secondary;
   font-weight: 900;
+  color: $gray-darkest;
 
   p {
     line-height: $line-height-headings;
@@ -26,17 +27,17 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 h1 {
-  font-family: $font-secondary;
   font-size: 32px;
   font-weight: normal;
-  color: $secondary;
 }
 
 h2 {
-  font-family: $font-secondary;
-  color: $secondary;
   font-size: 24px;
+}
 
+h4 {
+  font-family: $font-primary;
+  font-weight: 400;
 }
 
 p {

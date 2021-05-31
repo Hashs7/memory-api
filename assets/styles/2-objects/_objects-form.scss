@@ -1,0 +1,53 @@
+.form__group {
+  display: flex;
+  justify-content: space-between;
+  //max-width: 300px;
+  margin: 0 auto 16px  auto;
+
+  label {
+    text-align: left;
+    display: block;
+  }
+
+  input {
+    width: 100%;
+    height: 52px;
+    padding: 0 16px;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    border-color: #E7E7E7;
+  }
+}
+
+//buefy
+.control.has-icons-right .icon {
+  height: 52px;
+}
+
+.field {
+  width: 100%;
+}
+
+.form__field--half {
+  width: calc(50% - 8px);
+}
+
+.round-upload {
+  .upload {
+    display: block;
+    margin: auto !important;
+    width: 158px;
+    height: 158px;
+    padding: 8px;
+    border: 1px solid #eee7ce;
+    border-radius: 50%;
+  }
+  .upload-draggable {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 50%;
+    background-color: #eee7ce;
+  }
+}

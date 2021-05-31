@@ -6,28 +6,26 @@
 </template>
 
 <script>
-	export default {
-		name: "TalkUser",
-		props: {
-			user: {
-				id: {
-					type: String,
-					required: true,
-        },
-				name: {
-					type: String,
-					required: true,
-        }
-			},
-		},
-		methods: {
-			startConversation() {
-				console.log('startConversation with : ', this.user.id);
-			}
-		},
-	}
+export default {
+  name: 'TalkUser',
+  props: {
+    user: {
+      id: {
+        type: String,
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+    },
+  },
+  methods: {
+    startConversation() {
+      console.log('startConversation with : ', this.user.id);
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

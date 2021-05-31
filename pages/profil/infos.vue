@@ -1,25 +1,17 @@
 <template>
-  <div class="o-page o-page--profile-edit">
-    <div class="">
-      <span>Bienvenue !</span>
-      <h1>Quels sont vos centres d’intérêts ?</h1>
+  <div class="o-page o-page--profile-infos">
+    <div class="infos-heading">
+      <span>{{ heading[currentStep].title }}</span>
+      <h1>{{ heading[currentStep].subtitle }}</h1>
     </div>
 
     <div class="">
-      <div v-if="currentStep === 0" class="step-0">
-        <h3>Sélectionnez vos centres d'intérêts en cliquant dessus</h3>
-        <div class="categories">
-          <button
-            v-for="(c, i) in categories"
-            :key="i"
-            :class="{ selected: isSelected(c.slug) }"
-            class="categories__item"
-            @click="selectCategory(c.slug)"
-          >
-            <span>{{ c.text }}</span>
-          </button>
-        </div>
-      </div>
+      <UserInfoForm v-if="currentStep === 0" class="step-0" />
+      <InstrumentShortForm
+        v-if="currentStep === 1"
+        ref="stepInstrument"
+        class="step-1"
+      />
     </div>
     <div class="indicator">
       <span
@@ -40,30 +32,31 @@
 </template>
 
 <script>
+import UserInfoForm from '@/components/user/UserInfoForm';
+import InstrumentShortForm from '@/components/instrument/InstrumentShortForm';
+
+const STEPS = {
+  CATEGORIES: 'categories',
+  FIRST_INSTRUMENT: 'first-instrument',
+  THIRD: 'third',
+};
+
 export default {
-  components: {},
+  components: { InstrumentShortForm, UserInfoForm },
   middleware: 'auth',
   data() {
     return {
       MAX_STEPS: 2,
+      steps: [STEPS.CATEGORIES, STEPS.FIRST_INSTRUMENT, STEPS.THIRD],
       currentStep: 0,
-      selectedSlugs: [],
-      categories: [
+      heading: [
         {
-          slug: 'rennovation',
-          text: 'Rennovation',
+          title: 'Bienvenue !',
+          subtitle: 'Quels sont vos centres d’intérêts ?',
         },
         {
-          slug: 'concerts',
-          text: 'Concerts',
-        },
-        {
-          slug: 'repetitions',
-          text: 'Répétitions',
-        },
-        {
-          slug: 'rock',
-          text: 'Rock',
+          title: 'Construisons votre Motel',
+          subtitle: 'Ajoutez votre premier instrument !',
         },
       ],
     };
@@ -74,21 +67,19 @@ export default {
     },
   },
   methods: {
-    selectCategory(slug) {
-      const index = this.selectedSlugs.indexOf(slug);
-      if (index === -1) {
-        this.selectedSlugs.push(slug);
-        return;
-      }
-      this.selectedSlugs.splice(index, 1);
-    },
-    isSelected(slug) {
-      return this.selectedSlugs.includes(slug);
-    },
     previousStep() {
       this.currentStep -= 1;
     },
-    nextStep() {
+    async nextStep() {
+      if (this.steps[this.currentStep] === STEPS.FIRST_INSTRUMENT) {
+        try {
+          await this.$refs.stepInstrument.submit();
+          this.currentStep += 1;
+        } catch (e) {
+          this.notifyError();
+        }
+        return;
+      }
       this.currentStep += 1;
     },
     validate() {
@@ -96,25 +87,22 @@ export default {
         name: 'feed',
       });
     },
+    notifyError() {
+      this.$buefy.toast.open({
+        message: "L'instrument n'a pas été créé",
+        type: 'is-danger',
+      });
+    },
   },
 };
 </script>
 
 <style lang="scss">
-.categories__item {
-  cursor: pointer;
-  user-select: none;
-  display: inline-block;
-  border: 2px solid #e7e0c5;
-  border-radius: 4px;
-  padding: 0 12px;
-  height: 32px;
-  line-height: 16px;
-  background-color: transparent;
-
-  &.selected {
-    background-color: #e7e0c5;
-  }
+.infos-heading {
+  text-align: center;
+  max-width: 500px;
+  padding: 0 54px;
+  margin: 60px auto;
 }
 
 .indicator {

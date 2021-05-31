@@ -1,13 +1,8 @@
 <template>
   <form @submit="submit">
-    <img
-      v-if="user.thumbnail"
-      :src="user.thumbnail.path"
-      alt=""
-      width="100"
-      height="100"
-      class="user-picture"
-    />
+    <div class="round-upload">
+      <FileUpload ref="files" :multiple="false" />
+    </div>
     <div class="form__group">
       <b-field label="Prénom">
         <b-input v-model="user.firstName" type="text"> </b-input>
@@ -23,8 +18,7 @@
         <b-input v-model="user.username" type="text"> </b-input>
       </b-field>
     </div>
-    <FileUpload ref="files" :multiple="false" />
-    <button type="submit" class="button is-primary">Valider</button>
+    <button type="submit" class="u-button u-button--primary">Valider</button>
   </form>
 </template>
 
@@ -77,10 +71,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.user-picture {
-  display: block;
-  margin: 16px auto;
-  border-radius: 50%;
-}
-</style>
+<style scoped></style>

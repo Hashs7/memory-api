@@ -18,17 +18,6 @@
 
 <script>
 export default {
-  async fetch() {
-    let instruments = [];
-    try {
-      const res = await this.$api.getInstruments();
-      instruments = [...res.data];
-    } catch (e) {
-      console.log(e);
-    }
-    this.instruments = [...instruments];
-  },
-  fetchOnServer: false,
   data() {
     return {
       instruments: [],
@@ -55,6 +44,17 @@ export default {
       ],
     };
   },
+  async fetch() {
+    let instruments = [];
+    try {
+      const res = await this.$api.getInstruments();
+      instruments = [...res.data];
+    } catch (e) {
+      throw new Error(e);
+    }
+    this.instruments = [...instruments];
+  },
+  fetchOnServer: false,
   watch: {
     async selected(newVal) {
       await this.$router.push({

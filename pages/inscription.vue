@@ -1,11 +1,12 @@
 <template>
   <div class="o-page o-page--register">
-    <div class="">
-      <h1>Création de compte</h1>
-      <h2>Commençons par vous !</h2>
+    <div class="o-page__header">
+      <div class="logo"><IconLogo /></div>
+      <span class="o-page__title">Création de compte</span>
+      <h1 class="o-page__subtitle">Commençons par vous !</h1>
     </div>
-    <div class="create">
-      <form @submit="submit">
+    <form class="register__form" @submit="submit">
+      <div class="register__container">
         <div class="form__group">
           <b-field>
             <b-input
@@ -46,16 +47,28 @@
             </b-input>
           </b-field>
         </div>
-        <button type="submit" class="button is-primary">S'inscrire</button>
-        <NuxtLink to="/connexion">J'ai déjà un compte</NuxtLink>
-      </form>
-    </div>
+      </div>
+      <div class="form__actions">
+        <button type="submit" class="u-button u-button--primary">
+          S'inscrire
+        </button>
+        <NuxtLink to="/connexion" class="u-button u-button--outline"
+          >J'ai déjà un compte</NuxtLink
+        >
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
+import IconLogo from '~/assets/svg/ic_logo.svg?inline';
+
 export default {
   name: 'Register',
+  components: {
+    IconLogo,
+  },
+  layout: 'none',
   data() {
     return {
       firstName: '',
@@ -108,28 +121,34 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.form__group {
+<style lang="scss" scoped>
+.o-page__header {
+  margin: 144px 0 64px 0;
+  padding: 0 72px;
+}
+
+.register__form {
   display: flex;
-  justify-content: space-between;
-  max-width: 300px;
-  margin: 0 auto 16px auto;
+  flex-direction: column;
+  flex-grow: 1;
+}
 
-  label {
-    text-align: left;
-    display: block;
-  }
+.register__container {
+  flex-grow: 1;
+}
 
-  input {
+.logo {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  width: 64px;
+  margin: auto;
+}
+
+.form__actions {
+  .u-button {
     width: 100%;
   }
-}
-
-.field {
-  width: 100%;
-}
-
-.form__field--half {
-  width: calc(50% - 8px);
 }
 </style>

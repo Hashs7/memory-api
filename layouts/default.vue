@@ -16,3 +16,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.o-layout--default {
+  margin: 0 0 65px 0;
+}
+</style>

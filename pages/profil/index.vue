@@ -3,9 +3,17 @@
     <div class="">
       <h1>Mon compte</h1>
       <div class="user">
+        <img
+          v-if="user.thumbnail"
+          :src="user.thumbnail.path"
+          alt=""
+          width="100"
+          height="100"
+          class="user-picture"
+        />
         <p>{{ user.firstName }} {{ user.lastName }}</p>
       </div>
-      <NuxtLink to="/profil/edit" class="u-button"
+      <NuxtLink to="/profil/edit" class="u-button u-button--primary"
         >Modifier mon compte</NuxtLink
       >
       <Logout>Déconnexion</Logout>
@@ -27,3 +35,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.user-picture {
+  display: block;
+  margin: 16px auto;
+  border-radius: 50%;
+}
+</style>

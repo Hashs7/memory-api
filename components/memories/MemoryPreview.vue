@@ -1,23 +1,22 @@
 <template>
-  <nuxt-link v-if="link" :to="linkUrl" class="memory-preview">
-    <div class="memory-preview__header">
+  <component
+    :is="link ? 'nuxt-link' : 'div'"
+    :to="linkUrl"
+    class="memory-preview"
+    @click="$emit('click')
+  >
+    <div class="memory-preview__image-container">
+      <img
+        class="memory-preview__image"
+        :src="thumbnail"
+        alt="Image du souvenir"
+      />
+    </div>
+    <div class="memory-preview__body">
       <h4 class="memory-preview__name">{{ memory.name }}</h4>
-      <nuxt-link v-if="editable" :to="editLinkUrl" class="btn">
-        <IconBrush />
-      </nuxt-link>
+      <p class="memory-preview__date">{{ memory.date }}</p>
     </div>
-  </nuxt-link>
-  <div v-else class="memory-preview" @click="$emit('click')">
-    <div class="memory-preview__header">
-      <h4 class="memory-preview__name">{{ memory.name }}</h4>
-      <nuxt-link v-if="editable" to="">
-        <IconBrush />
-      </nuxt-link>
-    </div>
-    <div v-if="user" class="memory-preview__user">
-      <span>Souvenir de {{ user.firstName }} {{ user.lastName }}</span>
-    </div>
-  </div>
+  </component>
 </template>
 
 <script>
@@ -60,37 +59,47 @@ export default {
     user() {
       return this.$store.state.user;
     },
+    thumbnail() {
+      const image = this.memory.contents.find((c) => c.type === 'media')?.file
+        .path;
+      return image;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .memory-preview {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  max-width: 260px;
-  height: 280px;
-  margin: auto;
-  padding: 16px 24px;
-  font-size: 32px;
-  line-height: 1.2;
-  font-weight: 700;
-  color: #3764e5;
-  background-color: #f0f0f0;
-  border-radius: 8px;
+  display: block;
+  width: 100%;
+  margin: 20px 0;
+  padding: 16px;
+  background-color: $white;
+  border-radius: 4px;
   overflow-wrap: break-word;
-
-  &:not(:last-child) {
-    margin-bottom: 16px;
-  }
-
-  &__header {
-    display: flex;
-  }
-
-  &__user {
-    font-size: 13px;
-  }
+  box-shadow: $shadow--second;
+}
+.memory-preview__image-container {
+  height: 232px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.memory-preview__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.memory-preview__body {
+  padding-top: 12px;
+}
+.memory-preview__name {
+  font-family: $font-secondary;
+  font-size: 16px;
+}
+.memory-preview__date {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 300;
 }
 </style>
