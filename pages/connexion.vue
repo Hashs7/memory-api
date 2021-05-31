@@ -40,8 +40,8 @@ import IconLogo from '~/assets/svg/ic_logo.svg?inline';
 
 export default {
   name: 'Login',
-  layout: 'none',
   components: { Logout, IconLogo },
+  layout: 'none',
   data() {
     return {
       login: {
@@ -99,21 +99,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-/*
-.form__group {
-  max-width: 300px;
-  margin: 0 auto 16px auto;
-
-  label {
-    text-align: left;
-    display: block;
-  }
-
-  input {
-    width: 100%;
-  }
-}
-*/
-</style>

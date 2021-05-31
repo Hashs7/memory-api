@@ -37,6 +37,7 @@
               v-for="ins in instruments[s.name]"
               :key="ins.id"
               :data="ins"
+              :show-favorite="s.name === 'wish'"
             />
           </div>
         </section>
@@ -119,7 +120,9 @@ export default {
   border-bottom: 1px solid $gray-dark;
 }
 .instrument-nav__item {
+  display: inline-block;
   height: 32px;
+  padding: 0;
   margin-right: 20px;
   border: none;
   background-color: transparent;
@@ -127,6 +130,15 @@ export default {
 
   &.current {
     border-color: $gray-darkest;
+  }
+}
+
+.instruments-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  &.user-instrument {
+    display: block;
   }
 }
 

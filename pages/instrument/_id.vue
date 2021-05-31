@@ -93,7 +93,7 @@ export default {
   methods: {
     async addToWish() {
       try {
-        const res = await this.$api.addInstrumentToWishlist(
+        const res = await this.$api.toggleInstrumentToWishlist(
           this.instrument._id
         );
         this.$auth.setUser(res.data);
