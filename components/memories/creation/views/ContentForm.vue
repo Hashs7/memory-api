@@ -117,10 +117,6 @@ export default {
 </script>
 
 <style lang="scss">
-.o-page--create {
-  background-color: $gray-lightest;
-}
-
 .o-page__footer {
   display: flex;
   justify-content: space-between;

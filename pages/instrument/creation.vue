@@ -1,6 +1,6 @@
 <template>
   <div class="o-page o-page--create">
-    <h1>Ajouter un nouvel instrument</h1>
+    <h1 class="o-page__title">Ajouter un instrument</h1>
 
     <InstrumentForm />
 

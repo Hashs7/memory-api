@@ -1,30 +1,89 @@
 <template>
   <form ref="form" @submit="submit">
-    <div class="form__group">
-      <b-field label="Nom">
-        <b-input v-model="name" name="name" type="text"></b-input>
-      </b-field>
-    </div>
-    <div class="form__group">
-      <b-field label="Type">
-        <b-input v-model="type" name="type" type="text"></b-input>
-      </b-field>
-    </div>
-    <div class="form__group">
-      <b-field label="Spécification">
-        <b-input
-          v-model="specification"
-          name="specification"
-          type="text"
-        ></b-input>
-      </b-field>
-    </div>
-    <div class="form__group">
-      <b-field label="Marque">
-        <b-input v-model="brand" name="brand" type="text" required></b-input>
-      </b-field>
-    </div>
-    <FileUpload ref="files" />
+    <section class="o-section">
+      <div class="o-section__head">
+        <h4 class="o-section__title">Ajouter une photo</h4>
+      </div>
+      <ul class="o-section__pictures">
+        <li class="instrument-picture">
+          <FileUpload ref="files" />
+        </li>
+        <li class="instrument-picture">
+          <button>Ajouter</button>
+        </li>
+        <li
+          v-for="img in data.images"
+          :key="img._id"
+          class="instrument-picture"
+        >
+          <img :src="img.path" alt="" />
+        </li>
+      </ul>
+    </section>
+
+    <section class="o-section">
+      <div class="o-section__head">
+        <h4 class="o-section__title">Informations</h4>
+      </div>
+      <div class="">
+        <div class="form__group">
+          <b-field>
+            <b-input
+              v-model="type"
+              name="type"
+              type="text"
+              placeholder="Type d'instrument"
+            ></b-input>
+          </b-field>
+        </div>
+        <div class="form__group">
+          <b-field>
+            <b-input
+              v-model="brand"
+              name="brand"
+              type="text"
+              placeholder="Marque"
+              required
+            ></b-input>
+          </b-field>
+        </div>
+        <div class="form__group">
+          <b-field>
+            <b-input
+              v-model="name"
+              name="name"
+              type="text"
+              placeholder="Surnom (optionel)"
+            ></b-input>
+          </b-field>
+        </div>
+        <div class="form__group">
+          <b-field>
+            <b-input
+              v-model="specification"
+              name="specification"
+              type="text"
+              placeholder="Modèle (optionnel)"
+            ></b-input>
+          </b-field>
+        </div>
+      </div>
+    </section>
+
+    <section class="o-section">
+      <div class="o-section__head">
+        <h4 class="o-section__title">Détails</h4>
+      </div>
+      <div class=""></div>
+    </section>
+
+    <section class="o-section">
+      <div class="o-section__head">
+        <h4 class="o-section__title">Anciens propriétaires</h4>
+      </div>
+      <div class=""></div>
+    </section>
+
     <button type="submit" class="u-button u-button--primary">
       {{ data ? 'Modifier' : 'Ajouter' }}
     </button>
@@ -84,18 +143,15 @@ export default {
     },
 
     redirect() {
-      setTimeout(() => {
-        this.$router.push({
-          name: 'instrument-id',
-          params: { id: this.data.id },
-        });
-      }, 2000);
+      this.$router.push({
+        name: 'instrument-id',
+        params: { id: this.data.id },
+      });
     },
 
     async createInstrument(form) {
       try {
         await this.$api.newInstrument(form);
-        this.notifySuccess("L'instrument vient d'être créé");
       } catch (e) {
         this.notifyError("L'instrument n'a pas été créé");
       }
@@ -104,19 +160,11 @@ export default {
     async updateInstrument(form) {
       try {
         await this.$api.updateInstrument(this.data.id, form);
-        this.notifySuccess("L'instrument vient d'être mis à jour");
       } catch (e) {
         this.notifyError("L'instrument n'a pas été mis à jour");
       }
     },
 
-    // Instrument created callback
-    notifySuccess(message) {
-      this.$buefy.toast.open({
-        message,
-        type: 'is-success',
-      });
-    },
     notifyError(message) {
       this.$buefy.toast.open({
         message,
@@ -127,4 +175,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.instrument-picture {
+  width: 156px;
+  height: 156px;
+  margin-right: 12px;
+}
+</style>

@@ -5,8 +5,8 @@
 // -----------------------------------------------------------------------------
 
 .o-section {
-  padding-top: 52px;
-  padding-bottom: 52px;
+  margin-top: 32px;
+  margin-bottom: 32px;
 }
 
 .o-section__head {
@@ -14,9 +14,14 @@
   justify-content: space-between;
   border-bottom: 1px solid $gray-darkest;
   padding-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .o-section__title {
   font-weight: 500;
   font-family: $font-primary;
+}
+
+.o-section__pictures {
+  display: flex;
 }
