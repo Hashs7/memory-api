@@ -68,7 +68,6 @@ export class AuthService {
     const user = await this.userService.findByUsernameOrEmail(
       authUserDTO.username,
     );
-    console.log('user', user);
 
     if (!user) {
       throw new UnauthorizedException('Utilisateur non trouvé');

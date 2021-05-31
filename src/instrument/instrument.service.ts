@@ -90,6 +90,16 @@ export class InstrumentService {
         },
       ]);
 
+    this.filterMemories(instrument, user);
+    this.rewriteMemories(instrument);
+
+    instrument.owner.thumbnail?.rewritePath();
+    instrument.image?.rewritePath();
+
+    return instrument;
+  }
+
+  filterMemories(instrument: Instrument, user: User) {
     if (!user || !instrument.owner.equals(user._id)) {
       instrument.memories = instrument.memories.filter((m) => {
         if (m.visibility == 'Public') {
@@ -97,8 +107,9 @@ export class InstrumentService {
         }
       });
     }
-    instrument.owner.thumbnail?.rewritePath();
-    instrument.image?.rewritePath();
+  }
+
+  rewriteMemories(instrument: Instrument) {
     instrument.memories = instrument.memories.map((m) => {
       m.contents = m.contents.map((c) => {
         if (c.type !== ContentType.Text) {
@@ -108,8 +119,6 @@ export class InstrumentService {
       });
       return m;
     });
-
-    return instrument;
   }
 
   /**
@@ -121,7 +130,24 @@ export class InstrumentService {
       .find({
         owner: user._id,
       })
-      .populate('image');
+      .populate([
+        'image',
+        {
+          path: 'memories',
+          // select: 'username',
+          populate: {
+            path: 'contents',
+            populate: {
+              path: 'file',
+              model: File.name,
+            },
+          },
+        },
+      ]);
+
+    userInstruments.forEach((ins) => this.filterMemories(ins, user));
+    userInstruments.forEach((ins) => this.rewriteMemories(ins));
+
     const oldInstruments = await this.instrumentModel
       .find({
         oldOwners: { $in: user._id },
