@@ -15,7 +15,7 @@
     <div class="memory-preview__body">
       <h4 class="memory-preview__name">{{ memory.name }}</h4>
       <p class="memory-preview__date">{{ memory.date }}</p>
-      <nuxt-link v-if="isOwner" :to="editLinkUrl" class="btn">
+      <nuxt-link v-if="editable && isOwner" :to="editLinkUrl" class="btn">
         Modifier
       </nuxt-link>
     </div>
@@ -45,6 +45,10 @@ export default {
         type: Date,
         required: true,
       },
+    },
+    editable: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

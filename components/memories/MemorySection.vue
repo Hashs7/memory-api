@@ -9,6 +9,7 @@
         :key="m._id"
         :link="true"
         :memory="m"
+        editable
       />
     </template>
     <template v-else>
