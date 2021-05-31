@@ -120,35 +120,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.o-page__header {
-  margin: 144px 0 64px 0;
-  padding: 0 72px;
-}
-
-.register__form {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.register__container {
-  flex-grow: 1;
-}
-
-.logo {
-  position: absolute;
-  top: 64px;
-  left: 0;
-  right: 0;
-  width: 64px;
-  margin: auto;
-}
-
-.form__actions {
-  .u-button {
-    width: 100%;
-  }
-}
-</style>

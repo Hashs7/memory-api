@@ -2,12 +2,14 @@
   <div class="o-page">
     <div class="o-page__header">
       <input class="o-page__search" type="text" placeholder="Rechercher" />
-      <div class="profile">
-        <NuxtLink to="/profil" class="">
-          <span v-if="!$auth.loggedIn">Profil</span>
-          <img v-else :src="profilePicture" alt="photo de profil" />
-        </NuxtLink>
-      </div>
+      <NuxtLink to="/profil" class="profile">
+        <span v-if="!$auth.loggedIn">Profil</span>
+        <img
+          v-if="profilePicture"
+          :src="profilePicture"
+          alt="photo de profil"
+        />
+      </NuxtLink>
     </div>
 
     <h1 class="o-page__title">Explorer</h1>
@@ -37,7 +39,7 @@ export default {
   },
   computed: {
     profilePicture() {
-      return this.$auth.user?.thumbnail.path;
+      return this.$auth.user?.thumbnail?.path;
     },
   },
 };

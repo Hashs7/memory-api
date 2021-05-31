@@ -93,6 +93,7 @@ export default {
     },
     meta: {
       mobileAppIOS: 'dark-content',
+      appleStatusBarStyle: 'black-translucent',
     },
   },
 

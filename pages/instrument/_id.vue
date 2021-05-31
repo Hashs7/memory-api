@@ -31,6 +31,10 @@
           <NuxtLink :to="handover" class="u-button u-button--primary"
             >Vendre</NuxtLink
           >
+
+          <NuxtLink :to="edit" class="u-button u-button--primary"
+            >Modifier les informations</NuxtLink
+          >
         </div>
         <div v-else class="instrument__not-owner">
           <button
@@ -82,6 +86,10 @@ export default {
       const { id } = this.$route.params;
       return `/instrument/${id}/passation`;
     },
+    edit() {
+      const { id } = this.$route.params;
+      return `/instrument/${id}/edit`;
+    },
     isOwner() {
       return this.instrument.owner._id === this.$auth.$state.user?._id;
     },
@@ -93,7 +101,7 @@ export default {
   methods: {
     async addToWish() {
       try {
-        const res = await this.$api.addInstrumentToWishlist(
+        const res = await this.$api.toggleInstrumentToWishlist(
           this.instrument._id
         );
         this.$auth.setUser(res.data);
@@ -117,6 +125,7 @@ export default {
 }
 .instrument__image-container {
   height: 100vw;
+  max-height: 500px;
 }
 .instrument__image {
   width: 100%;

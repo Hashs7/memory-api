@@ -12,8 +12,8 @@
       />
     </div>
     <div class="memory-preview__body">
-      <h4 class="memory-preview__name">{{ memory.name }}</h4>
-      <p class="memory-preview__date">{{ memory.date }}</p>
+      <h4 class="memory-preview__name">{{ data.name }}</h4>
+      <p class="memory-preview__date">{{ data.date }}</p>
     </div>
   </component>
 </template>
@@ -26,7 +26,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    memory: {
+    data: {
       type: Object,
       required: true,
 
@@ -43,14 +43,15 @@ export default {
   computed: {
     linkUrl() {
       const { id } = this.$route.params;
-      return `/instrument/${id}/souvenir/${this.memory._id}`;
+      return `/instrument/${id}/souvenir/${this.data._id}`;
     },
     user() {
       return this.$store.state.user;
     },
     thumbnail() {
-      const image = this.memory.contents.find((c) => c.type === 'media')?.file
+      const image = this.data.contents.find((c) => c.type === 'media')?.file
         .path;
+      console.log(this.data.contents);
       return image;
     },
   },

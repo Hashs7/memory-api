@@ -6,7 +6,9 @@
         :alt="`Photo de profil de ${user.firstName}`"
       />
     </div>
-    <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+    <h1 v-if="user.firstName || user.lastName">
+      {{ user.firstName }} {{ user.lastName }}
+    </h1>
     <p>@{{ user.username }}</p>
 
     <section class="">
@@ -50,7 +52,7 @@ export default {
           name: 'memories',
           class: 'memories',
           nav: 'Souvenirs',
-          component: 'InstrumentPreview',
+          component: 'MemoryPreview',
           data: [],
         },
       ],

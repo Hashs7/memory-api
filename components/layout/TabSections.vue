@@ -35,11 +35,13 @@
 
 <script>
 import InstrumentPreview from '../instrument/InstrumentPreview';
+import MemoryPreview from '../memories/MemoryPreview';
 
 export default {
   name: 'TabSections',
   components: {
     InstrumentPreview,
+    MemoryPreview,
   },
   props: {
     showIndex: {
