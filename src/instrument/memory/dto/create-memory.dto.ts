@@ -31,15 +31,6 @@ export class CreateMemoryDto {
   })
   visibility?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    title: 'User ObjectId',
-    example: '606300aa1642981aa1aaaa8e',
-    type: String,
-  })
-  createdBy: string;
-
   @IsOptional()
   @ApiProperty({
     title: 'Array of Users ObjectId',
