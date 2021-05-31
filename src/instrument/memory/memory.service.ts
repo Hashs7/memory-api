@@ -70,11 +70,11 @@ export class MemoryService {
    * @param createMemoryDto
    */
   async create(
-    userId: Schema.Types.ObjectId,
+    userId: User,
     instrument: string,
     createMemoryDto: CreateMemoryDto,
   ): Promise<Memory> {
-    const id = shortid.generate();
+    const shortId = shortid.generate();
     const { withUsers } = createMemoryDto;
     const users = (await this.userService.findUsers(withUsers)).map(
       (u) => u._id,
@@ -92,10 +92,10 @@ export class MemoryService {
 
     const memory = await this.memoryModel.create({
       ...createMemoryDto,
+      id: shortId,
       createdBy: userId,
       categories: categories,
       withUsers: users,
-      id,
       contents,
     });
     await this.instrumentService.addMemory(instrument, memory);
@@ -125,8 +125,6 @@ export class MemoryService {
     const categories = (
       await this.categoryService.findCategories(updateMemoryDto.categories)
     ).map((u) => u._id);
-
-    console.log(categories);
 
     if (!memory) {
       throw new NotFoundException("Le souvenir n'existe pas");
