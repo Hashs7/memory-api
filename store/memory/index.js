@@ -2,49 +2,49 @@ import { CONTENT_TYPE, emptyMemory } from '@/const/memory';
 
 // Add memory store
 export const state = () => ({
-  memory: { ...emptyMemory },
+  data: { ...emptyMemory },
 });
 
 export const getters = {
-  contents: (state) => state.memory.contents,
+  contents: (state) => state.data.contents,
 };
 
 export const mutations = {
   addContent(state, type) {
-    state.memory.contents.push(CONTENT_TYPE[type]);
+    state.data.contents.push(CONTENT_TYPE[type]);
   },
 
   updateName(state, value) {
-    state.memory.name = value;
+    state.data.name = value;
   },
 
   updateDate(state, value) {
-    state.memory.date = value;
+    state.data.date = value;
   },
 
   updateVisibility(state, value) {
-    state.memory.visibility = value;
+    state.data.visibility = value;
   },
 
   setMemory(state, memory) {
-    state.memory = { ...memory };
+    state.data = { ...memory };
   },
 
   updateContent(state, { index, value, file }) {
     if (value) {
-      state.memory.contents[index].content = value;
+      state.data.contents[index].content = value;
     }
     if (file) {
-      state.memory.contents[index].file = file;
+      state.data.contents[index].file = file;
     }
   },
 
   resetState(state) {
-    state.memory = { ...emptyMemory };
+    state.data = { ...emptyMemory };
   },
 
   removeContent(state, index) {
-    state.memory.contents.splice(index, 1);
+    state.data.contents.splice(index, 1);
   },
 
   selectTheme(state, slug) {
