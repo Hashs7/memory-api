@@ -43,13 +43,13 @@ class ApiController {
   }
 
   updateMemory(instrumentId, memoryId, payload) {
-    return this.$axios.patch(`/instrument/${instrumentId}/${memoryId}`, {
+    return this.$axios.patch(`/instrument/${instrumentId}/memory/${memoryId}`, {
       ...payload,
     });
   }
 
   getMemoryById(instrumentId, memoryId) {
-    return this.$axios.get(`/instrument/${instrumentId}/${memoryId}`);
+    return this.$axios.get(`/instrument/${instrumentId}/memory/${memoryId}`);
   }
 
   newInstrument(payload) {

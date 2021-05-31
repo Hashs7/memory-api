@@ -35,7 +35,7 @@ import { VISIBILITY } from '@/const/memory';
 import IconChevron from '~/assets/svg/ic_chevron.svg?inline';
 
 export default {
-  name: 'Confidentiality',
+  name: 'Visibility',
   components: {
     IconChevron,
   },

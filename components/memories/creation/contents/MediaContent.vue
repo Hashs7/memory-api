@@ -1,6 +1,9 @@
 <template>
   <div class="media-content">
-    <label v-if="showChoices" class="media-content__container">
+    <div v-if="previewSrc" class="preview">
+      <img :src="previewSrc" alt="" class="preview__img" />
+    </div>
+    <label v-else-if="showChoices" class="media-content__container">
       <IconMedia class="media-content__icon" />
       <input
         ref="file"
@@ -11,9 +14,6 @@
         @change="previewImg"
       />
     </label>
-    <div v-if="previewSrc" class="preview">
-      <img :src="previewSrc" alt="" class="preview__img" />
-    </div>
   </div>
 </template>
 
@@ -21,11 +21,15 @@
 import IconMedia from '@/assets/svg/ic_media.svg?inline';
 
 export default {
-  name: 'MediaCreation',
+  name: 'MediaContent',
   components: {
     IconMedia,
   },
   props: {
+    value: {
+      type: Object,
+      required: true,
+    },
     index: {
       type: Number,
       required: true,
@@ -39,7 +43,9 @@ export default {
     };
   },
   mounted() {
-    // this.$refs.file.click();
+    if (this.value && this.value.file) {
+      this.previewSrc = this.value.file.path;
+    }
   },
   methods: {
     previewImg() {

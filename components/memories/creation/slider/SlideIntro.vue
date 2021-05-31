@@ -18,7 +18,7 @@ export default {
   computed: {
     name: {
       get() {
-        return this.$store.state.memory.name;
+        return this.$store.state.memory.memory.name;
       },
       set(value) {
         this.$store.commit('memory/updateName', value);

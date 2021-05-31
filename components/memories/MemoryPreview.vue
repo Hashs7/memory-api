@@ -7,7 +7,7 @@
       </nuxt-link>
     </div>
   </nuxt-link>
-  <div v-else class="memory-preview">
+  <div v-else class="memory-preview" @click="$emit('click')">
     <div class="memory-preview__header">
       <h4 class="memory-preview__name">{{ memory.name }}</h4>
       <nuxt-link v-if="editable" to="">

@@ -1,12 +1,17 @@
 <template>
-  <div class="o-page">
-    <EditForm
-      :value="memory"
-      @input="onInput"
-      @back="onBack"
-      @submit="onSubmit"
-    />
-  </div>
+  <Summary
+    v-if="currentView === 'Summary'"
+    edit
+    @back="onBack"
+    @submit="onSubmit"
+    @open-form="currentView = 'ContentForm'"
+  />
+  <ContentForm
+    v-else-if="currentView === 'ContentForm'"
+    v-model="memory"
+    edit
+    @back="currentView = 'Summary'"
+  />
 </template>
 
 <router>
@@ -16,17 +21,24 @@
 </router>
 
 <script>
-import EditForm from '@/components/memories/creation/views/EditForm';
+import ContentForm from '@/components/memories/creation/views/ContentForm';
+import Summary from '@/components/memories/creation/views/Summary';
+import { mapState } from 'vuex';
+
 export default {
-  components: { EditForm },
+  components: { Summary, ContentForm },
   middleware: 'auth',
-  async asyncData({ $api, params }) {
+  async asyncData({ $api, store, params }) {
     const memory = (await $api.getMemoryById(params.id, params.memoryId))?.data;
+    await store.commit('memory/setMemory', memory);
+  },
+  data() {
     return {
-      memory,
+      currentView: 'Summary',
     };
   },
   computed: {
+    ...mapState('memory', ['memory']),
     instrumentId() {
       return this.$route.params.id;
     },
@@ -69,6 +81,10 @@ export default {
         params: { id: this.instrumentId },
       });
     },
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit('memory/resetState');
+    next();
   },
 };
 </script>

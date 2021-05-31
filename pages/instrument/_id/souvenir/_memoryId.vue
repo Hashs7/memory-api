@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     mediaType(file) {
-      return file.mimetype.split('/')[0];
+      return file?.mimetype.split('/')[0];
     },
 
     previous() {
