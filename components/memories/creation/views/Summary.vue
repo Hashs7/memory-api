@@ -10,7 +10,7 @@
       </button>
     </div>
     <div class="o-page__body">
-      <MemoryPreview :memory="memory" />
+      <MemoryPreview :data="memory" />
 
       <div class="o-cells">
         <label class="o-cells__label">Date</label>

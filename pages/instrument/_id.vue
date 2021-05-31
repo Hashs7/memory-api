@@ -117,6 +117,7 @@ export default {
 }
 .instrument__image-container {
   height: 100vw;
+  max-height: 500px;
 }
 .instrument__image {
   width: 100%;

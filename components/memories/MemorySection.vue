@@ -8,7 +8,7 @@
         v-for="m in memories"
         :key="m._id"
         :link="true"
-        :memory="m"
+        :data="m"
       />
     </template>
     <template v-else>

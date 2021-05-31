@@ -47,7 +47,9 @@ export default {
       e.preventDefault();
       const formData = new FormData(this.$refs.form);
       const file = this.$refs.files.dropFiles;
-      formData.append('thumbnail', file);
+      if (file) {
+        formData.append('thumbnail', file);
+      }
       try {
         await this.$api.updateUser(formData);
         this.notifyCreated();
