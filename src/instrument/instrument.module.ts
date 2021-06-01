@@ -8,6 +8,7 @@ import { File, FileSchema } from '../file/file.schema';
 import { FileService } from '../file/file.service';
 import { UserService } from '../user/user.service';
 import { User, UserSchema } from '../user/user.schema';
+import { OldOwner, OldOwnerSchema } from './oldowner/oldowner.schema';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { User, UserSchema } from '../user/user.schema';
     MongooseModule.forFeature([
       { name: File.name, schema: FileSchema },
       { name: User.name, schema: UserSchema },
+      { name: OldOwner.name, schema: OldOwnerSchema },
       { name: Instrument.name, schema: InstrumentSchema },
     ]),
   ],
