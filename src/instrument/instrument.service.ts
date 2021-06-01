@@ -45,7 +45,7 @@ export class InstrumentService {
       .select('-_id -memories -__v')
       .populate([
         'owner',
-        'image',
+        'images',
         {
           path: 'owner',
           select: 'username -_id',
@@ -67,7 +67,7 @@ export class InstrumentService {
       .select('-__v')
       .populate([
         'owner',
-        'image',
+        'images',
         {
           path: 'memories',
           select: 'username',
@@ -96,7 +96,7 @@ export class InstrumentService {
       });
     }
     instrument.owner.thumbnail?.rewritePath();
-    instrument.image?.rewritePath();
+    instrument.images?.map((i) => i.rewritePath());
     instrument.memories = instrument.memories.map((m) => {
       m.contents = m.contents.map((c) => {
         if (c.type !== ContentType.Text) {
@@ -110,19 +110,70 @@ export class InstrumentService {
     return instrument;
   }
 
+  filterMemories(instrument: Instrument, user: User) {
+    if (!user || !instrument.owner.equals(user._id)) {
+      instrument.memories = instrument.memories.filter((m) => {
+        if (m.visibility == 'Public') {
+          return m;
+        }
+      });
+    }
+  }
+
+  rewriteMemories(instrument: Instrument) {
+    instrument.memories = instrument.memories.map((m) => {
+      m.contents = m.contents.map((c) => {
+        if (c.type !== ContentType.Text) {
+          c.file?.rewritePath();
+        }
+        return c;
+      });
+      return m;
+    });
+  }
+
   /**
    * Find user instruments
    * @param user
    */
   async findForUser(user: User) {
-    const userInstruments = await this.instrumentModel.find({
-      owner: user._id,
-    });
-    const oldInstruments = await this.instrumentModel.find({
-      oldOwners: { $in: user._id },
-    });
-    const wishInstruments = await this.instrumentModel.find({
-      _id: { $in: user.wishList },
+    const userInstruments = await this.instrumentModel
+      .find({
+        owner: user._id,
+      })
+      .populate([
+        'images',
+        {
+          path: 'memories',
+          // select: 'username',
+          populate: {
+            path: 'contents',
+            populate: {
+              path: 'file',
+              model: File.name,
+            },
+          },
+        },
+      ]);
+
+    userInstruments.forEach((ins) => this.filterMemories(ins, user));
+    userInstruments.forEach((ins) => this.rewriteMemories(ins));
+
+    const oldInstruments = await this.instrumentModel
+      .find({
+        oldOwners: { $in: user._id },
+      })
+      .populate('images');
+    const wishInstruments = await this.instrumentModel
+      .find({
+        _id: { $in: user.wishList },
+      })
+      .populate('images');
+
+    [userInstruments, oldInstruments, wishInstruments].forEach((arr) => {
+      arr.forEach((instrument) => {
+        instrument.images?.map((i) => i?.rewritePath());
+      });
     });
 
     return {

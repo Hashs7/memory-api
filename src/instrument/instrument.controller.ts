@@ -60,8 +60,7 @@ export class InstrumentController {
 
   @Get(':id')
   // @UseInterceptors(ClassSerializerInterceptor)
-  // @AllowAny()
-  @UseGuards(AuthGuard('jwt'))
+  @AllowAny()
   @ApiResponse({
     status: 200,
     type: Instrument,
