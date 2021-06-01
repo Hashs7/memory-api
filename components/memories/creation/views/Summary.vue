@@ -87,8 +87,8 @@ export default {
       },
     },
     visibilityItem() {
-      if (!this.visibility) return null;
-      return VISIBILITY[this.visibility];
+      if (!this.memory.visibility) return null;
+      return VISIBILITY[this.memory.visibility];
     },
   },
   methods: {

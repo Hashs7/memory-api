@@ -58,22 +58,23 @@ export default {
         });
         this.createdHandler();
       } catch (e) {
-        throw new Error(e);
+        this.notifyError();
       }
     },
 
     // Instrument created callback
     createdHandler() {
-      this.$buefy.toast.open({
-        message: "Le souvenir vient d'être créé",
-        type: 'is-success',
+      this.$router.push({
+        name: 'instrument-id',
+        params: { id: this.instrumentId },
       });
-      setTimeout(() => {
-        this.$router.push({
-          name: 'instrument-id',
-          params: { id: this.instrumentId },
-        });
-      }, 1000);
+    },
+
+    notifyError() {
+      this.$buefy.toast.open({
+        message: 'Le souvenir',
+        type: 'is-danger',
+      });
     },
   },
 };
