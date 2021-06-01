@@ -35,25 +35,16 @@
         <label class="o-cells__label">Confidentialité</label>
         <div class="o-cells__container">
           <button class="o-cells__item" @click="$emit('params')">
-            <span v-if="!visibilityItem"
-              >Choisissez qui peut voir le souvenir</span
-            >
+            <span v-if="!visibilityItem">
+              Choisissez qui peut voir le souvenir
+            </span>
             <span v-else class="o-cells__item-content">
               <span class="o-cells__item-text">{{ visibilityItem.text }}</span>
-              <span class="o-cells__item-help">{{
-                visibilityItem.helper
-              }}</span>
+              <span class="o-cells__item-help">
+                {{ visibilityItem.helper }}
+              </span>
             </span>
           </button>
-        </div>
-      </div>
-
-      <div v-if="!edit" class="o-cells">
-        <label class="o-cells__label">Partager</label>
-        <div class="o-cells__container">
-          <button class="o-cells__item">Facebook</button>
-          <button class="o-cells__item">Instagram</button>
-          <button class="o-cells__item">Twitter</button>
         </div>
       </div>
     </div>
@@ -61,7 +52,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import { VISIBILITY } from '@/const/memory';
 import MemoryPreview from '../../MemoryPreview';
 import IconChevron from '~/assets/svg/ic_chevron.svg?inline';
@@ -79,14 +70,7 @@ export default {
     },
   },
   computed: {
-    memory: {
-      get() {
-        return this.$store.state.memory.data;
-      },
-      set(value) {
-        this.$store.commit('memory/updateMemory', value);
-      },
-    },
+    ...mapState('memory', { memory: 'data' }),
     visibilityItem() {
       if (!this.visibility) return null;
       return VISIBILITY[this.visibility];

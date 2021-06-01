@@ -29,25 +29,20 @@ export const CONTENT_TYPE = {
 };
 
 export const VISIBILITY = {
-  private: {
-    slug: 'private',
-    text: 'Moi seulement',
-    helper: 'Vous seul pouvez voir ce souvenir',
+  Private: {
+    slug: 'Private',
+    label: 'Moi seulement',
+    helper: 'Vous êtes le seul à voir le memory',
   },
-  unlisted: {
-    slug: 'unlisted',
-    text: 'Non répertorié',
-    helper: 'Seul les personnes disposant du lien y ont accès',
+  UrlOnly: {
+    slug: 'UrlOnly',
+    label: 'Lien seulement',
+    helper: 'Seuls les utilisateurs qui possèdent le lien',
   },
-  fans: {
-    slug: 'fans',
-    text: 'Fans seulement',
-    helper: 'Seuls vos amis pourront voir ce souvenir',
-  },
-  public: {
-    slug: 'public',
-    text: 'Tout le monde',
-    helper: 'Votre souvenir est publique',
+  Public: {
+    slug: 'Public',
+    label: 'Tout le monde',
+    helper: 'Tous les  utilisateurs de Memory Motel',
   },
 };
 
