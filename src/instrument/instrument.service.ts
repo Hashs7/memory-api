@@ -19,6 +19,8 @@ import { File } from '../file/file.schema';
 import { ContentType } from './memory/content/content.schema';
 import { randomBytes } from 'crypto';
 import { UserService } from '../user/user.service';
+import { OldOwner } from './oldowner/oldowner.schema';
+import slugify from 'slugify';
 
 @Injectable()
 export class InstrumentService {
@@ -152,6 +154,32 @@ export class InstrumentService {
     createInstrumentDto: CreateInstrumentDto,
     file?: Express.Multer.File,
   ) {
+    const instrumentUsers = await Promise.all([
+      ...createInstrumentDto.oldOwnersUser.map((o) => {
+        if (typeof o.user === 'string') {
+          return this.userService.findUser(o.user);
+        }
+        return o.user;
+      }),
+    ]);
+
+    const oldOwnersUser: OldOwner[] = createInstrumentDto.oldOwnersUser.reduce(
+      (acc, cur) => {
+        const user = instrumentUsers.find((user) => user._id.equals(cur.user));
+        // @ts-ignore
+        cur.user = {
+          _id: user._id,
+          email: user.email,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          thumbnail: user.thumbnail,
+        };
+        return [...acc, { ...cur }];
+      },
+      [],
+    );
+    delete createInstrumentDto.oldOwnersUser;
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
@@ -159,6 +187,7 @@ export class InstrumentService {
         image: (await this.fileService.create(file, user._id))._id,
       }),
       id,
+      oldOwnersUser,
       owner: user._id,
       memories: [],
     });
@@ -234,13 +263,13 @@ export class InstrumentService {
       throw new UnauthorizedException('La passation a expiré');
     }
 
-    instrument.handoverToken = null;
+    /*instrument.handoverToken = null;
     instrument.handoverExpire = null;
     if (!instrument.oldOwners.includes(instrument.owner)) {
       instrument.oldOwners.push(instrument.owner);
     }
     instrument.owner = user._id;
-    await instrument.save();
+    await instrument.save();*/
 
     return instrument;
   }

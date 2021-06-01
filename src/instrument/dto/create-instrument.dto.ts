@@ -1,5 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
+import { OldOwner } from '../oldowner/oldowner.schema';
+import {
+  CreateOldownerDto,
+  CreateOldownerUserDto,
+} from '../oldowner/dto/create-oldowner.dto';
 
 export class CreateInstrumentDto {
   @IsString()
@@ -60,4 +65,12 @@ export class CreateInstrumentDto {
   @IsOptional()
   @ApiPropertyOptional()
   status?: string;
+
+  @IsOptional()
+  @ApiProperty()
+  oldOwnersUser?: CreateOldownerUserDto[];
+
+  @IsOptional()
+  @ApiProperty()
+  oldOwners?: CreateOldownerDto[];
 }

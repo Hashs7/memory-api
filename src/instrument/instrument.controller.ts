@@ -15,6 +15,7 @@ import {
 import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
+import { CreateOldownerDto } from './oldowner/dto/create-oldowner.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../user/auth/get-user.decorator';
 import { User } from '../user/user.schema';

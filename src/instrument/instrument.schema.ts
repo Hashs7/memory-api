@@ -6,6 +6,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Memory } from './memory/memory.schema';
 import { IsArray } from 'class-validator';
 import { Exclude } from 'class-transformer';
+import { MemoryContent } from './memory/content/content.schema';
+import { OldOwner } from './oldowner/oldowner.schema';
 
 @Schema()
 export class Instrument extends Document {
@@ -106,12 +108,23 @@ export class Instrument extends Document {
   @ApiProperty({ type: User })
   owner: User;
 
-  @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: User.name,
+  @IsArray()
+  @Prop([OldOwner])
+  @ApiProperty({
+    type: [OldOwner],
   })
-  @ApiProperty({ type: [User] })
-  oldOwners: User[];
+  oldOwnersUser: OldOwner[];
+
+  @IsArray()
+  @Prop()
+  @ApiProperty()
+  oldOwners: [
+    {
+      firstName: string;
+      lastName: string;
+    },
+  ];
+
   /*
   @Prop({
     type: [MongooseSchema.Types.ObjectId],
