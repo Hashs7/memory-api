@@ -9,9 +9,9 @@ import { MemoryCategory } from './category/category.schema';
 const timestamps2 = require('mongoose-timestamp2');
 
 export enum MemoryVisibility {
-  Private = 'Private',
-  UrlOnly = 'UrlOnly',
-  Public = 'Public',
+  Private = 'private',
+  Unlisted = 'unlisted',
+  Public = 'public',
 }
 
 @Schema()

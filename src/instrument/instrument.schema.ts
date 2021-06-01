@@ -35,12 +35,12 @@ export class Instrument extends Document {
   buyDate: Date;
 
   @Prop({
-    type: MongooseSchema.Types.ObjectId,
+    type: [MongooseSchema.Types.ObjectId],
     ref: File.name,
     required: false,
   })
   @ApiProperty({ type: File })
-  image: File;
+  images: File[];
 
   @Prop()
   @ApiProperty({

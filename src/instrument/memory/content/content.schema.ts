@@ -4,8 +4,8 @@ import { File } from '../../../file/file.schema';
 import { Schema as MongooseSchema, Types } from 'mongoose';
 
 export enum ContentType {
-  Video = 'video',
-  Image = 'image',
+  Video = 'media',
+  Image = 'media',
   Audio = 'audio',
   Text = 'text',
 }

@@ -134,26 +134,7 @@ export class MemoryService {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }
 
-    await this.instrumentModel
-      .findOneAndUpdate(
-        {
-          id: instrumentId,
-          'memories.id': id,
-        },
-        {
-          $set: {
-            'memories.$': {
-              ...updateMemoryDto,
-            },
-          },
-        },
-        {},
-      )
-      .exec();
-
-    delete updateMemoryDto.withUsers;
-
-    return this.memoryModel
+    const updatedMemory = await this.memoryModel
       .findOneAndUpdate(
         { id: id },
         {
@@ -168,6 +149,27 @@ export class MemoryService {
         },
       )
       .exec();
+
+    await this.instrumentModel
+      .findOneAndUpdate(
+        {
+          id: instrumentId,
+          'memories.id': id,
+        },
+        {
+          $set: {
+            'memories.$': updatedMemory,
+          },
+        },
+        {
+          useFindAndModify: false,
+        },
+      )
+      .exec();
+
+    // delete updateMemoryDto.withUsers;
+
+    return updatedMemory;
   }
 
   /**
