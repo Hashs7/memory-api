@@ -83,7 +83,7 @@ export class InstrumentService {
         },
         {
           path: 'owner',
-          select: 'username',
+          select: 'username firstName lastName',
           populate: {
             path: 'thumbnail',
           },
@@ -250,6 +250,7 @@ export class InstrumentService {
       [],
     );
     delete createInstrumentDto.oldOwnersUser;
+
     const id = shortid.generate();
     const instrument = await this.instrumentModel.create({
       ...createInstrumentDto,
@@ -261,6 +262,8 @@ export class InstrumentService {
       owner: user._id,
       memories: [],
     });
+
+    instrument.lastHandoverDate = instrument.buyDate;
 
     const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
     const img: string = await qrcode.toDataURL(url);
@@ -333,10 +336,11 @@ export class InstrumentService {
       throw new UnauthorizedException('La passation a expiré');
     }
 
-    /*instrument.handoverToken = null;
+    instrument.handoverToken = null;
     instrument.handoverExpire = null;
-    if (!instrument.oldOwners.includes(instrument.owner)) {
-      instrument.oldOwners.push(instrument.owner);
+
+    /*if (!instrument.oldOwnersUser.includes(instrument.owner)) {
+      instrument.oldOwnersUser.push({});
     }
     instrument.owner = user._id;
     await instrument.save();*/

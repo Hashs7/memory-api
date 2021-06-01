@@ -6,9 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Memory } from './memory/memory.schema';
 import { IsArray } from 'class-validator';
 import { Exclude } from 'class-transformer';
-import { MemoryContent } from './memory/content/content.schema';
 import { OldOwner } from './oldowner/oldowner.schema';
-import { Interface } from 'readline';
 
 @Schema()
 export class Instrument extends Document {
@@ -34,6 +32,12 @@ export class Instrument extends Document {
     description: "Date d'obtention de l'instrument (mois prêt)",
   })
   buyDate: Date;
+
+  @Prop()
+  @ApiProperty({
+    description: 'Date de dernière passation',
+  })
+  lastHandoverDate: Date;
 
   @Prop({
     type: [MongooseSchema.Types.ObjectId],
