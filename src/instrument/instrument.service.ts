@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
-import { Instrument } from './instrument.schema';
+import { Instrument, OldOwnerInterface } from './instrument.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
@@ -97,6 +97,7 @@ export class InstrumentService {
         }
       });
     }
+
     instrument.owner.thumbnail?.rewritePath();
     instrument.images?.map((i) => i.rewritePath());
     instrument.memories = instrument.memories.map((m) => {
@@ -109,7 +110,25 @@ export class InstrumentService {
       return m;
     });
 
+    instrument.oldOwnersUser = this.sortOldowners(
+      instrument.oldOwnersUser,
+      instrument.oldOwners,
+    );
+    instrument.oldOwners = undefined;
+
     return instrument;
+  }
+
+  sortOldowners(oldOwnersUser: OldOwner[], oldOwners: OldOwnerInterface[]) {
+    // @ts-ignore
+    const oldOwnersConcat = oldOwnersUser.concat(oldOwners);
+
+    oldOwnersConcat.sort(function (a, b) {
+      // @ts-ignore
+      return new Date(b.to) - new Date(a.to);
+    });
+
+    return oldOwnersConcat;
   }
 
   filterMemories(instrument: Instrument, user: User) {

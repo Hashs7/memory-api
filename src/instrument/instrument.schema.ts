@@ -8,6 +8,7 @@ import { IsArray } from 'class-validator';
 import { Exclude } from 'class-transformer';
 import { MemoryContent } from './memory/content/content.schema';
 import { OldOwner } from './oldowner/oldowner.schema';
+import { Interface } from 'readline';
 
 @Schema()
 export class Instrument extends Document {
@@ -120,32 +121,14 @@ export class Instrument extends Document {
   @ApiProperty()
   oldOwners: [
     {
-      firstName: string;
-      lastName: string;
+      user: {
+        firstName: string;
+        lastName: string;
+      };
+      from: Date;
+      to: Date;
     },
   ];
-
-  /*
-  @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: User.name,
-  })
-  @Prop(
-    raw([
-      {
-        user: { type: MongooseSchema.Types.ObjectId, ref: User.name },
-        date: { type: Date },
-      },
-    ]),
-  )
-  @ApiProperty({ type: [User] })
-  oldOwners: [
-    {
-      user: User;
-      date: Date;
-    },
-  ];
-  */
 
   @IsArray()
   @Prop([Memory])
@@ -161,6 +144,15 @@ export class Instrument extends Document {
   @Prop()
   @Exclude()
   handoverExpire: Date;
+}
+
+export interface OldOwnerInterface {
+  user: {
+    firstName;
+    lastName;
+  };
+  from;
+  to;
 }
 
 export const InstrumentSchema = SchemaFactory.createForClass(Instrument);
