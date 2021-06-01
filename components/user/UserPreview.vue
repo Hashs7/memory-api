@@ -6,7 +6,7 @@
         :alt="`Photo de profil de ${user.firstName}`"
       />
     </div>
-    <div v-if="user.firstName || user.lastName" class="user__infos">
+    <div v-if="name" class="user__infos">
       {{ name }}
     </div>
   </NuxtLink>
@@ -51,8 +51,8 @@ export default {
     },
     name() {
       let txt = '';
-      if (!this.user.firstName && this.user.lastName) {
-        return this.user.username;
+      if (!this.user.firstName && !this.user.lastName) {
+        return `@${this.user.username}`;
       }
       if (this.user.firstName) {
         txt += this.user.firstName;
@@ -62,6 +62,7 @@ export default {
         return txt;
       }
       txt += ` ${this.user.lastName}`;
+      console.log(this.user);
       return txt;
     },
   },

@@ -1,6 +1,5 @@
 <template>
   <div class="gallery">
-    <h3>Galerie</h3>
     <div class="gallery__container">
       <GalleryMedia
         v-for="m in medias"
@@ -9,6 +8,7 @@
         :selectable="true"
       />
     </div>
+    <button class="u-button u-button--outline">Importer une photo</button>
   </div>
 </template>
 

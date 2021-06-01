@@ -54,6 +54,11 @@ export default {
         type: String,
         required: true,
       },
+
+      images: {
+        type: Array,
+        default: () => [],
+      },
     },
   },
   computed: {

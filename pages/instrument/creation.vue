@@ -22,6 +22,9 @@ export default {
       showSurvey: false,
     };
   },
+  created() {
+    this.$store.commit('instrument/resetState');
+  },
 };
 </script>
 

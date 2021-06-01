@@ -1,38 +1,64 @@
 <template>
   <div class="o-page">
-    <h1 class="o-page__title">Nouveau</h1>
+    <h1 class="o-page__title">Ajouter</h1>
 
-    <div class="action" role="button" @click="newInstant">
-      <h3 class="action__title">Capturer un moment</h3>
-      <p class="action__description">
-        Cum abnoba manducare, omnes menses examinare magnum, superbus terrores.
-      </p>
-      <input
-        ref="file"
-        class="media-content__input"
-        type="file"
-        accept="audio/*,video/*,image/*"
-        style="opacity: 0"
-        @change="previewImg"
-      />
-    </div>
+    <section class="">
+      <TabSections :sections="sections">
+        <template v-slot:section0>
+          <div class="action" role="button" @click="newInstant">
+            <h3 class="action__title">Capturer un moment</h3>
+            <p class="action__description">
+              Cum abnoba manducare, omnes menses examinare magnum, superbus
+              terrores.
+            </p>
+            <input
+              ref="file"
+              class="media-content__input"
+              type="file"
+              accept="audio/*,video/*,image/*"
+              style="opacity: 0"
+              @change="previewImg"
+            />
+          </div>
 
-    <div class="action" role="button" @click="newMemory">
-      <h3 class="action__title">Écrire un souvenir</h3>
-      <p class="action__description">Heu, secundus abaculus!</p>
-    </div>
-
-    <Gallery />
+          <div class="action" role="button" @click="newMemory">
+            <h3 class="action__title">Écrire un souvenir</h3>
+            <p class="action__description">Heu, secundus abaculus!</p>
+          </div>
+        </template>
+        <template v-slot:section1>
+          <Gallery />
+        </template>
+      </TabSections>
+    </section>
   </div>
 </template>
 
 <script>
 import Gallery from '../components/user/gallery/Gallery';
+import TabSections from '../components/layout/TabSections';
 
 export default {
   name: 'Capture',
   components: {
+    TabSections,
     Gallery,
+  },
+  data() {
+    return {
+      sections: [
+        {
+          name: 'new',
+          class: 'new',
+          nav: 'Nouveau',
+        },
+        {
+          name: 'memories',
+          class: 'memories',
+          nav: 'Galerie',
+        },
+      ],
+    };
   },
   methods: {
     newMemory() {

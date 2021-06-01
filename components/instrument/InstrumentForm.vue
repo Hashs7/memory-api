@@ -13,12 +13,14 @@
             <IconAdd />
             <button>Ajouter</button>
           </div>
-          <div
-            v-for="img in data.images"
-            :key="img._id"
-            class="instrument-picture"
-          >
-            <img :src="img.path" alt="" />
+          <div v-if="data" class="">
+            <div
+              v-for="img in data.images"
+              :key="img._id"
+              class="instrument-picture"
+            >
+              <img :src="img.path" alt="" />
+            </div>
           </div>
         </vue-scroll>
       </div>
@@ -77,7 +79,9 @@
       <div class="o-section__head">
         <h4 class="o-section__title">Détails</h4>
       </div>
-      <div class=""></div>
+      <div class="">
+        <ColorsSelector />
+      </div>
     </section>
 
     <section class="o-section">
@@ -88,34 +92,27 @@
     </section>
 
     <button type="submit" class="u-button u-button--primary">
-      {{ data ? 'Modifier' : 'Ajouter' }}
+      {{ newInstrument ? 'Ajouter' : 'Modifier' }}
     </button>
   </form>
 </template>
 
 <script>
-// import FileUpload from '@/components/FileUpload';
+import { mapState } from 'vuex';
+import FileUpload from '@/components/FileUpload';
 import IconAdd from '@/assets/svg/ic_add.svg?inline';
+import ColorsSelector from './ColorsSelector';
 
 export default {
   name: 'InstrumentForm',
   components: {
-    // FileUpload,
+    ColorsSelector,
+    FileUpload,
     IconAdd,
   },
   middleware: 'auth',
-  props: {
-    data: {
-      type: Object,
-      default: () => {},
-    },
-  },
   data() {
     return {
-      name: '',
-      type: '',
-      specification: '',
-      brand: '',
       ops: {
         vuescroll: {
           locking: true,
@@ -126,45 +123,75 @@ export default {
       },
     };
   },
-  created() {
-    if (!this.data) return;
-    this.prefill();
+  computed: {
+    ...mapState('instrument', ['data']),
+    newInstrument() {
+      return !this.$route.params.id;
+    },
+    name: {
+      get() {
+        return this.data.name;
+      },
+      set(value) {
+        this.$store.commit('instrument/updateProps', { prop: 'name', value });
+      },
+    },
+    type: {
+      get() {
+        return this.data.type;
+      },
+      set(value) {
+        this.$store.commit('instrument/updateProps', { prop: 'type', value });
+      },
+    },
+    specification: {
+      get() {
+        return this.data.specification;
+      },
+      set(value) {
+        this.$store.commit('instrument/updateProps', {
+          prop: 'specification',
+          value,
+        });
+      },
+    },
+    brand: {
+      get() {
+        return this.data.brand;
+      },
+      set(value) {
+        this.$store.commit('instrument/updateProps', { prop: 'brand', value });
+      },
+    },
   },
   methods: {
-    prefill() {
-      ['name', 'type', 'specification', 'brand'].forEach((el) => {
-        this[el] = this.data[el];
-      });
-    },
-
     // Form submitted event
     submit(e) {
       e.preventDefault();
       const formData = new FormData(this.$refs.form);
-      if (this.$refs.files.dropFiles) {
-        const file = this.$refs.files.dropFiles[0];
-        formData.append('image', file);
+      const file = this.$refs.files.dropFiles;
+      if (file) {
+        formData.append('images', file);
       }
 
-      if (this.data) {
-        this.updateInstrument(formData);
-      } else {
+      if (this.newInstrument) {
         this.createInstrument(formData);
+        return;
       }
-
-      this.redirect();
+      this.updateInstrument(formData);
     },
 
-    redirect() {
+    redirect(id) {
       this.$router.push({
         name: 'instrument-id',
-        params: { id: this.data.id },
+        params: { id },
       });
     },
 
     async createInstrument(form) {
       try {
-        await this.$api.newInstrument(form);
+        const res = await this.$api.newInstrument(form);
+        this.redirect(res.data.id);
       } catch (e) {
         this.notifyError("L'instrument n'a pas été créé");
       }
@@ -173,6 +200,7 @@ export default {
     async updateInstrument(form) {
       try {
         await this.$api.updateInstrument(this.data.id, form);
+        this.redirect(this.data.id);
       } catch (e) {
         this.notifyError("L'instrument n'a pas été mis à jour");
       }

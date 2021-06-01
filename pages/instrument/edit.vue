@@ -14,8 +14,9 @@ import InstrumentForm from '@/components/instrument/InstrumentForm';
 
 export default {
   components: { InstrumentForm },
-  async asyncData({ $api, params }) {
+  async asyncData({ $api, store, params }) {
     const instrument = (await $api.getInstrumentById(params.id))?.data;
+    store.commit('instrument/setInstrumentData', instrument);
     return {
       instrument,
     };

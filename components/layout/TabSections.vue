@@ -27,6 +27,7 @@
             :key="d.id"
             :data="d"
           />
+          <slot :name="`section${i}`"></slot>
         </div>
       </section>
     </div>
