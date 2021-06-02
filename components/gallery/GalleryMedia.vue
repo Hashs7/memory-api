@@ -2,10 +2,10 @@
   <div
     ref="media"
     :class="{ selected }"
-    class="gallery__media"
+    class="gallery-media"
     @click="$emit('select')"
   >
-    <img class="gallery__media-img" :src="media.path" alt="" />
+    <img class="gallery-media__img" :src="media.path" alt="" />
   </div>
 </template>
 
@@ -55,9 +55,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gallery__media {
+.gallery-media {
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 
   &.selected:after {
     content: '';
@@ -82,7 +83,7 @@ export default {
   }*/
 }
 
-.gallery__media-img {
+.gallery-media__img {
   object-fit: cover;
   object-position: center;
   position: absolute;

@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import GalleryMedia from './GalleryMedia';
 import MediaPreview from './MediaPreview';
+import GalleryMedia from './GalleryMedia';
 
 export default {
   name: 'Gallery',
-  components: { MediaPreview, GalleryMedia },
+  components: { GalleryMedia, MediaPreview },
   props: {
     preview: {
       type: Boolean,

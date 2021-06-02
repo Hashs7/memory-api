@@ -197,20 +197,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.instrument-picture {
-  width: 156px;
-  height: 156px;
-  margin-right: 12px;
-  overflow: hidden;
-
-  &.add {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border: 1px solid $black;
-  }
-}
-</style>

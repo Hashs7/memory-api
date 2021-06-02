@@ -8,6 +8,9 @@
           class="instrument-picture"
         >
           <img :src="img.path" alt="" />
+          <button class="instrument-picture__remove" @click="remove(img._id)">
+            x
+          </button>
         </div>
       </template>
       <div class="instrument-picture add" @click="$emit('showGallery')">
@@ -42,6 +45,11 @@ export default {
   computed: {
     ...mapState('instrument', ['data']),
   },
+  methods: {
+    remove(_id) {
+      this.$store.commit('instrument/removeImage', _id);
+    },
+  },
 };
 </script>
 
@@ -50,6 +58,29 @@ export default {
   .__view {
     display: flex;
     padding: 0 16px 8px 16px;
+  }
+}
+
+.instrument-picture {
+  position: relative;
+  width: 156px;
+  height: 156px;
+  margin-right: 12px;
+  overflow: hidden;
+
+  &.add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid $black;
+  }
+
+  .instrument-picture__remove {
+    z-index: 5;
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 }
 </style>
