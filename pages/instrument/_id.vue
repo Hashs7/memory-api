@@ -1,9 +1,7 @@
 <template>
   <div class="instrument">
     <div v-if="instrument">
-      <div v-if="thumbnail" class="instrument__image-container">
-        <img class="instrument__image" :src="thumbnail" alt="" />
-      </div>
+      <ImagesCarousel v-if="thumbnail" :data="instrument.images" />
       <div class="instrument__container o-page__container">
         <div class="instrument__head">
           <h1 class="instrument__title">{{ instrument.name }}</h1>
@@ -25,16 +23,16 @@
 
         <div v-if="isOwner">
           <NuxtLink :to="addMemory" class="u-button u-button--primary"
-            >Ajouter un souvenir</NuxtLink
-          >
+            >Ajouter un souvenir
+          </NuxtLink>
 
           <NuxtLink :to="handover" class="u-button u-button--primary"
-            >Vendre</NuxtLink
-          >
+            >Vendre
+          </NuxtLink>
 
           <NuxtLink :to="edit" class="u-button u-button--primary"
-            >Modifier les informations</NuxtLink
-          >
+            >Modifier les informations
+          </NuxtLink>
         </div>
         <div v-else class="instrument__not-owner">
           <button
@@ -60,9 +58,10 @@
 <script>
 import UserPreview from '../../components/user/UserPreview';
 import MemorySection from '../../components/memories/MemorySection';
+import ImagesCarousel from '../../components/instrument/ImagesCarousel';
 
 export default {
-  components: { MemorySection, UserPreview },
+  components: { ImagesCarousel, MemorySection, UserPreview },
   layout(ctx) {
     let layout = 'default';
     if (ctx.route.params.memoryId) {
@@ -122,29 +121,23 @@ export default {
   z-index: 1;
   padding-top: 22px;
 }
+
 .instrument__head {
   text-align: center;
   margin-bottom: 20px;
 }
-.instrument__image-container {
-  height: 100vw;
-  max-height: 500px;
-}
-.instrument__image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
+
 .instrument__title {
   font-size: 26px;
 }
+
 .instrument__description {
   margin-top: 4px;
   font-size: 16px;
   font-weight: 400;
   font-family: $font-primary;
 }
+
 .instrument__owner {
   text-align: center;
   margin-bottom: 20px;

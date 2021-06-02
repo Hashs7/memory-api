@@ -31,6 +31,7 @@ export default {
   plugins: [
     { src: '~/plugins/ApiService.js' },
     { src: '~/plugins/vue-scroll.js' },
+    { src: '~/plugins/carousel.js' /* mode: 'client' */ },
     { src: '~/plugins/hammer.js', mode: 'client' },
     { src: '~/plugins/audio-recorder.js', mode: 'client' },
     { src: '~/plugins/wysiwyg.js', mode: 'client' },
