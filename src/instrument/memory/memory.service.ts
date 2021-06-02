@@ -36,7 +36,10 @@ export class MemoryService {
    * @param user
    */
   async findAll(instrumentId: string, user?: User): Promise<Memory[]> {
-    const instrument = await this.instrumentService.findOne(instrumentId, user);
+    const instrument = await this.instrumentService.findOnePopulate(
+      instrumentId,
+      user,
+    );
     return instrument.memories;
   }
 
@@ -117,7 +120,7 @@ export class MemoryService {
     updateMemoryDto: UpdateMemoryDto,
   ): Promise<Memory> {
     const memory = await this.memoryModel.findOne({ id });
-    const instrument = await this.instrumentService.findOne(instrumentId, user);
+    const instrument = await this.instrumentService.findOne(instrumentId);
     const withUsers = (
       await this.userService.findUsers(updateMemoryDto.withUsers)
     ).map((u) => u._id);
@@ -179,8 +182,8 @@ export class MemoryService {
    * @param instrumentId
    */
   async remove(user: User, id: string, instrumentId: string) {
-    const instrument = await this.instrumentService.findOne(instrumentId, user);
-    // @ts-ignore
+    const instrument = await this.instrumentService.findOne(instrumentId);
+
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }

@@ -58,12 +58,16 @@ export class InstrumentService {
       ]);
   }
 
+  async findOne(id: string) {
+    return await this.instrumentModel.findOne({ id });
+  }
+
   /**
    * Find one instrument with id
    * @param id
    * @param user
    */
-  async findOne(id: string, user?: User) {
+  async findOnePopulate(id: string, user?: User) {
     const instrument = await this.instrumentModel
       .findOne({ id })
       .select('-__v')
@@ -90,6 +94,7 @@ export class InstrumentService {
         },
       ]);
 
+    console.log(instrument);
     if (!user || !instrument.owner.equals(user._id)) {
       instrument.memories = instrument.memories.filter((m) => {
         if (m.visibility == 'Public') {
@@ -258,12 +263,11 @@ export class InstrumentService {
         image: (await this.fileService.create(file, user._id))._id,
       }),
       id,
+      lastHandoverDate: createInstrumentDto.buyDate,
       oldOwnersUser,
       owner: user._id,
       memories: [],
     });
-
-    instrument.lastHandoverDate = instrument.buyDate;
 
     const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
     const img: string = await qrcode.toDataURL(url);
@@ -289,7 +293,7 @@ export class InstrumentService {
     updateInstrumentDto: UpdateInstrumentDto,
     file?: Express.Multer.File,
   ) {
-    const instrument = await this.findOne(id, user);
+    const instrument = await this.instrumentModel.findOne({ id });
     if (!instrument) {
       throw new NotFoundException("L'instrument n'existe pas");
     }
@@ -308,7 +312,7 @@ export class InstrumentService {
    * @param user
    */
   async initHandover(id: string, user: User): Promise<{ token: string }> {
-    const instrument = await this.findOne(id, user);
+    const instrument = await this.instrumentModel.findOne({ id });
     this.validateInstrumentOwner(instrument, user);
 
     if (!instrument.handoverToken) {
@@ -332,20 +336,29 @@ export class InstrumentService {
       handoverToken: token,
     });
 
-    if (!instrument || instrument.handoverExpire < new Date()) {
-      throw new UnauthorizedException('La passation a expiré');
+    if (instrument.owner.equals(user._id)) {
+      throw new UnauthorizedException('Passation à vous même');
     }
 
     instrument.handoverToken = null;
     instrument.handoverExpire = null;
 
-    /*if (!instrument.oldOwnersUser.includes(instrument.owner)) {
-      instrument.oldOwnersUser.push({});
-    }
-    instrument.owner = user._id;
-    await instrument.save();*/
+    const pastUser = await this.userService.findUser(instrument.owner._id);
+    // @ts-ignore
+    const oldOwner: OldOwner = {
+      user: pastUser,
+      from: instrument.lastHandoverDate,
+      to: new Date(),
+    };
 
-    return instrument;
+    instrument.oldOwnersUser.push(oldOwner);
+
+    instrument.lastHandoverDate = new Date();
+    instrument.owner = user._id;
+
+    await instrument.save();
+
+    return this.findOnePopulate(instrument.id, user);
   }
 
   /**
@@ -354,7 +367,7 @@ export class InstrumentService {
    * @param memory
    */
   async addMemory(id: string, memory: Memory) {
-    const instrument = await this.findOne(id);
+    const instrument = await this.instrumentModel.findOne({ id });
     instrument.memories.push(memory);
     instrument.markModified('memories');
 
@@ -367,7 +380,7 @@ export class InstrumentService {
    * @param user
    */
   async remove(id: string, user: User) {
-    const instrument = await this.findOne(id, user);
+    const instrument = await this.instrumentModel.findOne({ id });
     // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException(
