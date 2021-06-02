@@ -9,7 +9,7 @@
         <a :href="downloadUrl" class="u-button--action">
           <IconDownload />
         </a>
-        <button class="u-button--action">
+        <button class="u-button--action" @click="deleteMedia">
           <IconTrash />
         </button>
       </div>
@@ -41,6 +41,10 @@ export default {
   methods: {
     close() {
       this.$store.commit('gallery/setPreview', null);
+    },
+    deleteMedia() {
+      // TODO
+      // this.$store.commit('gallery/remove', null);
     },
   },
 };

@@ -79,6 +79,7 @@ export default {
         console.log(e);
       }
     },
+
     async getMedias() {
       await this.$store.dispatch('gallery/getMedias');
     },

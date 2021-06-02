@@ -2,7 +2,7 @@
   <div class="capture-actions">
     <IlluCapture class="illu-capture" />
 
-    <div class="action" role="button" @click="newInstant">
+    <div class="action" role="button">
       <h3 class="action__title">Capturer un moment</h3>
       <p class="action__description">
         Ajouter un média rapidement à ta galerie.
@@ -38,13 +38,25 @@ export default {
     newMemory() {
       // TODO Open instrument selector then open instrument memory creation
     },
-    newInstant() {
-      // TODO Open camera and save image to gallery
-    },
+
     previewImg() {
+      console.log('previewImg', this.$refs.file.files);
       const fileReader = new FileReader();
-      fileReader.readAsDataURL(this.$refs.file.files[0]);
-      // fileReader.addEventListener('loadend', (e) => this.uploadImg(e));
+      [...this.$refs.file.files].forEach((f) => {
+        fileReader.readAsDataURL(f);
+        fileReader.addEventListener('loadend', (e) => this.uploadImg(e, f));
+      });
+    },
+
+    async uploadImg(event, file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      try {
+        const { data } = await this.$api.uploadFile(formData);
+        this.$store.commit('gallery/addMedia', data.response);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 };
@@ -96,5 +108,6 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
 }
 </style>

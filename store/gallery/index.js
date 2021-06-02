@@ -25,6 +25,12 @@ export const mutations = {
     state.medias.push(media);
   },
 
+  removeMedia(state, _id) {
+    const index = state.medias.findIndex((img) => img._id === _id);
+    if (index < 0) return;
+    state.medias.splice(index, 1);
+  },
+
   resetSelected(state) {
     state.selected = [];
   },
