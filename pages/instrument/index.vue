@@ -2,12 +2,12 @@
   <div class="o-page">
     <h1>Mon motel</h1>
     <section class="view view--instrument-list">
-      <nav class="instrument-nav">
+      <nav class="o-section__head tab-nav">
         <button
           v-for="(s, i) in sections"
           :key="i"
           :class="{ current: selectedSection === s.name }"
-          class="instrument-nav__item"
+          class="tab-nav__item"
           @click="showSection(s.name)"
         >
           {{ s.nav }}
@@ -112,25 +112,6 @@ export default {
 <style lang="scss" scoped>
 .create-instrument {
   margin-bottom: 8px;
-}
-.instrument-nav {
-  display: flex;
-  margin: 20px 0;
-  font-weight: 500;
-  border-bottom: 1px solid $gray-dark;
-}
-.instrument-nav__item {
-  display: inline-block;
-  height: 32px;
-  padding: 0;
-  margin-right: 20px;
-  border: none;
-  background-color: transparent;
-  border-bottom: 1px solid transparent;
-
-  &.current {
-    border-color: $gray-darkest;
-  }
 }
 
 .instruments-container {

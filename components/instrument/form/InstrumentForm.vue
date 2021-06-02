@@ -147,21 +147,6 @@ export default {
         ...this.$store.state.instrument.data,
         images: this.$store.getters['instrument/getImagesId'],
       };
-      // const formData = new FormData(this.$refs.form);
-      /*
-      formData.append(
-        'images',
-        JSON.stringify(this.$store.getters['instrument/getImagesId'])
-      );
-      */
-
-      // debugger;
-      /*
-      const file = this.$refs.files.dropFiles;
-      if (file) {
-        formData.append('images', file);
-      }
-      */
 
       if (this.newInstrument) {
         this.createInstrument(formData);

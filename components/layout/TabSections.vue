@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="tab-nav">
+    <nav class="o-section__head tab-nav">
       <button
         v-for="(s, i) in sections"
         :key="i"
@@ -94,12 +94,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .tab-nav {
-  display: flex;
+  justify-content: flex-start;
   margin: 20px 0;
+  padding-bottom: 0;
   font-weight: 500;
-  border-bottom: 1px solid $gray-dark;
 }
 
 .tab-nav__item {
