@@ -51,6 +51,8 @@ export class FileService {
       user: userId,
     });
 
+    fileDoc.rewritePath();
+
     return fileDoc;
   }
 
