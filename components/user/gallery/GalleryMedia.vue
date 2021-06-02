@@ -5,7 +5,7 @@
     class="gallery__media"
     @click="selectHandler"
   >
-    <img :src="media.path" alt="" />
+    <img class="gallery__media-img" :src="media.path" alt="" />
   </div>
 </template>
 
@@ -57,6 +57,7 @@ export default {
 <style lang="scss" scoped>
 .gallery__media {
   position: relative;
+  overflow: hidden;
 
   &.selected:after {
     content: '';
@@ -79,5 +80,15 @@ export default {
     border: 4px solid $primary;
     transition: all 0.3s;
   }*/
+}
+
+.gallery__media-img {
+  object-fit: cover;
+  object-position: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 </style>
