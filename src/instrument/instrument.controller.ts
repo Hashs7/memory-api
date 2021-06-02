@@ -67,7 +67,7 @@ export class InstrumentController {
     type: Instrument,
   })
   findOne(@Param('id') id: string, @GetUser() user: User) {
-    return this.instrumentService.findOne(id, user);
+    return this.instrumentService.findOnePopulate(id, user);
   }
 
   @Post()
