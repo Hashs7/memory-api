@@ -9,7 +9,7 @@ export enum ContentType {
   Audio = 'audio',
   Text = 'text',
 }
-
+export interface OldO {}
 @Schema({ timestamps: true })
 export class MemoryContent extends Types.Subdocument {
   @Prop()
