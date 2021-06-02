@@ -10,7 +10,7 @@ path: /instrument/:id/edit
 </router>
 
 <script>
-import InstrumentForm from '@/components/instrument/InstrumentForm';
+import InstrumentForm from '@/components/instrument/form/InstrumentForm';
 
 export default {
   components: { InstrumentForm },

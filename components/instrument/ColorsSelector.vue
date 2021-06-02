@@ -55,13 +55,14 @@ export default {
 
 <style lang="scss">
 .color {
-  width: 54px;
-  height: 54px;
+  display: block;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   padding: 4px;
   border: 2px solid $background-darker;
   background-color: transparent;
-  margin-right: 4px;
+  margin-right: 8px;
 
   .color__circle {
     display: block;
@@ -77,7 +78,7 @@ export default {
 
 .colors-selector__container .__view {
   display: flex;
-  padding: 0 16px;
+  padding: 0 16px 8px 16px;
 }
 
 .color.white {

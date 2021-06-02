@@ -27,7 +27,7 @@
           </div>
         </template>
         <template v-slot:section1>
-          <Gallery />
+          <Gallery preview />
         </template>
       </TabSections>
     </section>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import Gallery from '../components/user/gallery/Gallery';
+import Gallery from '../components/gallery/Gallery';
 import TabSections from '../components/layout/TabSections';
 
 export default {

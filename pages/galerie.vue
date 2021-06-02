@@ -1,11 +1,11 @@
 <template>
   <div class="o-page">
-    <Gallery />
+    <Gallery preview />
   </div>
 </template>
 
 <script>
-import Gallery from '../components/user/gallery/Gallery';
+import Gallery from '../components/gallery/Gallery';
 
 export default {
   name: 'Galerie',

@@ -19,6 +19,6 @@ export default {
 
 <style>
 .o-layout--default {
-  margin: 0 0 65px 0;
+  margin: 0 0 72px 0;
 }
 </style>

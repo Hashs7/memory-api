@@ -5,7 +5,7 @@
         v-for="m in medias"
         :key="m._id"
         :media="m"
-        :selectable="true"
+        @select="select(m._id)"
       />
     </div>
     <div class="u-button u-button--outline media-content">
@@ -19,23 +19,46 @@
         @change="previewImg"
       />
     </div>
+    <MediaPreview v-if="preview && mediaSelected" :media="mediaSelected" />
   </div>
 </template>
 
 <script>
 import GalleryMedia from './GalleryMedia';
+import MediaPreview from './MediaPreview';
+
 export default {
   name: 'Gallery',
-  components: { GalleryMedia },
+  components: { MediaPreview, GalleryMedia },
+  props: {
+    preview: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     medias() {
       return this.$store.state.gallery.medias;
     },
+    mediaSelected() {
+      return this.$store.getters['gallery/getPreview'];
+    },
   },
   mounted() {
     this.getMedias();
+    this.$store.commit('gallery/resetSelected');
+    this.$store.commit('gallery/setPreview', null);
   },
   methods: {
+    select(fileId) {
+      if (this.preview) {
+        this.$store.commit('gallery/setPreview', fileId);
+        return;
+      }
+      this.$store.commit('gallery/addSelected', fileId);
+      this.$emit('selected');
+    },
+
     previewImg() {
       const fileReader = new FileReader();
       [...this.$refs.file.files].forEach((f) => {
@@ -43,6 +66,7 @@ export default {
         fileReader.addEventListener('loadend', (e) => this.uploadImg(e, f));
       });
     },
+
     async uploadImg(event, file) {
       this.previewSrc = event.target.result;
       this.showChoices = false;
@@ -87,17 +111,5 @@ export default {
 .gallery__container > * {
   background: rgba(0, 0, 0, 0.1);
   border: 1px white solid;
-}
-
-.media-content {
-  position: relative;
-}
-.media-content__input {
-  z-index: 5;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 </style>

@@ -1,7 +1,20 @@
 export const state = () => ({
   medias: [],
   selected: [],
+  preview: null,
 });
+
+export const getters = {
+  getPreview(state) {
+    if (!state.preview) return;
+    return state.medias.find((m) => m._id === state.preview);
+  },
+
+  getLastSelected(state) {
+    if (!state.selected[0]) return;
+    return state.medias.find((m) => m._id === state.selected[0]);
+  },
+};
 
 export const mutations = {
   setMedias(state, value) {
@@ -18,6 +31,10 @@ export const mutations = {
 
   addSelected(state, media) {
     state.selected.push(media);
+  },
+
+  setPreview(state, id) {
+    state.preview = id;
   },
 
   removeSelected(state, _id) {

@@ -13,7 +13,11 @@ export const state = () => ({
   ...emptyState,
 });
 
-export const getters = {};
+export const getters = {
+  getImagesId(state) {
+    return state.data.images.map((img) => img._id);
+  },
+};
 
 export const mutations = {
   resetState(state) {
@@ -35,5 +39,8 @@ export const mutations = {
       return;
     }
     state.data.colors.splice(index, 1);
+  },
+  addImage(state, value) {
+    state.data.images.push(value);
   },
 };

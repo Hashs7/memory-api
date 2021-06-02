@@ -3,7 +3,7 @@
     ref="media"
     :class="{ selected }"
     class="gallery__media"
-    @click="selectHandler"
+    @click="$emit('select')"
   >
     <img class="gallery__media-img" :src="media.path" alt="" />
   </div>

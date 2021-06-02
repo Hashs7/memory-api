@@ -4,26 +4,8 @@
       <div class="o-section__head">
         <h4 class="o-section__title">Ajouter une photo</h4>
       </div>
-      <div class="o-section__pictures o-page__outside">
-        <vue-scroll :ops="ops">
-          <div class="instrument-picture">
-            <FileUpload ref="files" />
-          </div>
-          <div class="instrument-picture add">
-            <IconAdd />
-            <button>Ajouter</button>
-          </div>
-          <div v-if="data" class="">
-            <div
-              v-for="img in data.images"
-              :key="img._id"
-              class="instrument-picture"
-            >
-              <img :src="img.path" alt="" />
-            </div>
-          </div>
-        </vue-scroll>
-      </div>
+      <InstrumentImagesForm @showGallery="showGallery = true" />
+      <GalleryView v-if="showGallery" @close="selectImage" />
     </section>
 
     <section class="o-section">
@@ -99,28 +81,21 @@
 
 <script>
 import { mapState } from 'vuex';
-import FileUpload from '@/components/FileUpload';
-import IconAdd from '@/assets/svg/ic_add.svg?inline';
-import ColorsSelector from './ColorsSelector';
+import GalleryView from '../../gallery/GalleryView';
+import ColorsSelector from '../ColorsSelector';
+import InstrumentImagesForm from './InstrumentImagesForm';
 
 export default {
   name: 'InstrumentForm',
   components: {
+    InstrumentImagesForm,
+    GalleryView,
     ColorsSelector,
-    FileUpload,
-    IconAdd,
   },
   middleware: 'auth',
   data() {
     return {
-      ops: {
-        vuescroll: {
-          locking: true,
-        },
-        scrollPanel: {},
-        rail: {},
-        bar: {},
-      },
+      showGallery: false,
     };
   },
   computed: {
@@ -168,17 +143,39 @@ export default {
     // Form submitted event
     submit(e) {
       e.preventDefault();
-      const formData = new FormData(this.$refs.form);
+      const formData = {
+        ...this.$store.state.instrument.data,
+        images: this.$store.getters['instrument/getImagesId'],
+      };
+      // const formData = new FormData(this.$refs.form);
+      /*
+      formData.append(
+        'images',
+        JSON.stringify(this.$store.getters['instrument/getImagesId'])
+      );
+      */
+
+      // debugger;
+      /*
       const file = this.$refs.files.dropFiles;
       if (file) {
         formData.append('images', file);
       }
+      */
 
       if (this.newInstrument) {
         this.createInstrument(formData);
         return;
       }
       this.updateInstrument(formData);
+    },
+
+    selectImage() {
+      this.showGallery = false;
+      const selected = this.$store.getters['gallery/getLastSelected'];
+      if (!selected) return;
+      this.$store.commit('instrument/addImage', selected);
+      this.$store.commit('gallery/removeSelected', selected._id);
     },
 
     redirect(id) {
@@ -217,17 +214,12 @@ export default {
 </script>
 
 <style lang="scss">
-.o-section__pictures {
-  .__view {
-    display: flex;
-    padding: 0 16px;
-  }
-}
-
 .instrument-picture {
   width: 156px;
   height: 156px;
   margin-right: 12px;
+  overflow: hidden;
+
   &.add {
     display: flex;
     justify-content: center;

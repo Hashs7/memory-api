@@ -3,7 +3,6 @@
   flex-direction: column;
   // Remove navbar height
   min-height: calc(100vh - 3.25rem);
-  //max-width: 500px;
   margin: auto;
   padding: 16px;
   background-color: $background;
@@ -12,8 +11,6 @@
 .o-page__outside {
   margin-left: -16px;
   margin-right: -16px;
-  //padding-left: 32px;
-  //padding-right: 32px;
 }
 
 .o-page__container {
@@ -22,11 +19,17 @@
 }
 
 .o-page--full {
+  z-index: 50;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+
+  &.with-nav {
+    height: calc(100% - 72px);
+    bottom: auto;
+  }
 }
 
 .o-page__header-nav {
