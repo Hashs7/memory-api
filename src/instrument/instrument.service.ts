@@ -32,7 +32,6 @@ export class InstrumentService {
   ) {}
 
   private validateInstrumentOwner(instrument, user) {
-    // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }
@@ -94,7 +93,6 @@ export class InstrumentService {
         },
       ]);
 
-    console.log(instrument);
     if (!user || !instrument.owner.equals(user._id)) {
       instrument.memories = instrument.memories.filter((m) => {
         if (m.visibility == 'Public') {
