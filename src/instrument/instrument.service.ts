@@ -82,7 +82,7 @@ export class InstrumentService {
   }
 
   async findOne(id: string) {
-    return await this.instrumentModel.findOne({ id });
+    return this.instrumentModel.findOne({ id });
   }
 
   /**
@@ -110,7 +110,7 @@ export class InstrumentService {
         },
         {
           path: 'owner',
-          select: 'username firstName lastName',
+          select: 'username firstName lastName _id',
           populate: {
             path: 'thumbnail',
           },
@@ -158,10 +158,8 @@ export class InstrumentService {
   sortOldowners(oldOwnersUser, oldOwners: OldOwnerInterface[]) {
     const oldOwnersConcat = oldOwnersUser.concat(oldOwners);
 
-    oldOwnersConcat.sort(function (a, b) {
-      // @ts-ignore
-      return new Date(b.to) - new Date(a.to);
-    });
+    // @ts-ignore
+    oldOwnersConcat.sort((a, b) => new Date(b.to) - new Date(a.to));
 
     return oldOwnersConcat;
   }
@@ -217,7 +215,7 @@ export class InstrumentService {
 
     const oldInstruments = await this.instrumentModel
       .find({
-        oldOwners: { $in: user._id },
+        oldOwnersUser: { $in: user._id },
       })
       .populate('images');
     const wishInstruments = await this.instrumentModel
@@ -315,22 +313,18 @@ export class InstrumentService {
    * @param id
    * @param user
    * @param updateInstrumentDto
-   * @param file
    */
   async update(
     id: string,
     user: User,
     updateInstrumentDto: UpdateInstrumentDto,
-    file?: Express.Multer.File,
   ) {
     const instrument = await this.instrumentModel.findOne({ id });
     if (!instrument) {
       throw new NotFoundException("L'instrument n'existe pas");
     }
     this.validateInstrumentOwner(instrument, user);
-    /*if (file) {
-      updateInstrumentDto.image = file.filename;
-    }*/
+
     return this.instrumentModel
       .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
       .exec();

@@ -110,9 +110,8 @@ export class InstrumentController {
     @Param('id') id: string,
     @GetUser() user: User,
     @Body() updateInstrumentDto: UpdateInstrumentDto,
-    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.instrumentService.update(id, user, updateInstrumentDto, file);
+    return this.instrumentService.update(id, user, updateInstrumentDto);
   }
 
   @Patch(':id/handover')

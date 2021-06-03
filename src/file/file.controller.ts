@@ -154,7 +154,6 @@ export class FileController {
       // const url = `${process.env.AZURE_STORAGE_URL}/production/telechargement.jpeg${process.env.AZURE_STORAGE_SAS_KEY}`;
       const url = `${process.env.AZURE_STORAGE_URL}${image.path}/${image.originalname}${process.env.AZURE_STORAGE_SAS_KEY}`;
       const getFile = await got(url).buffer();
-      // res.set('Content-Type', 'image/png');
       res.set('Content-Type', image.mimetype);
       response = res.send(getFile);
     }
