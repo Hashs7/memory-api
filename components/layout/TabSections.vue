@@ -93,24 +93,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.tab-nav {
-  justify-content: flex-start;
-  margin: 20px 0;
-  padding-bottom: 0;
-  font-weight: 500;
-}
-
-.tab-nav__item {
-  height: 32px;
-  margin-right: 20px;
-  border: none;
-  background-color: transparent;
-  border-bottom: 2px solid transparent;
-
-  &.current {
-    border-color: $gray-darkest;
-  }
-}
-</style>

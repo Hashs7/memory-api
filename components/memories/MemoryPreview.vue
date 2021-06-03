@@ -14,7 +14,7 @@
     </div>
     <div class="memory-preview__body">
       <h4 class="memory-preview__name">{{ data.name }}</h4>
-      <p class="memory-preview__date">{{ data.date }}</p>
+      <p class="memory-preview__date">{{ date }}</p>
       <client-only>
         <nuxt-link v-if="editable && isOwner" :to="editLinkUrl" class="u-link">
           Modifier
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import IconBrush from '@/assets/svg/ic_brush.svg?inline';
 
 export default {
@@ -70,6 +71,10 @@ export default {
     thumbnail() {
       return this.data.contents.find((c) => c.type === 'media')?.file?.path;
     },
+    date() {
+      console.log(this.data.date);
+      return dayjs(this.data.date).format('MMMM YYYY');
+    },
   },
 };
 </script>
@@ -107,5 +112,6 @@ export default {
   margin-top: 8px;
   font-size: 12px;
   font-weight: 300;
+  text-transform: capitalize;
 }
 </style>

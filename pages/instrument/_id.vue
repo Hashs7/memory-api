@@ -1,5 +1,6 @@
 <template>
   <div class="instrument">
+    <button type="button" class="instrument__back" @click="back">Retour</button>
     <div v-if="instrument">
       <ImagesCarousel v-if="thumbnail" :data="instrument.images" />
       <div class="instrument__container o-page__container">
@@ -112,11 +113,25 @@ export default {
         throw new Error(e);
       }
     },
+    back() {
+      this.$router.go(-1);
+    },
   },
 };
 </script>
 
 <style lang="scss">
+.instrument {
+  position: relative;
+}
+
+.instrument__back {
+  z-index: 5;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
 .instrument__container {
   position: relative;
   z-index: 1;

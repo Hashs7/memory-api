@@ -6,6 +6,7 @@
   />
   <Summary
     v-else-if="!showVisibility"
+    edit
     @back="showSummary = false"
     @submit="submit"
     @params="showVisibility = true"

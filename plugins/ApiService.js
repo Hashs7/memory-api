@@ -123,7 +123,7 @@ class ApiController {
    * Route : Search
    */
   search(text) {
-    return this.$axios.get(`/search?search=${text}`);
+    return this.$axios.get(`/search?text=${text}`);
   }
 }
 
