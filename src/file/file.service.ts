@@ -59,7 +59,7 @@ export class FileService {
   async remove(id: string, user: User) {
     const file = await this.fileModel.findOne({ _id: id });
 
-    if (user._id.equals(file.user)) {
+    if (!user._id.equals(file.user)) {
       throw new UnauthorizedException(
         "Vous n'êtes pas propriétaire du fichier",
       );

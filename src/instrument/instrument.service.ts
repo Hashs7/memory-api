@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -58,7 +59,7 @@ export class InstrumentService {
   }
 
   async findOne(id: string) {
-    return await this.instrumentModel.findOne({ id });
+    return this.instrumentModel.findOne({ id });
   }
 
   /**
@@ -86,7 +87,7 @@ export class InstrumentService {
         },
         {
           path: 'owner',
-          select: 'username firstName lastName',
+          select: 'username firstName lastName _id',
           populate: {
             path: 'thumbnail',
           },
@@ -126,10 +127,8 @@ export class InstrumentService {
     // @ts-ignore
     const oldOwnersConcat = oldOwnersUser.concat(oldOwners);
 
-    oldOwnersConcat.sort(function (a, b) {
-      // @ts-ignore
-      return new Date(b.to) - new Date(a.to);
-    });
+    // @ts-ignore
+    oldOwnersConcat.sort((a, b) => new Date(b.to) - new Date(a.to));
 
     return oldOwnersConcat;
   }
@@ -185,7 +184,7 @@ export class InstrumentService {
 
     const oldInstruments = await this.instrumentModel
       .find({
-        oldOwners: { $in: user._id },
+        oldOwnersUser: { $in: user._id },
       })
       .populate('images');
     const wishInstruments = await this.instrumentModel
@@ -267,14 +266,6 @@ export class InstrumentService {
       memories: [],
     });
 
-    const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
-    const img: string = await qrcode.toDataURL(url);
-    const base64Data = img.split(';base64,').pop();
-
-    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
-      console.log('created'),
-    );
-
     return instrument;
   }
 
@@ -283,22 +274,18 @@ export class InstrumentService {
    * @param id
    * @param user
    * @param updateInstrumentDto
-   * @param file
    */
   async update(
     id: string,
     user: User,
     updateInstrumentDto: UpdateInstrumentDto,
-    file?: Express.Multer.File,
   ) {
     const instrument = await this.instrumentModel.findOne({ id });
     if (!instrument) {
       throw new NotFoundException("L'instrument n'existe pas");
     }
     this.validateInstrumentOwner(instrument, user);
-    /*if (file) {
-      updateInstrumentDto.image = file.filename;
-    }*/
+
     return this.instrumentModel
       .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
       .exec();
@@ -342,6 +329,7 @@ export class InstrumentService {
     instrument.handoverExpire = null;
 
     const pastUser = await this.userService.findUser(instrument.owner._id);
+    Logger.log(`${pastUser} ${pastUser._id}`);
     // @ts-ignore
     const oldOwner: OldOwner = {
       user: pastUser,
