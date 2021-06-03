@@ -215,6 +215,20 @@ export class MemoryService {
           },
         ],
       })
-      .limit(10);
+      .limit(10)
+      .then((memories) => {
+        return Promise.all(
+          memories.map(async (m) => {
+            const instrument = await this.instrumentService.findByMemory(m.id);
+
+            if (instrument) {
+              return {
+                ...m.toObject(),
+                instrumentId: instrument.id,
+              };
+            }
+          }),
+        );
+      });
   }
 }

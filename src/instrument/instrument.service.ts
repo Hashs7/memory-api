@@ -51,6 +51,12 @@ export class InstrumentService {
               $regex: new RegExp(q),
             },
           },
+
+          {
+            colors: {
+              $regex: new RegExp(q),
+            },
+          },
         ],
       })
       .limit(10);
@@ -289,6 +295,14 @@ export class InstrumentService {
       owner: user._id,
       memories: [],
     });
+  }
+
+  /**
+   * Find instrument by memory
+   * @param memoryId
+   */
+  async findByMemory(memoryId: string): Promise<Instrument> {
+    return this.instrumentModel.findOne({ 'memories.id': memoryId }).exec();
   }
 
   /**
