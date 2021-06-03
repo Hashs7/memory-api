@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './user.schema';
 import * as shortid from 'shortid';
 import { CreateUserDto } from './auth/dto/create-user.dto';
@@ -115,15 +119,24 @@ export class UserService {
   async update(
     user: User,
     updateUserDto: UpdateUserDto,
-    file: Express.Multer.File,
+    file?: Express.Multer.File,
   ) {
-    const thumbnail = await this.fileService.create(file, user._id);
+    let thumbnail;
+    if (file) {
+      thumbnail = await this.fileService.create(file, user._id);
+    }
+    if (
+      updateUserDto.username &&
+      (await this.usernameExist(updateUserDto.username))
+    ) {
+      throw new BadRequestException("Le nom d'utilisateur est déjà utilisé");
+    }
     return this.userModel
       .findOneAndUpdate(
         { _id: user._id },
         {
           ...updateUserDto,
-          thumbnail: thumbnail._id,
+          ...(file && { thumbnail: thumbnail._id }),
         },
         { new: true },
       )
