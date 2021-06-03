@@ -40,6 +40,7 @@
     "class-validator": "^0.13.1",
     "got": "^11.8.2",
     "handlebars": "^4.7.7",
+    "imagemin": "^8.0.0",
     "mime-types": "^2.1.31",
     "mongodb": "^3.6.5",
     "mongoose": "^5.12.2",

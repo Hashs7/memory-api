@@ -1,4 +1,9 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { File } from './file.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -6,15 +11,21 @@ import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 import { User } from '../user/user.schema';
 import * as fs from 'fs';
+import * as sharp from 'sharp';
 import * as path from 'path';
+import * as mime from 'mime-types';
 
 @Injectable()
 export class FileService {
+  root: string;
+
   constructor(
     private configService: ConfigService,
     // private azureStorage: AzureStorageService,
     @InjectModel(File.name) private fileModel: Model<File>,
-  ) {}
+  ) {
+    this.root = './uploads';
+  }
 
   async findOne(id: string) {
     const file = await this.fileModel.findOne({ _id: id });
@@ -32,9 +43,9 @@ export class FileService {
 
   async create(file: Express.Multer.File, userId: string): Promise<File> {
     const { originalname } = file;
-    const generatedName = randomBytes(10).toString('hex');
-    const filetype = file.mimetype.split('/').shift();
-    Logger.log(`file ${filetype} ${file.mimetype} ${file.size}`);
+    // const generatedName = randomBytes(10).toString('hex');
+    // const filetype = file.mimetype.split('/').shift();
+    // Logger.log(`file ${filetype} ${file.mimetype} ${file.size}`);
 
     if (process.env.NODE_ENV !== 'production') {
       // Store image locally
@@ -54,6 +65,59 @@ export class FileService {
     fileDoc.rewritePath();
 
     return fileDoc;
+  }
+
+  async getFileHandler(
+    res,
+    image: string,
+    download?: boolean,
+    width?: number,
+    height?: number,
+  ) {
+    if (width || height) {
+      return this.filterImage(res, image, { width, height });
+    }
+    if (!download) {
+      return this.serveFromFolder(res, image);
+    }
+    return this.download(res, image);
+  }
+
+  async filterImage(res, image, options) {
+    console.log('filterImage');
+    const filePath = `${this.root}/${image}`;
+    const file = fs.readFileSync(filePath);
+    const sharpFile = await sharp(file).resize(options).toBuffer();
+    res.set({
+      'Content-Type': mime.contentType(path.extname(filePath)),
+    });
+    const response = res.end(sharpFile);
+
+    return {
+      status: HttpStatus.OK,
+      response,
+    };
+  }
+
+  serveFromFolder(res, image) {
+    const response = res.sendFile(image, { root: this.root });
+
+    return {
+      status: HttpStatus.OK,
+      response,
+    };
+  }
+
+  download(res, image) {
+    res.setHeader(
+      'Content-Disposition',
+      'attachment: filename="' + image + '"',
+    );
+    res.download(`${this.root}/${image}`, image);
+
+    return {
+      status: HttpStatus.OK,
+    };
   }
 
   async remove(id: string, user: User) {

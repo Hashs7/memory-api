@@ -22,10 +22,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import * as sharp from 'sharp';
-import * as path from 'path';
 import got from 'got';
-import * as mime from 'mime-types';
 import { FileService } from './file.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Instrument } from '../instrument/instrument.schema';
@@ -115,46 +112,19 @@ export class FileController {
   @AllowAny()
   @Get(':imageName')
   async getImage(
-    @Param('imageName') image,
-    @Query('download') download: boolean,
-    @Query('w') width: number,
-    @Query('h') height: number,
     @Res() res,
+    @Param('imageName') image: string,
+    @Query('download') download?: boolean,
+    @Query('w') width?: string,
+    @Query('h') height?: string,
   ) {
-    const root = './uploads';
-    if (width || height) {
-      const filePath = `${root}/${image}`;
-      const file = fs.readFileSync(filePath);
-      Logger.log(mime.contentType(path.extname(filePath)));
-      const sharpFile = await sharp(file).resize(Number(width)).toBuffer();
-      res.set({
-        'Content-Type': mime.contentType(path.extname(filePath)),
-      });
-      const response = res.end(sharpFile);
-
-      return {
-        status: HttpStatus.OK,
-        response,
-      };
-    }
-    if (!download) {
-      const response = res.sendFile(image, { root });
-
-      return {
-        status: HttpStatus.OK,
-        response,
-      };
-    }
-
-    res.setHeader(
-      'Content-Disposition',
-      'attachment: filename="' + image + '"',
+    return this.fileService.getFileHandler(
+      res,
+      image,
+      download,
+      width ? Number(width) : null,
+      height ? Number(height) : null,
     );
-    res.download(`${root}/${image}`, image);
-
-    return {
-      status: HttpStatus.OK,
-    };
   }
 
   /**
