@@ -12,6 +12,7 @@ import {
   UseGuards,
   Delete,
   Query,
+  Logger,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
@@ -21,8 +22,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { randomBytes } from 'crypto';
+import * as sharp from 'sharp';
+import * as path from 'path';
 import got from 'got';
+import * as mime from 'mime-types';
 import { FileService } from './file.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Instrument } from '../instrument/instrument.schema';
@@ -111,15 +114,32 @@ export class FileController {
 
   @AllowAny()
   @Get(':imageName')
-  getImage(
+  async getImage(
     @Param('imageName') image,
     @Query('download') download: boolean,
+    @Query('w') width: number,
+    @Query('h') height: number,
     @Res() res,
   ) {
     const root = './uploads';
+    if (width || height) {
+      const filePath = `${root}/${image}`;
+      const file = fs.readFileSync(filePath);
+      Logger.log(mime.contentType(path.extname(filePath)));
+      const sharpFile = await sharp(file).resize(Number(width)).toBuffer();
+      res.set({
+        'Content-Type': mime.contentType(path.extname(filePath)),
+      });
+      const response = res.end(sharpFile);
 
+      return {
+        status: HttpStatus.OK,
+        response,
+      };
+    }
     if (!download) {
       const response = res.sendFile(image, { root });
+
       return {
         status: HttpStatus.OK,
         response,
