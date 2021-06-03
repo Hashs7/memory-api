@@ -132,7 +132,7 @@ export default {
 
   &[lazy='loaded'] {
     opacity: 0;
-    animation: fadein 0.7s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    animation: fadein 0.1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
     @keyframes fadein {
       0% {
         opacity: 0;
@@ -156,7 +156,7 @@ video.asset__asset {
   height: 100%;
   z-index: 1;
   background-color: transparentize($primary, 0.9);
-  transition: background-color 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+  //transition: background-color 0.2s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* -------------------- Video -------------------- */

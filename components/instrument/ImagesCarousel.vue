@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="images-carousel">
     <vue-glide
       v-model="active"
       :options="options"
@@ -48,6 +48,9 @@ export default {
 </script>
 
 <style lang="scss">
+.images-carousel {
+  background-color: $gray-darkest;
+}
 [data-glide-el='controls'] {
   z-index: 5;
   display: flex;

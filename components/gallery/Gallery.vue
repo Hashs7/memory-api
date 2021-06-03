@@ -90,6 +90,10 @@ export default {
 </script>
 
 <style>
+.gallery .media-content {
+  margin-bottom: 20px;
+}
+
 .gallery__container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));

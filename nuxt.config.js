@@ -112,6 +112,59 @@ export default {
       mobileAppIOS: 'dark-content',
       appleStatusBarStyle: 'black-translucent',
     },
+    themeColor: '#FFF9E2',
+    msTileColor: '#373737',
+    appleMobileWebAppStatusBarStyle: 'default',
+    /* workboxOptions: {
+      exclude: ['.htaccess'],
+      importScripts: ['/serviceWorkerSkipWaiting.js'],
+      skipWaiting: false,
+      navigateFallback: 'index.html',
+      runtimeCaching: [
+        // Cache the Google Fonts stylesheets with a stale while revalidate strategy.
+        {
+          urlPattern: /^https:\/\/fonts\.googleapis\.com/,
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'google-fonts-stylesheets',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+
+        // Cache the Google Fonts webfont files with a cache first strategy for 1 year.
+        {
+          urlPattern: /^https:\/\/fonts\.gstatic\.com/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'google-fonts-webfonts',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 31536000, // 1 year
+            },
+          },
+        },
+
+        // Cache the Carto CDN map tiles
+        {
+          urlPattern: /^https:\/\/.+\.basemaps\.cartocdn\.com/,
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'cartocdn-basemaps',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 5184000, // 60 days
+              maxEntries: 100, // Max 100 request (prevent taking to much space)
+            },
+          },
+        },
+      ],
+    }, */
   },
 
   server: {

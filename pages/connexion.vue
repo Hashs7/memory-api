@@ -42,7 +42,6 @@ export default {
   name: 'Login',
   components: { Logout, IconLogo },
   layout(ctx) {
-    console.log(ctx.app.$auth.loggedIn, 'ctx');
     let layout = 'default';
     if (!ctx.$auth.loggedIn) {
       layout = 'none';

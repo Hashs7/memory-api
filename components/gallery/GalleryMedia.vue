@@ -73,12 +73,11 @@ export default {
 }
 
 .gallery-media__img {
-  object-fit: cover;
-  object-position: center;
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  margin: auto;
 }
 </style>
