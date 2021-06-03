@@ -15,7 +15,9 @@
 </template>
 
 <router>
-path: /instrument/:id/souvenir/creation
+path: /souvenir/creation
+alias:
+ - /instrument/:id/souvenir/creation
 </router>
 
 <script>
@@ -24,6 +26,7 @@ import Summary from '@/components/memories/creation/views/Summary';
 import Visibility from '@/components/memories/creation/views/Visibility';
 import ContentForm from '../../components/memories/creation/views/ContentForm';
 
+// TODO get instrument id
 export default {
   name: 'NewInstrument',
   components: {

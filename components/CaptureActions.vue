@@ -17,12 +17,12 @@
       />
     </div>
 
-    <div class="action" role="button" @click="newMemory">
+    <NuxtLink class="action" :to="newMemory">
       <h3 class="action__title">Écrire un memory</h3>
       <p class="action__description">
         Raconte-nous un instant de vie avec ton instrument
       </p>
-    </div>
+    </NuxtLink>
   </div>
 </template>
 
@@ -34,11 +34,14 @@ export default {
   components: {
     IlluCapture,
   },
-  methods: {
+  computed: {
     newMemory() {
-      // TODO Open instrument selector then open instrument memory creation
+      return {
+        name: 'souvenir-creation',
+      };
     },
-
+  },
+  methods: {
     previewImg() {
       console.log('previewImg', this.$refs.file.files);
       const fileReader = new FileReader();
