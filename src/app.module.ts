@@ -13,6 +13,7 @@ import { CategoryModule } from './instrument/memory/category/category.module';
 import { CommandModule } from 'nestjs-command';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtAuthGuard } from './user/auth/JwtAuthGuard';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { JwtAuthGuard } from './user/auth/JwtAuthGuard';
     ChatModule,
     MailModule,
     CategoryModule,
+    SearchModule,
   ],
   controllers: [],
   providers: [

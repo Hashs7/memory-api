@@ -29,6 +29,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { Instrument } from './instrument.schema';
 import { AllowAny } from '../user/auth/JwtAuthGuard';
+import { async } from 'rxjs';
 
 @ApiTags('instrument')
 @Controller('instrument')

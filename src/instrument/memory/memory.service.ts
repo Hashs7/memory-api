@@ -198,4 +198,23 @@ export class MemoryService {
 
     return instrument;
   }
+
+  search(q: string) {
+    return this.memoryModel
+      .find({
+        $or: [
+          {
+            name: {
+              $regex: new RegExp(q),
+            },
+          },
+          {
+            description: {
+              $regex: new RegExp(q),
+            },
+          },
+        ],
+      })
+      .limit(10);
+  }
 }

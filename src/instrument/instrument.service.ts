@@ -20,7 +20,7 @@ import { ContentType } from './memory/content/content.schema';
 import { randomBytes } from 'crypto';
 import { UserService } from '../user/user.service';
 import { OldOwner } from './oldowner/oldowner.schema';
-import slugify from 'slugify';
+import { async } from 'rxjs';
 
 @Injectable()
 export class InstrumentService {
@@ -30,6 +30,30 @@ export class InstrumentService {
     private userService: UserService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
+
+  search(q: string) {
+    return this.instrumentModel
+      .find({
+        $or: [
+          {
+            brand: {
+              $regex: new RegExp(q),
+            },
+          },
+          {
+            modelName: {
+              $regex: new RegExp(q),
+            },
+          },
+          {
+            type: {
+              $regex: new RegExp(q),
+            },
+          },
+        ],
+      })
+      .limit(10);
+  }
 
   private validateInstrumentOwner(instrument, user) {
     // @ts-ignore
@@ -94,7 +118,6 @@ export class InstrumentService {
         },
       ]);
 
-    console.log(instrument);
     if (!user || !instrument.owner.equals(user._id)) {
       instrument.memories = instrument.memories.filter((m) => {
         if (m.visibility == 'Public') {
@@ -344,6 +367,7 @@ export class InstrumentService {
     instrument.handoverExpire = null;
 
     const pastUser = await this.userService.findUser(instrument.owner._id);
+    console.log(pastUser);
     // @ts-ignore
     const oldOwner: OldOwner = {
       user: pastUser,
