@@ -8,7 +8,7 @@ import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
 import { InstrumentService } from '../instrument.service';
 import { UserService } from '../../user/user.service';
-import { Model } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../../user/user.schema';
 import { ContentType, MemoryContent } from './content/content.schema';
@@ -199,7 +199,8 @@ export class MemoryService {
     return instrument;
   }
 
-  search(q: string) {
+  search(q: string, categories: Types.ObjectId[]) {
+    // @ts-ignore
     return this.memoryModel
       .find({
         $or: [
@@ -215,6 +216,7 @@ export class MemoryService {
           },
         ],
       })
+      .find({ categories: { $in: categories } })
       .limit(10)
       .then((memories) => {
         return Promise.all(

@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InstrumentService } from '../instrument/instrument.service';
 import { MemoryService } from '../instrument/memory/memory.service';
 import { Instrument } from '../instrument/instrument.schema';
-import { Memory } from '../instrument/memory/memory.schema';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class SearchService {
@@ -11,10 +11,11 @@ export class SearchService {
     private memoryService: MemoryService,
   ) {}
   public async search(
-    searchContent: string,
+    text: string,
+    categories: Types.ObjectId[],
   ): Promise<{ instruments: Instrument[]; memories: Object[] }> {
-    const instrumentRes = await this.instrumentService.search(searchContent);
-    const memoryRes = await this.memoryService.search(searchContent);
+    const instrumentRes = await this.instrumentService.search(text);
+    const memoryRes = await this.memoryService.search(text, categories);
 
     return {
       instruments: instrumentRes,
