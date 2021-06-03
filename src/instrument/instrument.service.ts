@@ -137,8 +137,17 @@ export class InstrumentService {
       return m;
     });
 
+    const oldOwnersUser = await Promise.all(
+      instrument.oldOwnersUser.map(async (o) => ({
+        _id: o._id,
+        from: o.from,
+        to: o.to,
+        user: await this.userService.findUser(o.user._id),
+      })),
+    );
+
     instrument.oldOwnersUser = this.sortOldowners(
-      instrument.oldOwnersUser,
+      oldOwnersUser,
       instrument.oldOwners,
     );
     instrument.oldOwners = undefined;
@@ -146,8 +155,7 @@ export class InstrumentService {
     return instrument;
   }
 
-  sortOldowners(oldOwnersUser: OldOwner[], oldOwners: OldOwnerInterface[]) {
-    // @ts-ignore
+  sortOldowners(oldOwnersUser, oldOwners: OldOwnerInterface[]) {
     const oldOwnersConcat = oldOwnersUser.concat(oldOwners);
 
     oldOwnersConcat.sort(function (a, b) {
@@ -365,11 +373,9 @@ export class InstrumentService {
     instrument.handoverToken = null;
     instrument.handoverExpire = null;
 
-    const pastUser = await this.userService.findUser(instrument.owner._id);
-    console.log(pastUser);
     // @ts-ignore
     const oldOwner: OldOwner = {
-      user: pastUser,
+      user: instrument.owner,
       from: instrument.lastHandoverDate,
       to: new Date(),
     };
