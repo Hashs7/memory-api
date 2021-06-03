@@ -52,7 +52,7 @@
       />
     </div>
 
-    <NuxtChild :is-owner="isOwner" :instrument="instrument" />
+    <NuxtChild v-if="instrument" :is-owner="isOwner" :instrument="instrument" />
   </div>
 </template>
 
@@ -70,11 +70,15 @@ export default {
     }
     return layout;
   },
-  async asyncData({ $api, params }) {
-    const instrument = (await $api.getInstrumentById(params.id))?.data;
-    return {
-      instrument,
-    };
+  async asyncData({ $api, params, redirect }) {
+    try {
+      const instrument = (await $api.getInstrumentById(params.id))?.data;
+      return {
+        instrument,
+      };
+    } catch (e) {
+      redirect('/404/');
+    }
   },
   fetchOnServer: false,
   computed: {

@@ -32,6 +32,8 @@ export default {
     { src: '~/plugins/ApiService.js' },
     { src: '~/plugins/vue-scroll.js' },
     { src: '~/plugins/carousel.js' /* mode: 'client' */ },
+    { src: '~/plugins/vue-lazyload.js', mode: 'client' },
+    { src: '~/plugins/colors.js', mode: 'client' },
     { src: '~/plugins/hammer.js', mode: 'client' },
     { src: '~/plugins/audio-recorder.js', mode: 'client' },
     { src: '~/plugins/wysiwyg.js', mode: 'client' },
@@ -60,6 +62,16 @@ export default {
 
   env: {
     apiUrl: process.env.VUE_APP_API_URL || 'http://localhost:3000',
+  },
+
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'custom',
+        path: '*',
+        component: resolve(__dirname, 'pages/404.vue'),
+      });
+    },
   },
 
   auth: {
