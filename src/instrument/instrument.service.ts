@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -242,24 +243,20 @@ export class InstrumentService {
    * Create new instrument
    * @param user
    * @param createInstrumentDto
-   * @param file
    */
-  async create(
-    user: User,
-    createInstrumentDto: CreateInstrumentDto,
-    file?: Express.Multer.File,
-  ) {
-    const instrumentUsers = await Promise.all([
-      ...createInstrumentDto.oldOwnersUser.map((o) => {
-        if (typeof o.user === 'string') {
-          return this.userService.findUser(o.user);
-        }
-        return o.user;
-      }),
-    ]);
+  async create(user: User, createInstrumentDto: CreateInstrumentDto) {
+    let oldOwnersUser: OldOwner[] = [];
 
-    const oldOwnersUser: OldOwner[] = createInstrumentDto.oldOwnersUser.reduce(
-      (acc, cur) => {
+    if (createInstrumentDto.oldOwnersUser) {
+      const instrumentUsers = await Promise.all([
+        ...createInstrumentDto.oldOwnersUser.map((o) => {
+          if (typeof o.user === 'string') {
+            return this.userService.findUser(o.user);
+          }
+          return o.user;
+        }),
+      ]);
+      oldOwnersUser = createInstrumentDto.oldOwnersUser?.reduce((acc, cur) => {
         const user = instrumentUsers.find((user) => user._id.equals(cur.user));
         // @ts-ignore
         cur.user = {
@@ -271,33 +268,19 @@ export class InstrumentService {
           thumbnail: user.thumbnail,
         };
         return [...acc, { ...cur }];
-      },
-      [],
-    );
-    delete createInstrumentDto.oldOwnersUser;
+      }, []);
+      delete createInstrumentDto.oldOwnersUser;
+    }
 
     const id = shortid.generate();
-    const instrument = await this.instrumentModel.create({
+    return this.instrumentModel.create({
       ...createInstrumentDto,
-      ...(file && {
-        image: (await this.fileService.create(file, user._id))._id,
-      }),
       id,
       lastHandoverDate: createInstrumentDto.buyDate,
       oldOwnersUser,
       owner: user._id,
       memories: [],
     });
-
-    const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
-    const img: string = await qrcode.toDataURL(url);
-    const base64Data = img.split(';base64,').pop();
-
-    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
-      console.log('created'),
-    );
-
-    return instrument;
   }
 
   /**

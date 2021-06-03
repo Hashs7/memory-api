@@ -6,7 +6,6 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { OldOwner } from '../oldowner/oldowner.schema';
 import {
   CreateOldownerDto,
   CreateOldownerUserDto,

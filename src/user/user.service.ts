@@ -18,6 +18,10 @@ export class UserService {
     return this.userModel.findOne({ email });
   }
 
+  async usernameExist(username: string): Promise<boolean> {
+    return !!(await this.userModel.findOne({ username }));
+  }
+
   async findUserByUsername(username: string): Promise<User> {
     const user = await this.userModel
       .findOne({ username })

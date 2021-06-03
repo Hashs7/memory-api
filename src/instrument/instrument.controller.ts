@@ -8,14 +8,12 @@ import {
   Delete,
   UseGuards,
   UseInterceptors,
-  UploadedFile,
   Query,
-  ClassSerializerInterceptor,
+  Logger,
 } from '@nestjs/common';
 import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
-import { CreateOldownerDto } from './oldowner/dto/create-oldowner.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../user/auth/get-user.decorator';
 import { User } from '../user/user.schema';
@@ -29,7 +27,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { Instrument } from './instrument.schema';
 import { AllowAny } from '../user/auth/JwtAuthGuard';
-import { async } from 'rxjs';
 
 @ApiTags('instrument')
 @Controller('instrument')
@@ -61,7 +58,6 @@ export class InstrumentController {
   }
 
   @Get(':id')
-  // @UseInterceptors(ClassSerializerInterceptor)
   @AllowAny()
   @ApiResponse({
     status: 200,
@@ -74,7 +70,6 @@ export class InstrumentController {
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @UseInterceptors(FileInterceptor('image', fileInterceptorOptions))
   @ApiOperation({ summary: 'Create instrument' })
   @ApiResponse({
     status: 200,
@@ -84,9 +79,8 @@ export class InstrumentController {
   create(
     @GetUser() user: User,
     @Body() createInstrumentDto: CreateInstrumentDto,
-    @UploadedFile() file?: Express.Multer.File,
   ) {
-    return this.instrumentService.create(user, createInstrumentDto, file);
+    return this.instrumentService.create(user, createInstrumentDto);
   }
 
   @Patch('confirm-handover')

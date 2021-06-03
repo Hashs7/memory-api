@@ -34,7 +34,7 @@ export class AuthService {
   async signUp(createUserDto: CreateUserDto) {
     const { email, password, username } = createUserDto;
     const existEmail = await this.userService.findUserbyEmail(email);
-    const existUsername = await this.userService.findUserByUsername(username);
+    const existUsername = await this.userService.usernameExist(username);
 
     if (existEmail) {
       throw new BadRequestException("L'email est déjà utilisé");
@@ -63,8 +63,6 @@ export class AuthService {
    * @param hashed
    */
   async signIn(authUserDTO: AuthCredentialsDto, hashed = false) {
-    Logger.log(authUserDTO.password);
-
     const user = await this.userService.findByUsernameOrEmail(
       authUserDTO.username,
     );
