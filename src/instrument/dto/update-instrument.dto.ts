@@ -1,5 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsDate,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class UpdateInstrumentDto {
   @IsString()
@@ -66,4 +72,9 @@ image?: string;
   @IsOptional()
   @ApiPropertyOptional()
   status?: string;
+
+  @IsArray()
+  @IsOptional()
+  @ApiPropertyOptional()
+  colors?: string[];
 }

@@ -8,7 +8,7 @@ import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
 import { InstrumentService } from '../instrument.service';
 import { UserService } from '../../user/user.service';
-import { Model, Schema } from 'mongoose';
+import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../../user/user.schema';
 import { ContentType, MemoryContent } from './content/content.schema';

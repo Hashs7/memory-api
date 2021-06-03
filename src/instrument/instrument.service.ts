@@ -56,7 +56,6 @@ export class InstrumentService {
   }
 
   private validateInstrumentOwner(instrument, user) {
-    // @ts-ignore
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }

@@ -9,9 +9,9 @@ import {
   Param,
   HttpStatus,
   BadRequestException,
-  Logger,
   UseGuards,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
@@ -29,6 +29,7 @@ import { Instrument } from '../instrument/instrument.schema';
 import { GetUser } from '../user/auth/get-user.decorator';
 import { User } from '../user/user.schema';
 import { AllowAny } from '../user/auth/JwtAuthGuard';
+import * as fs from 'fs';
 
 // process.env.NODE_ENV = 'production';
 
@@ -110,12 +111,29 @@ export class FileController {
 
   @AllowAny()
   @Get(':imageName')
-  getImage(@Param('imageName') image, @Res() res) {
-    const response = res.sendFile(image, { root: './uploads' });
+  getImage(
+    @Param('imageName') image,
+    @Query('download') download: boolean,
+    @Res() res,
+  ) {
+    const root = './uploads';
+
+    if (!download) {
+      const response = res.sendFile(image, { root });
+      return {
+        status: HttpStatus.OK,
+        response,
+      };
+    }
+
+    res.setHeader(
+      'Content-Disposition',
+      'attachment: filename="' + image + '"',
+    );
+    res.download(`${root}/${image}`, image);
 
     return {
       status: HttpStatus.OK,
-      response,
     };
   }
 

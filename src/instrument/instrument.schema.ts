@@ -29,6 +29,12 @@ export class Instrument extends Document {
 
   @Prop()
   @ApiProperty({
+    description: "Liste des couleurs de l'instrument",
+  })
+  colors: string[];
+
+  @Prop()
+  @ApiProperty({
     description: "Date d'obtention de l'instrument (mois prêt)",
   })
   buyDate: Date;
