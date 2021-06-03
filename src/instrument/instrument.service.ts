@@ -1,6 +1,5 @@
 import {
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -21,7 +20,7 @@ import { ContentType } from './memory/content/content.schema';
 import { randomBytes } from 'crypto';
 import { UserService } from '../user/user.service';
 import { OldOwner } from './oldowner/oldowner.schema';
-import slugify from 'slugify';
+import { async } from 'rxjs';
 
 @Injectable()
 export class InstrumentService {
@@ -31,6 +30,30 @@ export class InstrumentService {
     private userService: UserService,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
+
+  search(q: string) {
+    return this.instrumentModel
+      .find({
+        $or: [
+          {
+            brand: {
+              $regex: new RegExp(q),
+            },
+          },
+          {
+            modelName: {
+              $regex: new RegExp(q),
+            },
+          },
+          {
+            type: {
+              $regex: new RegExp(q),
+            },
+          },
+        ],
+      })
+      .limit(10);
+  }
 
   private validateInstrumentOwner(instrument, user) {
     if (!instrument.owner.equals(user._id)) {
@@ -266,6 +289,14 @@ export class InstrumentService {
       memories: [],
     });
 
+    const url = `${this.configService.get('APP_BASE_URL')}/instrument/${id}`;
+    const img: string = await qrcode.toDataURL(url);
+    const base64Data = img.split(';base64,').pop();
+
+    fs.writeFile('.tmp/qrcode.png', base64Data, { encoding: 'base64' }, () =>
+      console.log('created'),
+    );
+
     return instrument;
   }
 
@@ -329,7 +360,6 @@ export class InstrumentService {
     instrument.handoverExpire = null;
 
     const pastUser = await this.userService.findUser(instrument.owner._id);
-    Logger.log(`${pastUser} ${pastUser._id}`);
     // @ts-ignore
     const oldOwner: OldOwner = {
       user: pastUser,
