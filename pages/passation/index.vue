@@ -6,6 +6,7 @@
         <p class="">Racontez nous !</p>
       </div>
       <div v-show="step === 1" class="step step-2">
+        <img :src="illuSrc" alt="" />
         <canvas ref="canvas"></canvas>
         <p class="">Invitez le nouveau propriétaire</p>
         <ClipboardCopy v-if="url" :value="url">Copier le lien</ClipboardCopy>
@@ -35,12 +36,14 @@ path: /instrument/:id/passation
 
 <script>
 import QRCode from 'qrcode';
+import illuSrc from '@/assets/img/illu_handover.gif';
 import ClipboardCopy from '../../components/layout/ClipboardCopy';
 
 export default {
   components: { ClipboardCopy },
   data() {
     return {
+      illuSrc,
       MAX_STEP: 1,
       step: 0,
       token: null,

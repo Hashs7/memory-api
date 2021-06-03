@@ -16,6 +16,7 @@
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.9.1",
+    "date.js": "^0.3.3",
     "gsap": "^3.6.1",
     "nuxt": "^2.15.3",
     "nuxt-buefy": "^0.4.4",

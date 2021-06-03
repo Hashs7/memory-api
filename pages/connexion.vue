@@ -71,8 +71,8 @@ export default {
             password: this.login.password,
           },
         });
-        // TODO get more user infos
         this.$auth.setUser(response.data.user);
+        await this.$auth.fetchUser();
         this.redirect();
       } catch (err) {}
     },

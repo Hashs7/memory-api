@@ -42,9 +42,13 @@ export default {
     close() {
       this.$store.commit('gallery/setPreview', null);
     },
-    deleteMedia() {
-      // TODO
-      // this.$store.commit('gallery/remove', null);
+    async deleteMedia() {
+      try {
+        await this.$store.dispatch('gallery/deleteMedia', this.media._id);
+        this.close();
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 };

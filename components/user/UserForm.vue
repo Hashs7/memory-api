@@ -1,21 +1,22 @@
 <template>
-  <form @submit="submit">
+  <form ref="form" @submit="submit">
     <div class="round-upload">
       <FileUpload ref="files" :multiple="false" />
     </div>
     <div class="form__group">
       <b-field label="Prénom">
-        <b-input v-model="user.firstName" type="text"> </b-input>
+        <b-input v-model="user.firstName" name="firstName" type="text">
+        </b-input>
       </b-field>
     </div>
     <div class="form__group">
       <b-field label="Nom">
-        <b-input v-model="user.lastName" type="text"> </b-input>
+        <b-input v-model="user.lastName" name="lastName" type="text"> </b-input>
       </b-field>
     </div>
     <div class="form__group">
       <b-field label="Pseudo">
-        <b-input v-model="user.username" type="text"> </b-input>
+        <b-input v-model="user.username" name="username" type="text"> </b-input>
       </b-field>
     </div>
     <button type="submit" class="u-button u-button--primary">Valider</button>
@@ -39,7 +40,7 @@ export default {
   },
   mounted() {
     if (this.$auth.loggedIn) {
-      this.user = this.$auth.$state.user;
+      this.user = { ...this.$auth.$state.user };
     }
   },
   methods: {
@@ -52,15 +53,15 @@ export default {
       }
       try {
         await this.$api.updateUser(formData);
-        this.notifyCreated();
+        await this.$auth.fetchUser();
+        this.redirect();
       } catch (e) {
         this.notifyError();
       }
     },
-    notifyCreated() {
-      this.$buefy.toast.open({
-        message: 'Votre profil a été modifé',
-        type: 'is-success',
+    redirect() {
+      this.$router.push({
+        name: 'profil',
       });
     },
     notifyError() {

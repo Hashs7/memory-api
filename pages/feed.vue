@@ -1,7 +1,7 @@
 <template>
   <div class="o-page">
     <div class="o-page__header">
-      <input class="o-page__search" type="text" placeholder="Rechercher" />
+      <SearchBar />
       <NuxtLink to="/profil" class="profile">
         <span v-if="!$auth.loggedIn">Profil</span>
         <img
@@ -28,7 +28,10 @@
 </router>
 
 <script>
+import SearchBar from '../components/SearchBar';
+
 export default {
+  components: { SearchBar },
   async fetch() {
     try {
       const res = await this.$api.getInstruments();
@@ -53,10 +56,6 @@ export default {
 
 .o-page__title {
   margin-top: 20px;
-}
-
-.o-page__search {
-  flex-grow: 1;
 }
 
 .profile {

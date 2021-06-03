@@ -70,17 +70,6 @@ export default {
     bottom: 0;
     border: 4px solid $primary;
   }
-
-  /*&.selected {
-    z-index: 1;
-    position: fixed;
-    left: 20px;
-    right: 20px;
-    top: 20px;
-    bottom: 20px;
-    border: 4px solid $primary;
-    transition: all 0.3s;
-  }*/
 }
 
 .gallery-media__img {

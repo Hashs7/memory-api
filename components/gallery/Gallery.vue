@@ -1,13 +1,5 @@
 <template>
   <div class="gallery">
-    <div class="gallery__container">
-      <GalleryMedia
-        v-for="m in medias"
-        :key="m._id"
-        :media="m"
-        @select="select(m._id)"
-      />
-    </div>
     <div class="u-button u-button--outline media-content">
       <span>Importer une photo</span>
       <input
@@ -19,6 +11,16 @@
         @change="previewImg"
       />
     </div>
+
+    <div class="gallery__container">
+      <GalleryMedia
+        v-for="m in medias"
+        :key="m._id"
+        :media="m"
+        @select="select(m._id)"
+      />
+    </div>
+
     <MediaPreview v-if="preview && mediaSelected" :media="mediaSelected" />
   </div>
 </template>

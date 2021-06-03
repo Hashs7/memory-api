@@ -90,6 +90,7 @@ export default {
       return `/instrument/${id}/edit`;
     },
     isOwner() {
+      console.log(this.instrument.owner._id, this.$auth.$state.user?._id);
       return this.instrument.owner._id === this.$auth.$state.user?._id;
     },
     isFavorite() {

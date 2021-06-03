@@ -56,4 +56,11 @@ export const actions = {
       commit('setMedias', res.data);
     } catch (e) {}
   },
+
+  async deleteMedia({ commit }, id) {
+    try {
+      await this.$api.deleteMedia(id);
+      commit('removeMedia', id);
+    } catch (e) {}
+  },
 };

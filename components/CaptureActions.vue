@@ -62,7 +62,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .illu-capture {
   display: block;
   width: 184px;

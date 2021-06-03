@@ -68,7 +68,7 @@ export default {
       return this.data.createdBy === this.$auth.$state.user?._id;
     },
     thumbnail() {
-      return this.data.contents.find((c) => c.type === 'media')?.file.path;
+      return this.data.contents.find((c) => c.type === 'media')?.file?.path;
     },
   },
 };

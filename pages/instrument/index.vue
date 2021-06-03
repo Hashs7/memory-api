@@ -93,9 +93,7 @@ export default {
       this.instruments.user = userInstruments;
       this.instruments.old = oldInstruments;
       this.instruments.wish = wishInstruments;
-      if (userInstruments.length) {
-        this.showSection('user');
-      }
+      this.showSection('user');
     } catch (e) {
       throw new Error(e);
     }

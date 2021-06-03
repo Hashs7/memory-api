@@ -80,6 +80,6 @@ export default {
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
-  margin: auto;
+  margin: 80px auto 12px auto;
 }
 </style>
