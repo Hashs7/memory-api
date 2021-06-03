@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InstrumentService } from '../instrument/instrument.service';
 import { MemoryService } from '../instrument/memory/memory.service';
 import { Instrument } from '../instrument/instrument.schema';
@@ -12,7 +12,7 @@ export class SearchService {
   ) {}
   public async search(
     searchContent: string,
-  ): Promise<{ instruments: Instrument[]; memories: Memory[] }> {
+  ): Promise<{ instruments: Instrument[]; memories: Object[] }> {
     const instrumentRes = await this.instrumentService.search(searchContent);
     const memoryRes = await this.memoryService.search(searchContent);
 
