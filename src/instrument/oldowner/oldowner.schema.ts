@@ -5,7 +5,11 @@ import { User } from '../../user/user.schema';
 
 @Schema()
 export class OldOwner extends Types.Subdocument {
-  @Prop(User)
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: User.name,
+    required: true,
+  })
   @ApiProperty({ type: User })
   user: User;
 

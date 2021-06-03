@@ -51,8 +51,18 @@ export class UserService {
     return this.userModel.findOne({ resetPasswordToken });
   }
 
-  findUsers(ids: string[]): Promise<User[]> {
-    return this.userModel.find({ _id: { $in: ids } }).exec();
+  async findUsers(ids: string[]): Promise<User[]> {
+    const users = await this.userModel
+      .find({ _id: { $in: ids } })
+      .populate('thumbnail');
+    return users.map((u) => {
+      u.thumbnail?.rewritePath();
+      u.salt = null;
+      u.password = null;
+      u.resetPasswordToken = null;
+      u.resetPasswordExpire = null;
+      return u;
+    });
   }
 
   async saveUser(user: User): Promise<User> {
