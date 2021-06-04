@@ -5,14 +5,12 @@
     @back="currentView = 'Summary'"
   />
   <Summary
-    v-else-if="currentView === 'Summary' && !showVisibility"
+    v-else-if="currentView === 'Summary'"
     edit
     @back="onBack"
     @submit="onSubmit"
-    @params="showVisibility = true"
     @open-form="currentView = 'ContentForm'"
   />
-  <Visibility v-else @back="showVisibility = false" />
 </template>
 
 <router>
@@ -23,10 +21,9 @@
 import { mapState } from 'vuex';
 import ContentForm from '@/components/memories/creation/views/ContentForm';
 import Summary from '@/components/memories/creation/views/Summary';
-import Visibility from '@/components/memories/creation/views/Visibility';
 
 export default {
-  components: { Summary, ContentForm, Visibility },
+  components: { Summary, ContentForm },
   middleware: 'auth',
   async asyncData({ $api, store, params }) {
     const memory = (await $api.getMemoryById(params.id, params.memoryId))?.data;
@@ -35,11 +32,10 @@ export default {
   data() {
     return {
       currentView: 'Summary',
-      showVisibility: false,
     };
   },
   computed: {
-    ...mapState('memory', ['data']),
+    ...mapState('memory', { memory: 'data' }),
     instrumentId() {
       return this.$route.params.id;
     },
@@ -57,7 +53,7 @@ export default {
           this.instrumentId,
           this.$route.params.memoryId,
           {
-            ...this.data,
+            ...this.memory,
           }
         );
         this.updatedHandler();

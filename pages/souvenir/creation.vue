@@ -23,7 +23,6 @@ alias:
 <script>
 import { mapState } from 'vuex';
 import Summary from '@/components/memories/creation/views/Summary';
-import Visibility from '@/components/memories/creation/views/Visibility';
 import ContentForm from '../../components/memories/creation/views/ContentForm';
 
 // TODO get instrument id
@@ -31,7 +30,6 @@ export default {
   name: 'NewInstrument',
   components: {
     ContentForm,
-    Visibility,
     Summary,
   },
   layout: 'none',
@@ -39,7 +37,6 @@ export default {
     return {
       success: false,
       showSummary: false,
-      showVisibility: false,
     };
   },
   computed: {

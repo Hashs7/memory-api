@@ -41,6 +41,7 @@ export default {
     { src: '~/plugins/audio-recorder.js', mode: 'client' },
     { src: '~/plugins/wysiwyg.js', mode: 'client' },
     { src: '~/plugins/nuxt-client-init.js', mode: 'client' },
+    { src: '~/plugins/vue-select.js' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
