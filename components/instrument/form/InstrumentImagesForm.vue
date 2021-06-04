@@ -13,22 +13,22 @@
           </button>
         </div>
       </template>
-      <div class="instrument-picture add" @click="$emit('showGallery')">
-        <IconAdd />
-        <button type="button">Ajouter</button>
-      </div>
+      <ButtonSquare
+        class="instrument-picture add"
+        @click.native="$emit('showGallery')"
+      />
     </vue-scroll>
   </div>
 </template>
 
 <script>
-import IconAdd from '@/assets/svg/ic_add.svg?inline';
 import { mapState } from 'vuex';
+import ButtonSquare from '../../UI/ButtonSquare';
 
 export default {
   name: 'InstrumentImagesForm',
   components: {
-    IconAdd,
+    ButtonSquare,
   },
   data() {
     return {
@@ -73,7 +73,6 @@ export default {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border: 1px solid $black;
   }
 
   .instrument-picture__remove {

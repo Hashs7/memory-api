@@ -4,6 +4,9 @@
       <img :src="previewSrc" alt="" class="preview__img" />
     </div>
     <label v-else-if="showChoices" class="media-content__container">
+      <Gallery @selected="$emit('close')" />
+    </label>
+    <!--    <label v-else-if="showChoices" class="media-content__container">
       <IconMedia class="media-content__icon" />
       <input
         ref="file"
@@ -13,17 +16,17 @@
         style="opacity: 0"
         @change="previewImg"
       />
-    </label>
+    </label>-->
   </div>
 </template>
 
 <script>
-import IconMedia from '@/assets/svg/ic_media.svg?inline';
+import Gallery from '../../../gallery/Gallery';
 
 export default {
   name: 'MediaContent',
   components: {
-    IconMedia,
+    Gallery,
   },
   props: {
     value: {
@@ -82,6 +85,7 @@ export default {
 }
 
 .media-content__container {
+  padding: 16px;
   width: 100%;
   height: 100%;
   display: flex;

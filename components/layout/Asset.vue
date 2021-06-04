@@ -1,5 +1,5 @@
 <template>
-  <div @resize.capture="sendSize" class="asset">
+  <div class="asset" @resize.capture="sendSize">
     <span
       :style="{ backgroundColor, transform: `translateX(${x})` }"
       class="asset__underlay"

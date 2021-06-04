@@ -122,6 +122,7 @@ export default {
 
 <style lang="scss">
 .o-page--create-content {
+  max-height: calc(100vh - 72px);
   background-repeat: repeat;
   background-image: url('~/assets/svg/ic_grid.svg');
 }

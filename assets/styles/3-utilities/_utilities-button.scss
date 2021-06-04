@@ -16,10 +16,11 @@
 
   @include hover {}
 }
-
+/*
 .u-button + .u-button {
   margin-top: 8px;
 }
+*/
 
 .u-button--primary {
   background-color: $gray-darkest;
@@ -47,9 +48,20 @@
 }
 
 .u-button--background {
+  position: relative;
   padding: 0;
   height: auto;
   line-height: 1;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+
+  &.dark {
+    color: $white;
+  }
+  &.light {
+    color: $black;
+  }
 }
 
 .u-button__content {
@@ -110,4 +122,15 @@
 
 .u-button--back.transparent {
   background-color: transparent;
+}
+
+
+.u-button__input-file {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }
