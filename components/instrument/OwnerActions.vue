@@ -4,7 +4,7 @@
       Ajouter un souvenir
     </NuxtLink>
 
-    <button @click="toggleForSale" class="u-button u-button--primary">
+    <button class="u-button u-button--primary" @click="toggleForSale">
       {{ instrument.forSale ? 'Retirer de la vente' : 'Mettre en vente' }}
     </button>
 

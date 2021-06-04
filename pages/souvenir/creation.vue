@@ -29,12 +29,12 @@ import ContentForm from '../../components/memories/creation/views/ContentForm';
 // TODO get instrument id
 export default {
   name: 'NewInstrument',
-  layout: 'none',
   components: {
     ContentForm,
     Visibility,
     Summary,
   },
+  layout: 'none',
   data() {
     return {
       success: false,

@@ -11,7 +11,6 @@ export const getters = {
 
 export const mutations = {
   addContent(state, type) {
-    console.log(getContent(type));
     state.data.contents.push(getContent(type));
   },
 

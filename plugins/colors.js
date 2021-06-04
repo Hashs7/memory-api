@@ -5,13 +5,15 @@ import imagesLoaded from 'imagesloaded';
 /* -------------------- Plugin -------------------- */
 const Color = {
   install(Vue) {
-    Vue.prototype.$color = (url) => (new Promise((resolve) => {
+    Vue.prototype.$color = (url) =>
+      new Promise((resolve) => {
         let data;
         const image = new Image();
         imagesLoaded(image, () => {
           const rvb = { r: 0, v: 0, b: 0 };
           const canvas = document.createElement('canvas');
-          const height = image.naturalHeight || image.offsetHeight || image.height;
+          const height =
+            image.naturalHeight || image.offsetHeight || image.height;
           canvas.height = height;
           const width = image.naturalWidth || image.offsetWidth || image.width;
           canvas.width = width;
@@ -48,11 +50,9 @@ const Color = {
         });
         image.crossOrigin = '*';
         image.src = url;
-      })
-    );
+      });
   },
 };
-
 
 /* -------------------- Use -------------------- */
 Vue.use(Color);

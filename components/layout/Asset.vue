@@ -5,15 +5,15 @@
       class="asset__underlay"
     />
     <img
-      ref="asset"
       v-if="isImage"
+      ref="asset"
       v-lazy="{ src: url }"
       :alt="alt"
       class="asset__asset"
     />
     <video
-      ref="asset"
       v-else
+      ref="asset"
       :src="url"
       muted
       loop
