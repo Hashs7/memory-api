@@ -41,6 +41,9 @@
   border: 6px solid $white;
   background-color: $gray;
   box-shadow: $shadow--second;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .u-button--background {
@@ -79,4 +82,32 @@
   box-shadow: $shadow--third;
   border: none;
   border-radius: 50%;
+}
+
+.u-button--back {
+  position: relative;
+  display: block;
+  padding: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: $black;
+  border: none;
+
+  svg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+}
+
+.u-button--back.light {
+  background-color: $background;
+}
+
+.u-button--back.transparent {
+  background-color: transparent;
 }

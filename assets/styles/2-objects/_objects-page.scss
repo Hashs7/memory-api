@@ -37,12 +37,9 @@
 .o-page__header-nav {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 58px;
-  font-size: 14px;
   line-height: 1;
-  background-color: $white;
 }
 
 .o-page__header-btn {
@@ -51,10 +48,8 @@
   bottom: 0;
   border: none;
   background-color: transparent;
-  min-width: 40px;
   height: 100%;
   font-size: 14px;
-  padding: 0 22px;
 
   &:first-child {
     left: 0;

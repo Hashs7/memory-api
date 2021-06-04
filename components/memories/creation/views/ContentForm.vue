@@ -1,13 +1,15 @@
 <template>
-  <div class="o-page o-page--create">
+  <div class="o-page o-page--create-content">
     <div class="o-page__header o-page__header-nav">
-      <button class="o-page__header-btn icon" @click="$emit('back')">
+      <button class="u-button--back" @click="$emit('back')">
         <IconChevron />
       </button>
-      <span>Racontez l'histoire de votre instrument</span>
+      <button class="u-button--back transparent">
+        <IconVisibility />
+      </button>
     </div>
 
-    <form class="o-page__body">
+    <form class="o-page__body o-page__outside">
       <div class="slider">
         <SlideIntro />
         <div v-for="(content, i) in contents" :key="i" class="slider__item">
@@ -49,7 +51,7 @@
       </button>
       <button
         type="button"
-        class="button u-button u-button--round actions__submit"
+        class="u-button--round actions__submit"
         @click="$emit(edit ? 'back' : 'next')"
       >
         <IconCheck />
@@ -70,6 +72,7 @@ import MemoryPreview from '@/components/memories/MemoryPreview';
 import IconCheck from '@/assets/svg/ic_check.svg?inline';
 import IconBrush from '@/assets/svg/ic_brush.svg?inline';
 import IconChevron from '@/assets/svg/ic_chevron.svg?inline';
+import IconVisibility from '@/assets/svg/ic_visibility.svg?inline';
 
 import { CONTENT_TYPE } from '@/const/memory';
 
@@ -86,6 +89,7 @@ export default {
     IconCheck,
     IconBrush,
     IconChevron,
+    IconVisibility,
   },
   props: {
     edit: {
@@ -117,6 +121,11 @@ export default {
 </script>
 
 <style lang="scss">
+.o-page--create-content {
+  background-repeat: repeat;
+  background-image: url('~/assets/svg/ic_grid.svg');
+}
+
 .o-page__footer {
   display: flex;
   justify-content: space-between;
@@ -138,8 +147,10 @@ export default {
 
 .slider {
   display: flex;
+  align-items: center;
   overflow: auto;
-  padding: 8px 24px;
+  padding: 16px 24px;
+  height: 100%;
 
   &::-webkit-scrollbar {
     width: 0;
@@ -151,9 +162,10 @@ export default {
   position: relative;
   //min-width: calc(100vw - 60px);
   //height: calc((100vw - 60px) * (16 / 9));
-  width: 300px;
+  min-width: 300px;
   height: calc(300px * (16 / 9));
-  margin: 20px 12px;
+  //margin: 20px 12px;
+  margin-right: 12px;
   box-shadow: $shadow--first;
   border-radius: $radius;
   background-color: $white;
