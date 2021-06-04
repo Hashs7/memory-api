@@ -33,16 +33,19 @@ export const VISIBILITY = {
     slug: 'Private',
     label: 'Moi seulement',
     helper: 'Vous êtes le seul à voir le memory',
+    icon: 'IconPrivate',
   },
   UrlOnly: {
     slug: 'UrlOnly',
     label: 'Lien seulement',
     helper: 'Seuls les utilisateurs qui possèdent le lien',
+    icon: 'IconLink',
   },
   Public: {
     slug: 'Public',
     label: 'Tout le monde',
     helper: 'Tous les  utilisateurs de Memory Motel',
+    icon: 'IconWorld',
   },
 };
 

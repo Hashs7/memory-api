@@ -20,6 +20,7 @@
     "nuxt-buefy": "^0.4.4",
     "qrcode": "^1.4.4",
     "vue-audio-recorder": "^3.0.1",
+    "vue-select": "^3.11.2",
     "vue-wysiwyg": "^1.7.2",
     "vue2-hammer": "^2.1.2"
   },
