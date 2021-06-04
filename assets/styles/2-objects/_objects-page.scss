@@ -2,9 +2,16 @@
   display: flex;
   flex-direction: column;
   // Remove navbar height
-  min-height: calc(100vh - 3.25rem);
-  background-color: $background;
+  min-height: calc(100vh - 72px);
+  margin: auto;
   padding: 16px;
+  background-color: $background;
+  max-width: 688px;
+}
+
+.o-page__outside {
+  margin-left: -16px;
+  margin-right: -16px;
 }
 
 .o-page__container {
@@ -13,11 +20,18 @@
 }
 
 .o-page--full {
+  z-index: 50;
   position: fixed;
+  max-width: none;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+
+  &.with-nav {
+    height: calc(100% - 72px);
+    bottom: auto;
+  }
 }
 
 .o-page__header-nav {
@@ -70,6 +84,7 @@
 }
 
 .o-page__title {
+  font-size: 24px;
   //font-size: 16px;
   font-weight: 300;
   margin-bottom: 20px;
@@ -95,59 +110,36 @@
   padding: 0 8px;
 }
 
-.o-cells {
-
-  &:not(:last-child) {
-    margin-bottom: 16px;
+// Specific
+.o-page--register,
+.o-page--login {
+  .o-page__header {
+    margin: 144px 0 64px 0;
+    padding: 0 72px;
   }
-}
 
-.o-cells__label {
-  margin: 0 0 12px 8px;
-  font-size: 14px;
-  color: #C0C0C0;
-}
-
-.o-cells__container {
-  box-shadow: $shadow--first;
-  border-radius: 4px;
-}
-
-.o-cells__item {
-  width: 100%;
-  height: 78px;
-  border: none;
-  background-color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 22px;
-  border-radius: 4px;
-
-  &:not(:last-child) {
-    border-radius: 4px 4px 0 0;
-    border-bottom: 1px solid #E1E1E1;
+  .register__form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
   }
-  
-  &.selected {
-    background-color: #DFDFDF;
+
+  .register__container {
+    flex-grow: 1;
   }
-}
 
-.o-cells__item-content {
-  display: block;
-  text-align: left;
-  line-height: 1;
-}
+  .logo {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    width: 64px;
+    margin: auto;
+  }
 
-.o-cells__item-text {
-  display: block;
-  font-size: 16px;
-  line-height: 1;
-}
-
-.o-cells__item-help {
-  line-height: 1;
-  font-size: 13px;
-  color: #C0C0C0;
+  .form__actions {
+    .u-button {
+      width: 100%;
+    }
+  }
 }

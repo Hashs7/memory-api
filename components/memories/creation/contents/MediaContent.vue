@@ -89,13 +89,6 @@ export default {
   justify-content: center;
 }
 
-.media-content__input {
-  height: 0.1px;
-  width: 0.1px;
-  overflow: hidden;
-  position: absolute;
-}
-
 .u-button {
   margin-bottom: 8px;
 }

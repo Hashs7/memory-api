@@ -36,7 +36,9 @@
             :src="c.file.path"
             controls
           />
-          <span v-if="c.type !== 'media'">{{ c.type }}</span>
+          <span v-if="c.type !== 'media'">
+            <p v-html="c.content"></p>
+          </span>
         </MemoryCard>
       </div>
     </div>
@@ -45,14 +47,12 @@
 </template>
 
 <router>
-{
-  path: '/instrument/:id/souvenir/:memoryId'
-}
+  path: /instrument/:id/souvenir/:memoryId
 </router>
 
 <script>
 import MemoryCard from '@/components/memories/MemoryCard';
-import UserPreview from '../../../../components/user/UserPreview';
+import UserPreview from '@/components/user/UserPreview';
 
 export default {
   components: { UserPreview, MemoryCard },

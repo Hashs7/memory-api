@@ -7,10 +7,13 @@ export default {
     title: 'Memory Motel',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, user-scalable=no',
+      },
       { hid: 'description', name: 'description', content: '' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -30,6 +33,10 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/ApiService.js' },
+    { src: '~/plugins/vue-scroll.js' },
+    { src: '~/plugins/carousel.js' /* mode: 'client' */ },
+    { src: '~/plugins/vue-lazyload.js', mode: 'client' },
+    { src: '~/plugins/colors.js', mode: 'client' },
     { src: '~/plugins/hammer.js', mode: 'client' },
     { src: '~/plugins/audio-recorder.js', mode: 'client' },
     { src: '~/plugins/wysiwyg.js', mode: 'client' },
@@ -61,6 +68,16 @@ export default {
     apiUrl: process.env.VUE_APP_API_URL || 'http://localhost:3000',
   },
 
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'custom',
+        path: '*',
+        component: resolve(__dirname, 'pages/404.vue'),
+      });
+    },
+  },
+
   auth: {
     redirect: {
       login: '/connexion',
@@ -89,12 +106,71 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    icon: {
+      fileName: 'favicon.png',
+    },
     manifest: {
       lang: 'fr',
     },
     meta: {
+      name: 'Memory Motel',
+      viewport: 'width=device-width, initial-scale=1, user-scalable=no',
       mobileAppIOS: 'dark-content',
+      appleStatusBarStyle: 'black-translucent',
     },
+    themeColor: '#FFF9E2',
+    msTileColor: '#373737',
+    appleMobileWebAppStatusBarStyle: 'default',
+    /* workboxOptions: {
+      exclude: ['.htaccess'],
+      importScripts: ['/serviceWorkerSkipWaiting.js'],
+      skipWaiting: false,
+      navigateFallback: 'index.html',
+      runtimeCaching: [
+        // Cache the Google Fonts stylesheets with a stale while revalidate strategy.
+        {
+          urlPattern: /^https:\/\/fonts\.googleapis\.com/,
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'google-fonts-stylesheets',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+          },
+        },
+
+        // Cache the Google Fonts webfont files with a cache first strategy for 1 year.
+        {
+          urlPattern: /^https:\/\/fonts\.gstatic\.com/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'google-fonts-webfonts',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 31536000, // 1 year
+            },
+          },
+        },
+
+        // Cache the Carto CDN map tiles
+        {
+          urlPattern: /^https:\/\/.+\.basemaps\.cartocdn\.com/,
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'cartocdn-basemaps',
+            cacheableResponse: {
+              statuses: [0, 200],
+            },
+            expiration: {
+              maxAgeSeconds: 5184000, // 60 days
+              maxEntries: 100, // Max 100 request (prevent taking to much space)
+            },
+          },
+        },
+      ],
+    }, */
   },
 
   server: {

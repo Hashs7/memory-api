@@ -82,6 +82,19 @@ export default {
       opacity: 0.5;
     }
 
+    &--current:not(.add) {
+      position: relative;
+      &:after {
+        content: '';
+        height: 2px;
+        position: absolute;
+        top: -12px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        background-color: $black;
+      }
+    }
     &--current .tabbar__text,
     &--current svg {
       opacity: 1;
@@ -109,11 +122,9 @@ export default {
 .tabbar__container {
   margin: auto;
   width: 100%;
-  //height: 100%;
   position: relative;
   display: flex;
   justify-content: space-around;
-  //padding-bottom: 16px;
 }
 
 .tabbar__item.add {

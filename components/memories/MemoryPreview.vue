@@ -5,7 +5,7 @@
     class="memory-preview"
     @click="$emit('click')"
   >
-    <div class="memory-preview__image-container">
+    <div v-if="thumbnail" class="memory-preview__image-container">
       <img
         class="memory-preview__image"
         :src="thumbnail"
@@ -13,18 +13,19 @@
       />
     </div>
     <div class="memory-preview__body">
-      <h4 class="memory-preview__name">{{ memory.name }}</h4>
-      <p v-if="typeof memory.date === 'string'" class="memory-preview__date">
-        {{ memory.date }}
-      </p>
-      <nuxt-link v-if="editable && isOwner" :to="editLinkUrl" class="btn">
-        Modifier
-      </nuxt-link>
+      <h4 class="memory-preview__name">{{ data.name }}</h4>
+      <p class="memory-preview__date">{{ date }}</p>
+      <client-only>
+        <nuxt-link v-if="editable && isOwner" :to="editLinkUrl" class="u-link">
+          Modifier
+        </nuxt-link>
+      </client-only>
     </div>
   </component>
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import IconBrush from '@/assets/svg/ic_brush.svg?inline';
 
 export default {
@@ -35,7 +36,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    memory: {
+    data: {
       type: Object,
       required: true,
 
@@ -56,7 +57,7 @@ export default {
   computed: {
     linkUrl() {
       const { id } = this.$route.params;
-      return `/instrument/${id}/souvenir/${this.memory.id}`;
+      return `/instrument/${id}/souvenir/${this.data.id}`;
     },
     editLinkUrl() {
       return `${this.linkUrl}/edit`;
@@ -65,12 +66,14 @@ export default {
       return this.$store.state.user;
     },
     isOwner() {
-      return this.memory.createdBy === this.$auth.$state.user?._id;
+      return this.data.createdBy === this.$auth.$state.user?._id;
     },
     thumbnail() {
-      const image = this.memory.contents.find((c) => c.type === 'media')?.file
-        .path;
-      return image;
+      return this.data.contents.find((c) => c.type === 'media')?.file?.path;
+    },
+    date() {
+      console.log(this.data.date);
+      return dayjs(this.data.date).format('MMMM YYYY');
     },
   },
 };
@@ -109,5 +112,6 @@ export default {
   margin-top: 8px;
   font-size: 12px;
   font-weight: 300;
+  text-transform: capitalize;
 }
 </style>

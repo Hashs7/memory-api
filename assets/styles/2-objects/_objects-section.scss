@@ -5,18 +5,33 @@
 // -----------------------------------------------------------------------------
 
 .o-section {
-  padding-top: 52px;
-  padding-bottom: 52px;
+  padding-top: 32px;
+  padding-bottom: 32px;
 }
 
 .o-section__head {
+  position: relative;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid $gray-darkest;
   padding-bottom: 8px;
+  margin-bottom: 16px;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100vw - 16px);
+    height: 1px;
+    background-color: rgba($gray-darkest, .4);
+  }
 }
 
 .o-section__title {
   font-weight: 500;
   font-family: $font-primary;
+}
+
+.o-section__pictures {
+  display: flex;
 }

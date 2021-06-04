@@ -68,3 +68,15 @@
 .u-button__bg {
   width: 100%;
 }
+
+.u-button--action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  background-color: $background;
+  box-shadow: $shadow--third;
+  border: none;
+  border-radius: 50%;
+}

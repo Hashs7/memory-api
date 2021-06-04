@@ -1,7 +1,7 @@
 <template>
   <div class="o-page">
     <h1 class="o-page__title">Passation</h1>
-    <h2 v-if="validated">
+    <h2 v-if="validated && instrument">
       Vous venez de faire l'acquisition de {{ instrument.name }}
     </h2>
     <div v-if="error.hasError" class="error">
@@ -26,6 +26,18 @@ path: /instrument/:id/passation/reception
 
 <script>
 export default {
+  /*
+  async asyncData($api, params) {
+    try {
+      const res = await $api.getInstrumentById(params.id);
+      return {
+        instrument: res.data,
+      };
+    } catch (e) {
+      throw new Error(e);
+    }
+  },
+  */
   data() {
     return {
       error: {
@@ -60,8 +72,12 @@ export default {
   },
   methods: {
     async getInstrument() {
-      const res = await this.$api.getInstrumentById(this.instrumentId);
-      this.instrument = res.data;
+      try {
+        const res = await this.$api.getInstrumentById(this.instrumentId);
+        this.instrument = res.data;
+      } catch (e) {
+        throw new Error(e);
+      }
     },
     async validateToken() {
       if (!this.$route.query.token) {

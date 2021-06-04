@@ -3,25 +3,24 @@ class ApiController {
     this.$axios = $axios;
   }
 
+  /**
+   * Route : User
+   */
   me() {
     return this.$axios.get('/user/me');
   }
 
   async login(payload) {
-    const { data } = await this.$axios.post('/auth/signin', { ...payload });
+    const { data } = await this.$axios.post('/auth/signin', payload);
     return data;
   }
 
   register(payload) {
-    return this.$axios.post('/auth/signup', { ...payload });
+    return this.$axios.post('/auth/signup', payload);
   }
 
   getOnlineUsers() {
     return this.$axios.get('/user/online');
-  }
-
-  getUserMedias() {
-    return this.$axios.get('/file/user');
   }
 
   getUserByUsername(username) {
@@ -37,29 +36,32 @@ class ApiController {
   }
 
   sendMessage(payload) {
-    return this.$axios.post('/chat/message', { ...payload });
+    return this.$axios.post('/chat/message', payload);
   }
 
+  /**
+   * Route : Memory
+   */
   newMemory(instrumentId, payload) {
-    return this.$axios.post(`/instrument/${instrumentId}/memory`, {
-      ...payload,
-    });
+    return this.$axios.post(`/instrument/${instrumentId}/memory`, payload);
   }
 
   updateMemory(instrumentId, memoryId, payload) {
-    return this.$axios.patch(`/instrument/${instrumentId}/memory/${memoryId}`, {
-      ...payload,
-    });
+    return this.$axios.patch(
+      `/instrument/${instrumentId}/memory/${memoryId}`,
+      payload
+    );
   }
 
   getMemoryById(instrumentId, memoryId) {
     return this.$axios.get(`/instrument/${instrumentId}/memory/${memoryId}`);
   }
 
+  /**
+   * Route : Instrument
+   */
   newInstrument(payload) {
-    return this.$axios.post('/instrument', payload, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    return this.$axios.post('/instrument', payload);
   }
 
   getInstruments() {
@@ -78,7 +80,11 @@ class ApiController {
     return this.$axios.get(`/instrument/${id}`);
   }
 
-  addInstrumentToWishlist(id) {
+  updateInstrument(id, payload) {
+    return this.$axios.patch(`/instrument/${id}`, payload);
+  }
+
+  toggleInstrumentToWishlist(id) {
     return this.$axios.patch(`/user/wishlist/${id}`);
   }
 
@@ -90,6 +96,9 @@ class ApiController {
     return this.$axios.patch(`/instrument/confirm-handover?token=${token}`);
   }
 
+  /**
+   * Route : File
+   */
   getFile(filename) {
     return this.$axios.get(`/file/${filename}`);
   }
@@ -100,6 +109,21 @@ class ApiController {
         'Content-Type': 'multipart/form-data',
       },
     });
+  }
+
+  getUserMedias() {
+    return this.$axios.get('/file/user');
+  }
+
+  deleteMedia(id) {
+    return this.$axios.delete(`/file/${id}`);
+  }
+
+  /**
+   * Route : Search
+   */
+  search(text) {
+    return this.$axios.get(`/search?text=${text}`);
   }
 }
 

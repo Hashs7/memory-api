@@ -4,11 +4,20 @@
     @next="showSummary = true"
     @back="$router.back()"
   />
-  <Summary v-else @back="showSummary = false" @submit="submit" />
+  <Summary
+    v-else-if="!showVisibility"
+    edit
+    @back="showSummary = false"
+    @submit="submit"
+    @params="showVisibility = true"
+  />
+  <Visibility v-else @back="showVisibility = false" />
 </template>
 
 <router>
-path: /instrument/:id/souvenir/creation
+path: /souvenir/creation
+alias:
+ - /instrument/:id/souvenir/creation
 </router>
 
 <script>
@@ -16,6 +25,7 @@ import { mapState } from 'vuex';
 import Summary from '@/components/memories/creation/views/Summary';
 import ContentForm from '../../components/memories/creation/views/ContentForm';
 
+// TODO get instrument id
 export default {
   name: 'NewInstrument',
   components: {
@@ -29,7 +39,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('memory', ['memory']),
+    ...mapState('memory', ['data']),
     selectedTheme() {
       return this.themes.find((el) => el.selected)?.slug;
     },
@@ -45,36 +55,33 @@ export default {
     async submit() {
       try {
         await this.$api.newMemory(this.instrumentId, {
-          ...this.memory,
+          ...this.data,
         });
         this.createdHandler();
       } catch (e) {
-        throw new Error(e);
+        this.notifyError();
       }
     },
 
     // Instrument created callback
     createdHandler() {
-      this.$buefy.toast.open({
-        message: "Le souvenir vient d'être créé",
-        type: 'is-success',
+      this.$router.push({
+        name: 'instrument-id',
+        params: { id: this.instrumentId },
       });
-      setTimeout(() => {
-        this.$router.push({
-          name: 'instrument-id',
-          params: { id: this.instrumentId },
-        });
-      }, 1000);
+    },
+
+    notifyError() {
+      this.$buefy.toast.open({
+        message: 'Le souvenir',
+        type: 'is-danger',
+      });
     },
   },
 };
 </script>
 
 <style lang="scss">
-.o-page--create {
-  background-color: #fffefa;
-}
-
 .o-page__footer {
   display: flex;
   justify-content: space-between;

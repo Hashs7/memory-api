@@ -11,8 +11,7 @@
       </button>
     </div>
     <div class="o-page__body">
-      <MemoryPreview v-if="edit" :memory="memory" @click="$emit('open-form')" />
-      <MemoryPreview v-else :memory="memory" />
+      <MemoryPreview :data="memory" @click="edit ? $emit('open-form') : ''" />
 
       <div class="o-cells">
         <label class="o-cells__label">Date</label>

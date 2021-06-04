@@ -2,12 +2,12 @@
   <div class="o-page">
     <h1>Mon motel</h1>
     <section class="view view--instrument-list">
-      <nav class="instrument-nav">
+      <nav class="o-section__head tab-nav">
         <button
           v-for="(s, i) in sections"
           :key="i"
           :class="{ current: selectedSection === s.name }"
-          class="instrument-nav__item"
+          class="tab-nav__item"
           @click="showSection(s.name)"
         >
           {{ s.nav }}
@@ -37,6 +37,7 @@
               v-for="ins in instruments[s.name]"
               :key="ins.id"
               :data="ins"
+              :show-favorite="s.name === 'wish'"
             />
           </div>
         </section>
@@ -92,9 +93,7 @@ export default {
       this.instruments.user = userInstruments;
       this.instruments.old = oldInstruments;
       this.instruments.wish = wishInstruments;
-      if (userInstruments.length) {
-        this.showSection('user');
-      }
+      this.showSection('user');
     } catch (e) {
       throw new Error(e);
     }
@@ -112,21 +111,13 @@ export default {
 .create-instrument {
   margin-bottom: 8px;
 }
-.instrument-nav {
-  display: flex;
-  margin: 20px 0;
-  font-weight: 500;
-  border-bottom: 1px solid $gray-dark;
-}
-.instrument-nav__item {
-  height: 32px;
-  margin-right: 20px;
-  border: none;
-  background-color: transparent;
-  border-bottom: 1px solid transparent;
 
-  &.current {
-    border-color: $gray-darkest;
+.instruments-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  &.user-instrument {
+    display: block;
   }
 }
 

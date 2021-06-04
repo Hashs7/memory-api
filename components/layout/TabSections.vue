@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="tab-nav">
+    <nav class="o-section__head tab-nav">
       <button
         v-for="(s, i) in sections"
         :key="i"
@@ -27,6 +27,7 @@
             :key="d.id"
             :data="d"
           />
+          <slot :name="`section${i}`"></slot>
         </div>
       </section>
     </div>
@@ -35,11 +36,13 @@
 
 <script>
 import InstrumentPreview from '../instrument/InstrumentPreview';
+import MemoryPreview from '../memories/MemoryPreview';
 
 export default {
   name: 'TabSections',
   components: {
     InstrumentPreview,
+    MemoryPreview,
   },
   props: {
     showIndex: {
@@ -90,24 +93,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.tab-nav {
-  display: flex;
-  margin: 20px 0;
-  font-weight: 500;
-  border-bottom: 1px solid $gray-dark;
-}
-
-.tab-nav__item {
-  height: 32px;
-  margin-right: 20px;
-  border: none;
-  background-color: transparent;
-  border-bottom: 2px solid transparent;
-
-  &.current {
-    border-color: $gray-darkest;
-  }
-}
-</style>

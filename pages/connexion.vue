@@ -1,9 +1,13 @@
 <template>
-  <div class="o-page o-page--signin">
-    <div class="create">
-      <h1>Connexion</h1>
+  <div class="o-page o-page--login">
+    <div class="o-page__header">
+      <div class="logo"><IconLogo /></div>
+      <span class="o-page__title">Connexion au compte</span>
+      <h1 class="o-page__subtitle">Bon retour parmis nous !</h1>
+    </div>
 
-      <form v-if="!$auth.loggedIn" @submit="submit">
+    <form v-if="!$auth.loggedIn" class="register__form" @submit="submit">
+      <div class="register__container">
         <div class="form__group">
           <b-field label="Email">
             <b-input v-model="login.username" type="email"></b-input>
@@ -15,26 +19,35 @@
             </b-input>
           </b-field>
         </div>
-        <button type="submit" class="button is-primary">Me connecter</button>
-      </form>
-      <Logout v-else type="submit" class="button"> Me déconnecter </Logout>
-      <button @click="resetPassword">Mot de passe oublié</button>
-      <NuxtLink to="/inscription">S'inscrire</NuxtLink>
-
-      <div>
-        <h2>Hint</h2>
-        <div>Password98015</div>
       </div>
-    </div>
+      <div class="form__actions">
+        <button type="submit" class="u-button u-button--primary">
+          Me connecter
+        </button>
+        <NuxtLink to="/inscription" class="u-button u-button--outline"
+          >S'inscrire</NuxtLink
+        >
+      </div>
+    </form>
+    <Logout v-else type="submit" class="button"> Me déconnecter </Logout>
+    <button @click="resetPassword">Mot de passe oublié</button>
   </div>
 </template>
 
 <script>
 import Logout from '../components/user/Logout';
+import IconLogo from '~/assets/svg/ic_logo.svg?inline';
 
 export default {
   name: 'Login',
-  components: { Logout },
+  components: { Logout, IconLogo },
+  layout(ctx) {
+    let layout = 'default';
+    if (!ctx.$auth.loggedIn) {
+      layout = 'none';
+    }
+    return layout;
+  },
   data() {
     return {
       login: {
@@ -57,8 +70,8 @@ export default {
             password: this.login.password,
           },
         });
-        // TODO get more user infos
         this.$auth.setUser(response.data.user);
+        await this.$auth.fetchUser();
         this.redirect();
       } catch (err) {}
     },
@@ -92,24 +105,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.form__group {
-  max-width: 300px;
-  margin: 0 auto 16px auto;
-
-  label {
-    text-align: left;
-    display: block;
-  }
-
-  input {
-    width: 100%;
-  }
-}
-
-.button {
-  margin: auto;
-  display: inline-block;
-}
-</style>

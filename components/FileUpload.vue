@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     labelText() {
-      return this.multiple ? 'Déposez vos fichiers' : 'Déposez votre fichier';
+      return this.multiple ? 'Ajouter' : 'Déposez votre fichier';
     },
   },
   methods: {

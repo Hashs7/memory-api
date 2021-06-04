@@ -1,32 +1,33 @@
 <template>
-  <Summary
-    v-if="currentView === 'Summary'"
-    edit
-    @back="onBack"
-    @submit="onSubmit"
-    @open-form="currentView = 'ContentForm'"
-  />
   <ContentForm
-    v-else-if="currentView === 'ContentForm'"
+    v-if="currentView === 'ContentForm'"
     v-model="memory"
     edit
     @back="currentView = 'Summary'"
   />
+  <Summary
+    v-else-if="currentView === 'Summary' && !showVisibility"
+    edit
+    @back="onBack"
+    @submit="onSubmit"
+    @params="showVisibility = true"
+    @open-form="currentView = 'ContentForm'"
+  />
+  <Visibility v-else @back="showVisibility = false" />
 </template>
 
 <router>
-{
-  path: '/instrument/:id/souvenir/:memoryId/edit'
-}
+  path: /instrument/:id/souvenir/:memoryId/edit
 </router>
 
 <script>
+import { mapState } from 'vuex';
 import ContentForm from '@/components/memories/creation/views/ContentForm';
 import Summary from '@/components/memories/creation/views/Summary';
-import { mapState } from 'vuex';
+import Visibility from '@/components/memories/creation/views/Visibility';
 
 export default {
-  components: { Summary, ContentForm },
+  components: { Summary, ContentForm, Visibility },
   middleware: 'auth',
   async asyncData({ $api, store, params }) {
     const memory = (await $api.getMemoryById(params.id, params.memoryId))?.data;
@@ -35,6 +36,7 @@ export default {
   data() {
     return {
       currentView: 'Summary',
+      showVisibility: false,
     };
   },
   computed: {
@@ -56,7 +58,7 @@ export default {
           this.instrumentId,
           this.$route.params.memoryId,
           {
-            ...this.memory,
+            ...this.data,
           }
         );
         this.updatedHandler();
@@ -65,14 +67,9 @@ export default {
           message: 'Une erreur est survenue',
           type: 'is-error',
         });
-        console.error(e);
       }
     },
     updatedHandler() {
-      this.$buefy.toast.open({
-        message: 'Le souvenir a bien été modifié',
-        type: 'is-success',
-      });
       this.$router.push({
         name: 'instrument-id',
         params: { id: this.instrumentId },

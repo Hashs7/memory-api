@@ -1,13 +1,15 @@
 <template>
   <div class="o-page">
     <div class="o-page__header">
-      <input class="o-page__search" type="text" placeholder="Rechercher" />
-      <div class="profile">
-        <NuxtLink to="/profil" class="">
-          <span v-if="!$auth.loggedIn">Profil</span>
-          <img v-else :src="profilePicture" alt="photo de profil" />
-        </NuxtLink>
-      </div>
+      <SearchBar />
+      <NuxtLink to="/profil" class="profile">
+        <span v-if="!$auth.loggedIn">Profil</span>
+        <img
+          v-if="profilePicture"
+          :src="profilePicture"
+          alt="photo de profil"
+        />
+      </NuxtLink>
     </div>
 
     <h1 class="o-page__title">Explorer</h1>
@@ -26,7 +28,10 @@
 </router>
 
 <script>
+import SearchBar from '../components/SearchBar';
+
 export default {
+  components: { SearchBar },
   async fetch() {
     try {
       const res = await this.$api.getInstruments();
@@ -37,7 +42,7 @@ export default {
   },
   computed: {
     profilePicture() {
-      return this.$auth.user?.thumbnail.path;
+      return this.$auth.user?.thumbnail?.path;
     },
   },
 };
@@ -51,10 +56,6 @@ export default {
 
 .o-page__title {
   margin-top: 20px;
-}
-
-.o-page__search {
-  flex-grow: 1;
 }
 
 .profile {
