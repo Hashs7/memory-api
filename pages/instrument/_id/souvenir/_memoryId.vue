@@ -36,7 +36,9 @@
             :src="c.file.path"
             controls
           />
-          <span v-if="c.type !== 'media'">{{ c.type }}</span>
+          <span v-if="c.type !== 'media'">
+            <p v-html="c.content"></p>
+          </span>
         </MemoryCard>
       </div>
     </div>

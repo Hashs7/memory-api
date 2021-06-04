@@ -149,8 +149,10 @@ export default {
 
 .slider__item {
   position: relative;
-  min-width: calc(100vw - 60px);
-  height: calc((100vw - 60px) * (16 / 9));
+  //min-width: calc(100vw - 60px);
+  //height: calc((100vw - 60px) * (16 / 9));
+  width: 300px;
+  height: calc(300px * (16 / 9));
   margin: 20px 12px;
   box-shadow: $shadow--first;
   border-radius: $radius;

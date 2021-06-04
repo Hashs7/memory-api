@@ -102,19 +102,22 @@ export default {
 
     redirect() {
       if (this.$store.getters['handover/pendingHandover']) {
-        // user came from handover
-        const id = this.$store.state.handover.instrumentId;
-        const { token } = this.$store.state.handover;
-        this.$router.push({
-          name: 'passation-reception',
-          params: { id },
-          query: { token },
-        });
+        this.redirectHandover();
         return;
       }
       // Redirect to personal instruments
       this.$router.push({
         name: 'instrument',
+      });
+    },
+    redirectHandover() {
+      // user came from handover
+      const id = this.$store.state.handover.instrumentId;
+      const { token } = this.$store.state.handover;
+      this.$router.push({
+        name: 'passation-reception',
+        params: { id },
+        query: { token },
       });
     },
   },
