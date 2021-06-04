@@ -2,8 +2,8 @@
   <v-select
     v-model="visibility"
     class="u-select"
-    :searchable="false"
     label="label"
+    :searchable="false"
     :options="visibilities"
     :reduce="(v) => v.slug"
     :clearable="false"

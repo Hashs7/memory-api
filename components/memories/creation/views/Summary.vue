@@ -31,6 +31,13 @@
         </client-only>
       </div>
 
+      <TabSections
+        :sections="[
+          {
+            nav: 'Paramètres de confidentialité',
+          },
+        ]"
+      />
       <Visibility />
     </div>
   </div>
@@ -41,10 +48,12 @@ import { mapMutations, mapState } from 'vuex';
 import Visibility from '@/components/memories/creation/form/Visibility';
 import MemoryPreview from '@/components/memories/MemoryPreview';
 import IconChevron from '@/assets/svg/ic_chevron.svg?inline';
+import TabSections from '../../../layout/TabSections';
 
 export default {
   name: 'Summary',
   components: {
+    TabSections,
     Visibility,
     MemoryPreview,
     IconChevron,
