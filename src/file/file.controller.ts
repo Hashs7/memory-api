@@ -12,6 +12,7 @@ import {
   UseGuards,
   Delete,
   Query,
+  Logger,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
@@ -21,7 +22,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { randomBytes } from 'crypto';
 import got from 'got';
 import { FileService } from './file.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -111,30 +111,20 @@ export class FileController {
 
   @AllowAny()
   @Get(':imageName')
-  getImage(
-    @Param('imageName') image,
-    @Query('download') download: boolean,
+  async getImage(
     @Res() res,
+    @Param('imageName') image: string,
+    @Query('download') download?: boolean,
+    @Query('w') width?: string,
+    @Query('h') height?: string,
   ) {
-    const root = './uploads';
-
-    if (!download) {
-      const response = res.sendFile(image, { root });
-      return {
-        status: HttpStatus.OK,
-        response,
-      };
-    }
-
-    res.setHeader(
-      'Content-Disposition',
-      'attachment: filename="' + image + '"',
+    return this.fileService.getFileHandler(
+      res,
+      image,
+      download,
+      width ? Number(width) : null,
+      height ? Number(height) : null,
     );
-    res.download(`${root}/${image}`, image);
-
-    return {
-      status: HttpStatus.OK,
-    };
   }
 
   /**
