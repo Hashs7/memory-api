@@ -14,7 +14,9 @@
     </div>
     <div class="memory-preview__body">
       <h4 class="memory-preview__name">{{ memory.name }}</h4>
-      <p class="memory-preview__date">{{ memory.date }}</p>
+      <p v-if="typeof memory.date === 'string'" class="memory-preview__date">
+        {{ memory.date }}
+      </p>
       <nuxt-link v-if="editable && isOwner" :to="editLinkUrl" class="btn">
         Modifier
       </nuxt-link>

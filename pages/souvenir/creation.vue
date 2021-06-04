@@ -4,13 +4,7 @@
     @next="showSummary = true"
     @back="$router.back()"
   />
-  <Summary
-    v-else-if="!showVisibility"
-    @back="showSummary = false"
-    @submit="submit"
-    @params="showVisibility = true"
-  />
-  <Visibility v-else @back="showVisibility = false" />
+  <Summary v-else @back="showSummary = false" @submit="submit" />
 </template>
 
 <router>
@@ -20,21 +14,18 @@ path: /instrument/:id/souvenir/creation
 <script>
 import { mapState } from 'vuex';
 import Summary from '@/components/memories/creation/views/Summary';
-import Visibility from '@/components/memories/creation/views/Visibility';
 import ContentForm from '../../components/memories/creation/views/ContentForm';
 
 export default {
   name: 'NewInstrument',
   components: {
     ContentForm,
-    Visibility,
     Summary,
   },
   data() {
     return {
       success: false,
       showSummary: false,
-      showVisibility: false,
     };
   },
   computed: {

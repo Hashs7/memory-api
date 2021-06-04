@@ -101,12 +101,6 @@ export default {
   },
   computed: {
     ...mapGetters('memory', ['contents']),
-    memory: {
-      get() {
-        return this.$store.state.memory;
-      },
-      set(newValue) {},
-    },
   },
   methods: {
     removeItem(index) {
