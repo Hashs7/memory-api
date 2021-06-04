@@ -12,7 +12,7 @@ export class SearchService {
   ) {}
   public async search(
     text: string,
-    categories: Types.ObjectId[],
+    categories?: Types.ObjectId[],
   ): Promise<{ instruments: Instrument[]; memories: Object[] }> {
     const instrumentRes = await this.instrumentService.search(text);
     const memoryRes = await this.memoryService.search(text, categories);

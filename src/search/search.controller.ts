@@ -13,7 +13,10 @@ export class SearchController {
     @Query('text') searchText: string,
     @Query('categories') cat: string,
   ): Promise<any> {
-    const categories = cat.split(',').map((c) => Types.ObjectId(c));
+    let categories = null;
+    if (cat) {
+      categories = cat.split(',').map((c) => Types.ObjectId(c));
+    }
     return await this.searchService.search(searchText, categories);
   }
 }
