@@ -38,7 +38,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('memory', ['memory']),
+    ...mapState('memory', { memory: 'data' }),
     instrumentId() {
       return this.$route.params.id;
     },
@@ -49,9 +49,6 @@ export default {
         name: 'instrument-id',
         params: { id: this.instrumentId },
       });
-    },
-    onInput(value) {
-      this.memory = { ...value };
     },
     async onSubmit() {
       try {
