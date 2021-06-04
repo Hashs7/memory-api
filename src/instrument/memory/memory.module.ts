@@ -37,5 +37,6 @@ import { CategoryService } from './category/category.service';
     CategoryService,
     FileService,
   ],
+  exports: [MemoryService],
 })
 export class MemoryModule {}
