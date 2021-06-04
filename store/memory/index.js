@@ -1,4 +1,4 @@
-import { CONTENT_TYPE, emptyMemory } from '@/const/memory';
+import { getContent, emptyMemory } from '@/const/memory';
 
 // Add memory store
 export const state = () => ({
@@ -11,7 +11,8 @@ export const getters = {
 
 export const mutations = {
   addContent(state, type) {
-    state.data.contents.push(CONTENT_TYPE[type]);
+    console.log(getContent(type));
+    state.data.contents.push(getContent(type));
   },
 
   updateName(state, value) {
@@ -51,5 +52,17 @@ export const mutations = {
     state.themes.forEach((t) => (t.selected = false));
     const theme = state.themes.find((t) => t.slug === slug);
     theme.selected = true;
+  },
+};
+
+export const actions = {
+  addSelectedMedia({ rootGetters, commit, dispatch }, index) {
+    const selected = rootGetters['gallery/getLastSelected'];
+    if (!selected) return;
+    commit('updateContent', {
+      index,
+      file: selected,
+    });
+    commit('gallery/removeSelected', selected._id, { root: true });
   },
 };

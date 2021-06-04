@@ -3,6 +3,7 @@
     :is="link ? 'nuxt-link' : 'button'"
     :to="link"
     :class="{ light: outline, dark: !outline }"
+    :type="!link ? 'button' : ''"
     class="u-button u-button--background"
   >
     <div class="u-button__content">
@@ -18,7 +19,7 @@ import BtnBackground from '@/assets/svg/button/btn_background.svg?inline';
 import BtnOutline from '@/assets/svg/button/btn_outline.svg?inline';
 
 export default {
-  name: 'Button',
+  name: 'CustomButton',
   components: {
     BtnBackground,
     BtnOutline,

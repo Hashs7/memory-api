@@ -1,61 +1,63 @@
 <template>
-  <div class="o-page o-page--create-content">
-    <div class="o-page__header o-page__header-nav">
-      <button class="u-button--back" @click="$emit('back')">
-        <IconChevron />
-      </button>
-      <button class="u-button--back transparent">
-        <IconVisibility />
-      </button>
-    </div>
-
-    <form class="o-page__body o-page__outside">
-      <div class="slider">
-        <SlideIntro />
-        <div v-for="(content, i) in contents" :key="i" class="slider__item">
-          <component
-            :is="contentType[content.type].component"
-            :key="i"
-            :value="content"
-            :index="i"
-          />
-          <button type="button" class="slider__close" @click="removeItem(i)">
-            x
-          </button>
-        </div>
-
-        <SliderAdd />
+  <div class="o-page--create-content">
+    <div class="o-page">
+      <div class="o-page__header o-page__header-nav">
+        <button class="u-button--back" @click="$emit('back')">
+          <IconChevron />
+        </button>
+        <button class="u-button--back transparent">
+          <IconVisibility />
+        </button>
       </div>
-    </form>
 
-    <form v-if="showThemes" class="o-page--full themes">
-      <div class="themes__container">
-        <h3>Choisissez votre thème</h3>
-        <div class="themes__grid">
-          <ThemeSelector v-for="(t, i) in themes" :key="i" :theme="t" />
+      <form class="o-page__body o-page__outside">
+        <div class="slider">
+          <SlideIntro />
+          <div v-for="(content, i) in contents" :key="i" class="slider__item">
+            <component
+              :is="contentType[content.type].component"
+              :key="i"
+              :value="content"
+              :index="i"
+            />
+            <button type="button" class="slider__close" @click="removeItem(i)">
+              x
+            </button>
+          </div>
+
+          <SliderAdd />
         </div>
-      </div>
-      <span
-        class="o-page--full themes__background"
-        @click="showThemes = false"
-      ></span>
-    </form>
+      </form>
 
-    <div class="o-page__footer actions">
-      <button
-        type="button"
-        class="button u-button u-button--round actions__theme"
-        @click="showThemes = !showThemes"
-      >
-        <IconBrush />
-      </button>
-      <button
-        type="button"
-        class="u-button--round actions__submit"
-        @click="$emit(edit ? 'back' : 'next')"
-      >
-        <IconCheck />
-      </button>
+      <form v-if="showThemes" class="o-page--full themes">
+        <div class="themes__container">
+          <h3>Choisissez votre thème</h3>
+          <div class="themes__grid">
+            <ThemeSelector v-for="(t, i) in themes" :key="i" :theme="t" />
+          </div>
+        </div>
+        <span
+          class="o-page--full themes__background"
+          @click="showThemes = false"
+        ></span>
+      </form>
+
+      <div class="o-page__footer actions">
+        <button
+          type="button"
+          class="button u-button u-button--round actions__theme"
+          @click="showThemes = !showThemes"
+        >
+          <IconBrush />
+        </button>
+        <button
+          type="button"
+          class="u-button--round actions__submit"
+          @click="$emit(edit ? 'back' : 'next')"
+        >
+          <IconCheck />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -125,6 +127,10 @@ export default {
   max-height: calc(100vh - 72px);
   background-repeat: repeat;
   background-image: url('~/assets/svg/ic_grid.svg');
+
+  .o-page {
+    background-color: transparent;
+  }
 }
 
 .o-page__footer {

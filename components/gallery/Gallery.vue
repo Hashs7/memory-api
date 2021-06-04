@@ -1,6 +1,6 @@
 <template>
   <div class="gallery">
-    <Button outline>
+    <CustomButton outline>
       <span>Importer une photo</span>
       <input
         ref="file"
@@ -10,7 +10,7 @@
         style="opacity: 0"
         @change="previewImg"
       />
-    </Button>
+    </CustomButton>
 
     <div class="gallery__container">
       <GalleryMedia
@@ -26,13 +26,13 @@
 </template>
 
 <script>
-import Button from '../UI/Button';
+import CustomButton from '../UI/CustomButton';
 import MediaPreview from './MediaPreview';
 import GalleryMedia from './GalleryMedia';
 
 export default {
   name: 'Gallery',
-  components: { Button, GalleryMedia, MediaPreview },
+  components: { CustomButton, GalleryMedia, MediaPreview },
   props: {
     preview: {
       type: Boolean,

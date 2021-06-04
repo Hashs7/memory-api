@@ -28,6 +28,8 @@ export const CONTENT_TYPE = {
   },
 };
 
+export const getContent = (type) => ({ ...CONTENT_TYPE[type] });
+
 export const VISIBILITY = {
   private: {
     slug: 'private',

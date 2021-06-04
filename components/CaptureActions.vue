@@ -9,7 +9,7 @@
       </p>
       <input
         ref="file"
-        class="media-content__input"
+        class="u-button__input-file"
         type="file"
         accept="audio/*,video/*,image/*"
         style="opacity: 0"
