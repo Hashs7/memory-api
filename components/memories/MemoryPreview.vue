@@ -72,7 +72,6 @@ export default {
       return this.data.contents.find((c) => c.type === 'media')?.file?.path;
     },
     date() {
-      console.log(this.data.date);
       return dayjs(this.data.date).format('MMMM YYYY');
     },
   },

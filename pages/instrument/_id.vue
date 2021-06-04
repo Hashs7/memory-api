@@ -1,6 +1,7 @@
 <template>
   <div class="instrument">
-    <button type="button" class="instrument__back" @click="back">Retour</button>
+    <ButtonBack class="instrument__back" />
+
     <div v-if="instrument">
       <ImagesCarousel v-if="thumbnail" :data="instrument.images" />
       <div class="instrument__container o-page__container">
@@ -22,19 +23,12 @@
           <UserPreview :user="instrument.owner" />
         </div>
 
-        <div v-if="isOwner">
-          <NuxtLink :to="addMemory" class="u-button u-button--primary"
-            >Ajouter un souvenir
-          </NuxtLink>
+        <OwnerActions
+          v-if="isOwner"
+          :instrument="instrument"
+          @update="updateInstrument"
+        />
 
-          <NuxtLink :to="handover" class="u-button u-button--primary"
-            >Vendre
-          </NuxtLink>
-
-          <NuxtLink :to="edit" class="u-button u-button--primary"
-            >Modifier les informations
-          </NuxtLink>
-        </div>
         <div v-else class="instrument__not-owner">
           <button
             :class="[isFavorite]"
@@ -60,9 +54,17 @@
 import UserPreview from '../../components/user/UserPreview';
 import MemorySection from '../../components/memories/MemorySection';
 import ImagesCarousel from '../../components/instrument/ImagesCarousel';
+import OwnerActions from '../../components/instrument/OwnerActions';
+import ButtonBack from '../../components/UI/ButtonBack';
 
 export default {
-  components: { ImagesCarousel, MemorySection, UserPreview },
+  components: {
+    ButtonBack,
+    OwnerActions,
+    ImagesCarousel,
+    MemorySection,
+    UserPreview,
+  },
   layout(ctx) {
     let layout = 'default';
     if (ctx.route.params.memoryId) {
@@ -82,20 +84,7 @@ export default {
   },
   fetchOnServer: false,
   computed: {
-    addMemory() {
-      const { id } = this.$route.params;
-      return `/instrument/${id}/souvenir/creation`;
-    },
-    handover() {
-      const { id } = this.$route.params;
-      return `/instrument/${id}/passation`;
-    },
-    edit() {
-      const { id } = this.$route.params;
-      return `/instrument/${id}/edit`;
-    },
     isOwner() {
-      console.log(this.instrument.owner._id, this.$auth.$state.user?._id);
       return this.instrument.owner._id === this.$auth.$state.user?._id;
     },
     isFavorite() {
@@ -120,6 +109,9 @@ export default {
     back() {
       this.$router.go(-1);
     },
+    updateInstrument(data) {
+      this.instrument = data;
+    },
   },
 };
 </script>
@@ -132,8 +124,8 @@ export default {
 .instrument__back {
   z-index: 5;
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 18px;
+  left: 18px;
 }
 
 .instrument__container {

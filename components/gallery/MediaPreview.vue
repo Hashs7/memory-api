@@ -1,7 +1,7 @@
 <template>
   <div class="o-page o-page--full with-nav">
     <div class="media-preview">
-      <button @click="close">Retour</button>
+      <ButtonBack emit @back="close" />
       <div class="o-page__outside">
         <img class="" :src="media.path" alt="" />
       </div>
@@ -20,10 +20,12 @@
 <script>
 import IconTrash from '@/assets/svg/ic_trash.svg?inline';
 import IconDownload from '@/assets/svg/ic_download.svg?inline';
+import ButtonBack from '../UI/ButtonBack';
 
 export default {
   name: 'MediaPreview',
   components: {
+    ButtonBack,
     IconTrash,
     IconDownload,
   },
