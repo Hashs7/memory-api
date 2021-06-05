@@ -53,6 +53,10 @@ export class UpdateMemoryDto {
 
   @IsOptional()
   @ApiPropertyOptional()
+  preview?: MemoryContent;
+
+  @IsOptional()
+  @ApiPropertyOptional()
   contents?: MemoryContent[];
 
   @IsNotEmpty()

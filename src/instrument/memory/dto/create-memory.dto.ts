@@ -45,6 +45,10 @@ export class CreateMemoryDto {
   })
   withUsers?: string[];
 
+  // @IsOptional()
+  @ApiProperty()
+  preview: MemoryContent;
+
   @IsOptional()
   @ApiProperty()
   contents?: MemoryContent[];
