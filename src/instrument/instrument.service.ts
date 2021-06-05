@@ -56,8 +56,29 @@ export class InstrumentService {
           },
         ],
       })
-      .select('')
-      .limit(10);
+      .select('images brand modelName name forSale type owner memories')
+      .limit(10)
+      .populate([
+        'owner',
+        'images',
+        {
+          path: 'owner',
+          select: 'username firstName lastName _id',
+          populate: {
+            path: 'thumbnail',
+          },
+        },
+      ])
+      .exec();
+  }
+
+  searchSerialize(instrumentRes: Instrument[]): Instrument[] {
+    instrumentRes.map((i) => {
+      i.memories = i.memories.filter((m) => {
+        if (m.visibility == 'public') return m;
+      });
+    });
+    return instrumentRes;
   }
 
   private validateInstrumentOwner(instrument, user) {
