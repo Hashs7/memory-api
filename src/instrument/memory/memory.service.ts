@@ -201,6 +201,11 @@ export class MemoryService {
   }
 
   search(q: string, categories: Types.ObjectId[]) {
+    const filters: any = {};
+
+    if (categories) {
+      filters.categories = { $in: categories };
+    }
     // @ts-ignore
     return this.memoryModel
       .find({
@@ -216,14 +221,19 @@ export class MemoryService {
             },
           },
         ],
+        $and: [
+          {
+            visibility: 'public',
+          },
+        ],
       })
-      .find({ categories: { $in: categories } })
+      .find(filters)
       .limit(10)
+      .select('-withUsers -createdAt -updatedAt -contents -template')
       .then((memories) => {
         return Promise.all(
           memories.map(async (m) => {
             const instrument = await this.instrumentService.findByMemory(m.id);
-
             if (instrument) {
               return {
                 ...m.toObject(),

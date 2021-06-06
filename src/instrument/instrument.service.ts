@@ -68,8 +68,7 @@ export class InstrumentService {
             path: 'thumbnail',
           },
         },
-      ])
-      .exec();
+      ]);
   }
 
   searchSerialize(instrumentRes: Instrument[]): Instrument[] {

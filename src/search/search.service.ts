@@ -15,8 +15,8 @@ export class SearchService {
     categories?: Types.ObjectId[],
   ): Promise<{ instruments: Instrument[]; memories: Object[] }> {
     let instrumentRes = await this.instrumentService.search(text);
-
     instrumentRes = this.instrumentService.searchSerialize(instrumentRes);
+
     const memoryRes = await this.memoryService.search(text, categories);
 
     return {
