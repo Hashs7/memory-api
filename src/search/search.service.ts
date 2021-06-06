@@ -13,8 +13,14 @@ export class SearchService {
   public async search(
     text: string,
     categories?: Types.ObjectId[],
+    forSale?: string,
+    instruTypes?: string,
   ): Promise<{ instruments: Instrument[]; memories: Object[] }> {
-    let instrumentRes = await this.instrumentService.search(text);
+    let instrumentRes = await this.instrumentService.search(
+      text,
+      forSale,
+      instruTypes,
+    );
     instrumentRes = this.instrumentService.searchSerialize(instrumentRes);
 
     const memoryRes = await this.memoryService.search(text, categories);

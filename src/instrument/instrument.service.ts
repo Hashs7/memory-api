@@ -29,7 +29,17 @@ export class InstrumentService {
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
-  search(q: string) {
+  search(q: string, forSale: string, instruTypes: string) {
+    const filters: any = {};
+
+    if (forSale) {
+      filters.forSale = forSale;
+    }
+
+    if (instruTypes) {
+      filters.type = { $in: instruTypes };
+    }
+
     return this.instrumentModel
       .find({
         $or: [
@@ -58,6 +68,7 @@ export class InstrumentService {
       })
       .select('images brand modelName name forSale type owner memories')
       .limit(10)
+      .find(filters)
       .populate([
         'owner',
         'images',
