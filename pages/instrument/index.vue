@@ -1,48 +1,52 @@
 <template>
   <div class="o-page">
-    <h1>Mon motel</h1>
-    <section class="view view--instrument-list">
-      <nav class="o-section__head tab-nav">
-        <button
-          v-for="(s, i) in sections"
-          :key="i"
-          :class="{ current: selectedSection === s.name }"
-          class="tab-nav__item"
-          @click="showSection(s.name)"
-        >
-          {{ s.nav }}
-        </button>
-      </nav>
+    <div class="o-page__header">
+      <h1>Mon motel</h1>
+    </div>
+    <div class="o-page__body">
+      <section class="view view--instrument-list">
+        <nav class="o-section__head tab-nav">
+          <button
+            v-for="(s, i) in sections"
+            :key="i"
+            :class="{ current: selectedSection === s.name }"
+            class="tab-nav__item"
+            @click="showSection(s.name)"
+          >
+            {{ s.nav }}
+          </button>
+        </nav>
 
-      <div class="instrument-sections">
-        <section
-          v-for="(s, i) in sections"
-          :key="i"
-          :class="[s.class]"
-          class="instruments-container"
-        >
-          <div v-show="selectedSection === s.name" class="">
-            <NuxtLink
-              v-if="selectedSection === 'user'"
-              to="/instrument/creation"
-              class="u-button u-button--background create-instrument"
-            >
-              <div class="u-button__content">
-                <IconAdd />
-                <span>Ajouter</span>
-              </div>
-              <IconRectangle class="u-button__bg" />
-            </NuxtLink>
-            <InstrumentPreview
-              v-for="ins in instruments[s.name]"
-              :key="ins.id"
-              :data="ins"
-              :show-favorite="s.name === 'wish'"
-            />
-          </div>
-        </section>
-      </div>
-    </section>
+        <div class="instrument-sections">
+          <section
+            v-for="(s, i) in sections"
+            :key="i"
+            :class="[s.class]"
+            class="instruments-container"
+          >
+            <div v-show="selectedSection === s.name" class="">
+              <NuxtLink
+                v-if="selectedSection === 'user'"
+                to="/instrument/creation"
+                class="u-button u-button--background create-instrument"
+              >
+                <div class="u-button__content">
+                  <IconAdd />
+                  <span>Ajouter</span>
+                </div>
+                <IconRectangle class="u-button__bg" />
+              </NuxtLink>
+              <InstrumentPreview
+                v-for="ins in instruments[s.name]"
+                :key="ins.id"
+                :data="ins"
+                :show-favorite="s.name === 'wish'"
+              />
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 

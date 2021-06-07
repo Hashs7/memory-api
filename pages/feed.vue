@@ -2,24 +2,36 @@
   <div class="o-page">
     <div class="o-page__header">
       <SearchBar />
-      <NuxtLink to="/profil" class="profile">
-        <span v-if="!$auth.loggedIn">Profil</span>
-        <img
-          v-if="profilePicture"
-          :src="profilePicture"
-          alt="photo de profil"
-        />
-      </NuxtLink>
+      <transition name="fade" mode="out-in">
+        <NuxtLink v-if="!searchActive" to="/profil" class="profile">
+          <span v-if="!$auth.loggedIn">Profil</span>
+          <img
+            v-if="profilePicture"
+            :src="profilePicture"
+            alt="Photo de profil"
+          />
+        </NuxtLink>
+        <button
+          v-else
+          class="u-button u-button--text"
+          @click="setSearchActive(false)"
+        >
+          Annuler
+        </button>
+      </transition>
+      <SearchModal v-if="searchActive" />
     </div>
 
-    <h1 class="o-page__title">Explorer</h1>
+    <div class="o-page__body">
+      <h1 class="o-page__title">Explorer</h1>
 
-    <section class="o-section">
-      <div class="o-section__head">
-        <h4 class="o-section__title">Actualités des instruments favoris</h4>
-        <button class="u-link">Voir tout</button>
-      </div>
-    </section>
+      <section class="o-section">
+        <div class="o-section__head">
+          <h4 class="o-section__title">Actualités des instruments favoris</h4>
+          <button class="u-link">Voir tout</button>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -28,10 +40,12 @@
 </router>
 
 <script>
-import SearchBar from '../components/SearchBar';
+import { mapMutations, mapState } from 'vuex';
+import SearchBar from '../components/search/SearchBar';
+import SearchModal from '../components/search/SearchModal';
 
 export default {
-  components: { SearchBar },
+  components: { SearchModal, SearchBar },
   async fetch() {
     try {
       const res = await this.$api.getInstruments();
@@ -41,9 +55,15 @@ export default {
     }
   },
   computed: {
+    ...mapState('search', { searchActive: 'active' }),
     profilePicture() {
       return this.$auth.user?.thumbnail?.path;
     },
+  },
+  methods: {
+    ...mapMutations('search', {
+      setSearchActive: 'setActive',
+    }),
   },
 };
 </script>
@@ -52,6 +72,7 @@ export default {
 .o-page__header {
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 .o-page__title {
@@ -59,10 +80,10 @@ export default {
 }
 
 .profile {
-  width: 50px;
-  height: 50px;
-  margin-left: 16px;
-  background-color: #fff;
+  width: 36px;
+  height: 36px;
+  margin-left: 12px;
+  background-color: $background-darker;
   border-radius: 50%;
   display: flex;
   justify-content: center;
