@@ -59,13 +59,11 @@ export class User extends Document {
   resetPasswordExpire: Date;
 
   @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: 'Instrument',
     required: false,
     default: [],
   })
-  @ApiProperty({ type: Instrument })
-  wishList?: MongooseSchema.Types.ObjectId[];
+  @ApiProperty()
+  wishList?: string[];
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,

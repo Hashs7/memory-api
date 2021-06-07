@@ -14,6 +14,7 @@ import { CommandModule } from 'nestjs-command';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtAuthGuard } from './user/auth/JwtAuthGuard';
 import { SearchModule } from './search/search.module';
+import { FeedModule } from './feed/feed.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { SearchModule } from './search/search.module';
     MailModule,
     CategoryModule,
     SearchModule,
+    FeedModule,
   ],
   controllers: [],
   providers: [

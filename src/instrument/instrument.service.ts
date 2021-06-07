@@ -121,6 +121,18 @@ export class InstrumentService {
     return this.instrumentModel.findOne({ id });
   }
 
+  async findMultiple(ids: string[]) {
+    let instrumentRes = await this.instrumentModel.find({
+      id: {
+        $in: ids,
+      },
+    });
+
+    instrumentRes = this.searchSerialize(instrumentRes);
+
+    return instrumentRes;
+  }
+
   /**
    * Find one instrument with id
    * @param id

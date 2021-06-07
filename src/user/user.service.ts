@@ -155,7 +155,7 @@ export class UserService {
       .exec();
   }
 
-  async toggleToWishlist(user: User, instrumentId: ObjectId) {
+  async toggleToWishlist(user: User, instrumentId: string) {
     const index = user.wishList.indexOf(instrumentId);
     if (index === -1) {
       user.wishList.push(instrumentId);
