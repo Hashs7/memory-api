@@ -49,6 +49,14 @@
   line-height: 1;
 }
 
+.u-button--text {
+  background: none;
+  border: none;
+  padding: 0 12px;
+  height: inherit;
+  line-height: 36px;
+}
+
 .u-button__content {
   position: absolute;
   top: 0;

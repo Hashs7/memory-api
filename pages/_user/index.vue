@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import TabSections from '../../components/layout/TabSections';
+import TabSections from '@/components/layout/TabSections';
 
 export default {
   name: 'UserProfile',
