@@ -1,13 +1,14 @@
 <template>
   <form class="o-page__search search" @submit.prevent="submit">
     <input
-      v-model="searchTxt"
+      v-model="searchQuery"
       class="search__input"
-      type="text"
+      type="search"
       placeholder="Rechercher"
-      @click="searchFocused = true"
+      @input="submit"
+      @focus="onSearchFocus"
     />
-    <div v-if="hasResults && searchFocused" class="search__results">
+    <div v-if="hasResults" class="search__results">
       <div v-if="hasInstruments" class="result">
         <p class="result__title">Instruments</p>
         <div
@@ -40,12 +41,11 @@
 </template>
 
 <script>
+import { mapMutations, mapState, mapActions } from 'vuex';
 export default {
   name: 'SearchBar',
   data() {
     return {
-      searchTxt: '',
-      searchFocused: false,
       results: {
         instruments: [],
         memories: [],
@@ -53,6 +53,15 @@ export default {
     };
   },
   computed: {
+    ...mapState('search', { searchActive: 'active' }),
+    searchQuery: {
+      get() {
+        return this.$store.state.search.query;
+      },
+      set(newValue) {
+        this.setQuery(newValue);
+      },
+    },
     hasInstruments() {
       return !!this.results.instruments.length;
     },
@@ -64,15 +73,20 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('search', ['setActive', 'setQuery']),
+    ...mapActions('search', ['search']),
     async submit() {
-      if (this.searchTxt.length < 4) return;
+      if (this.searchQuery.length < 3) return;
 
       try {
-        const res = await this.$api.search(this.searchTxt);
-        console.log(res.data);
-        this.results = res.data;
+        await this.search();
       } catch (e) {
         console.log(e);
+      }
+    },
+    onSearchFocus() {
+      if (!this.searchActive) {
+        this.setActive(true);
       }
     },
     instrumentLink(id) {
@@ -100,6 +114,11 @@ export default {
 .search__input {
   width: 100%;
   height: 100%;
+  background-color: $background-darker;
+
+  &::placeholder {
+    color: $gray-darkest;
+  }
 }
 
 .search__results {
