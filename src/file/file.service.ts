@@ -84,7 +84,6 @@ export class FileService {
   }
 
   async filterImage(res, image, options) {
-    console.log('filterImage');
     const filePath = `${this.root}/${image}`;
     const file = fs.readFileSync(filePath);
     const sharpFile = await sharp(file).resize(options).toBuffer();
