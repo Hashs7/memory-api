@@ -43,6 +43,14 @@ export class File extends Document {
   @ApiProperty()
   size: string;
 
+  @Prop()
+  @ApiProperty()
+  width: number;
+
+  @Prop()
+  @ApiProperty()
+  height: number;
+
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',
