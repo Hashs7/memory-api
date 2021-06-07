@@ -362,9 +362,10 @@ export class InstrumentService {
     }
     this.validateInstrumentOwner(instrument, user);
 
-    return this.instrumentModel
-      .findOneAndUpdate({ id }, updateInstrumentDto, { new: true })
-      .exec();
+    await this.instrumentModel.findOneAndUpdate({ id }, updateInstrumentDto, {
+      new: true,
+    });
+    return this.findOnePopulate(id, user);
   }
 
   /**

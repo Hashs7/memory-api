@@ -64,6 +64,12 @@ export class Memory extends Types.Subdocument {
   })
   withUsers?: MongooseSchema.Types.ObjectId[];
 
+  @Prop(MemoryContent)
+  @ApiProperty({
+    type: MemoryContent,
+  })
+  preview: MemoryContent;
+
   @IsArray()
   @Prop([MemoryContent])
   @ApiProperty({

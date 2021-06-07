@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthResetDto } from './dto/auth-reset.dto';
 import { AuthForgotDto } from './dto/auth-forgot.dto';
-import {AllowAny} from "./JwtAuthGuard";
+import { AllowAny } from './JwtAuthGuard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -25,7 +25,6 @@ export class AuthController {
   async signIn(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
   ): Promise<{ accessToken: string }> {
-    Logger.log(authCredentialsDto.password);
     return await this.authService.signIn(authCredentialsDto);
   }
 

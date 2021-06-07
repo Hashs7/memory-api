@@ -139,6 +139,7 @@ export class UserService {
     }
     if (
       updateUserDto.username &&
+      updateUserDto.username !== user.username &&
       (await this.usernameExist(updateUserDto.username))
     ) {
       throw new BadRequestException("Le nom d'utilisateur est déjà utilisé");
@@ -150,7 +151,6 @@ export class UserService {
           ...updateUserDto,
           ...(file && { thumbnail: thumbnail._id }),
         },
-        { new: true },
       )
       .exec();
   }
