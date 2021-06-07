@@ -1,17 +1,30 @@
 <template>
   <div class="o-page o-page--user">
-    <div v-if="user.thumbnail" class="user-thumbnail">
-      <img
-        :src="user.thumbnail.path"
-        :alt="`Photo de profil de ${user.firstName}`"
-      />
+    <div class="user__header">
+      <ButtonBack light class="user-back" />
+      <div v-if="isOwner" class="owner">
+        <NuxtLink to="profil/edit" class="btn-edit">Modifier</NuxtLink>
+      </div>
     </div>
-    <h1 v-if="user.firstName || user.lastName">
-      {{ user.firstName }} {{ user.lastName }}
-    </h1>
-    <p>@{{ user.username }}</p>
+    <div class="user-banner">
+      <img src="http://seb-mbp.local:3000/file/guitar1975.jpg" alt="" />
+    </div>
+    <div class="user-infos">
+      <div v-if="user.thumbnail" class="user-thumbnail">
+        <img
+          :src="user.thumbnail.path"
+          :alt="`Photo de profil de ${user.firstName}`"
+        />
+      </div>
+      <h1 v-if="name" class="user-name">
+        {{ name }}
+      </h1>
+      <p class="user-username">
+        @<span>{{ user.username }}</span>
+      </p>
+    </div>
 
-    <section class="">
+    <section class="o-page__container">
       <TabSections :sections="sections" :show-index="true" />
     </section>
   </div>
@@ -19,10 +32,11 @@
 
 <script>
 import TabSections from '@/components/layout/TabSections';
+import ButtonBack from '../../components/UI/ButtonBack';
 
 export default {
   name: 'UserProfile',
-  components: { TabSections },
+  components: { ButtonBack, TabSections },
   async asyncData({ $api, params, redirect }) {
     try {
       const user = await $api.getUserByUsername(params.user);
@@ -58,6 +72,20 @@ export default {
       ],
     };
   },
+  computed: {
+    name() {
+      if (!this.user.firstName) return null;
+      let txt = this.user.firstName;
+      const shortLast = this.user.lastName?.charAt(0);
+      if (shortLast) {
+        txt += ` ${shortLast}.`;
+      }
+      return txt;
+    },
+    isOwner() {
+      return this.$auth.$state.user._id === this.user._id;
+    },
+  },
   created() {
     const instrumentSection = this.sections.find(
       (s) => s.name === 'instruments'
@@ -72,14 +100,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.o-page--user {
-}
-.user-thumbnail {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 80px auto 12px auto;
-}
-</style>
+<style lang="scss"></style>

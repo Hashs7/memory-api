@@ -1,5 +1,5 @@
 <template>
-  <button class="u-button--back" @click="back">
+  <button class="u-button--back" :class="{ light, absolute }" @click="back">
     <IconChevron />
   </button>
 </template>
@@ -14,6 +14,14 @@ export default {
   },
   props: {
     emit: {
+      type: Boolean,
+      default: false,
+    },
+    light: {
+      type: Boolean,
+      default: false,
+    },
+    absolute: {
       type: Boolean,
       default: false,
     },

@@ -131,6 +131,15 @@
 
 .u-button--back.light {
   background-color: $background;
+  path {
+    fill: $gray-darkest;
+  }
+}
+.u-button--back.absolute {
+  position: absolute;
+  z-index: 5;
+  top: 18px;
+  left: 18px;
 }
 
 .u-button--back.transparent {

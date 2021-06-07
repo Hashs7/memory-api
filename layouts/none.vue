@@ -3,3 +3,9 @@
     <nuxt />
   </section>
 </template>
+
+<script>
+export default {
+  name: 'LayoutNone',
+};
+</script>
