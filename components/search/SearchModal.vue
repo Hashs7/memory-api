@@ -1,19 +1,19 @@
 <template>
   <div class="search-modal">
-    <ResultsView v-if="query.length > 0" />
-    <SearchView v-else />
+    <SearchResultsView v-if="showResults && query.length > 0" />
+    <SearchHistoryView v-else />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import ResultsView from '@/components/search/views/ResultsView';
-import SearchView from '@/components/search/views/SearchView';
+import SearchResultsView from '@/components/search/views/SearchResultsView';
+import SearchHistoryView from '@/components/search/views/SearchHistoryView';
 export default {
   name: 'SearchModal',
-  components: { SearchView, ResultsView },
+  components: { SearchHistoryView, SearchResultsView },
   computed: {
-    ...mapState('search', ['query']),
+    ...mapState('search', ['query', 'showResults']),
   },
 };
 </script>

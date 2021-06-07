@@ -2,6 +2,7 @@ export const state = () => ({
   active: false,
   query: '',
   results: {},
+  showResults: false,
   loading: false,
 });
 
@@ -17,6 +18,9 @@ export const mutations = {
   setResults(state, results) {
     state.results = results;
   },
+  setShowResults(state, value) {
+    state.showResults = value;
+  },
   setLoading(state, value) {
     state.loading = value;
   },
@@ -28,6 +32,7 @@ export const actions = {
       commit('setResults', true);
       const results = await this.$api.search(state.query);
       commit('setResults', results.data);
+      commit('setShowResults', true);
     } catch (e) {
       console.error(e);
     } finally {

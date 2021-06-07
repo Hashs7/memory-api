@@ -5,7 +5,6 @@
       class="search__input"
       type="search"
       placeholder="Rechercher"
-      @input="submit"
       @focus="onSearchFocus"
     />
     <div v-if="hasResults" class="search__results">

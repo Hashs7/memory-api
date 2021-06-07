@@ -1,5 +1,5 @@
 <template>
-  <div class="o-page results-view">
+  <div class="o-page search-results-view">
     <div class="o-page__body">
       <h1>Résultats</h1>
       <TabSections
@@ -27,7 +27,7 @@
 import TabSections from '@/components/layout/TabSections';
 import { mapState } from 'vuex';
 export default {
-  name: 'ResultsView',
+  name: 'SearchResultsView',
   components: { TabSections },
   computed: {
     ...mapState('search', ['results']),
