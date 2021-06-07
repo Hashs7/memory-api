@@ -44,11 +44,7 @@ export const actions = {
   },
   readLocalHistory({ commit }) {
     let history = localStorage.getItem('searchHistory');
-    if (!history) {
-      history = [];
-    } else {
-      history = JSON.parse(history);
-    }
+    history = !history ? [] : JSON.parse(history);
     commit('setHistory', history);
   },
   async search({ state, commit, dispatch }) {
