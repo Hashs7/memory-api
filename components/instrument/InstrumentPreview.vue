@@ -2,7 +2,7 @@
   <NuxtLink :to="link" class="instrument-preview">
     <Asset v-if="thumbnail" :data="thumbnail" class="instrument-preview__img" />
     <div class="instrument-preview__content">
-      <p class="instrument-preview__name">{{ data.name }}</p>
+      <p class="instrument-preview__name">{{ instrumentName }}</p>
       <p v-if="data.createdAt" class="instrument-preview__date">
         Ajouté en {{ date }}
       </p>
@@ -78,6 +78,12 @@ export default {
     thumbnail() {
       return this.data.images[0];
     },
+    instrumentName() {
+      if (this.data.name) {
+        return this.data.name;
+      }
+      return `${this.data.brand} ${this.data.specification}`;
+    },
   },
   methods: {
     async toggleFav() {
@@ -139,6 +145,7 @@ export default {
 .instrument-preview__name {
   line-height: 1.2;
   font-weight: 700;
+  text-transform: capitalize;
 }
 
 .instrument-preview__img {

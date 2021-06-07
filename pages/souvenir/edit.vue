@@ -1,7 +1,6 @@
 <template>
   <ContentForm
     v-if="currentView === 'ContentForm'"
-    v-model="memory"
     edit
     @back="currentView = 'Summary'"
   />

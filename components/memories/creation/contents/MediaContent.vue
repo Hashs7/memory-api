@@ -4,26 +4,18 @@
       <img :src="previewSrc" alt="" class="preview__img" />
     </div>
     <label v-else-if="showChoices" class="media-content__container">
-      <IconMedia class="media-content__icon" />
-      <input
-        ref="file"
-        class="media-content__input"
-        type="file"
-        accept="audio/*,video/*,image/*"
-        style="opacity: 0"
-        @change="previewImg"
-      />
+      <Gallery @selected="previewImg" />
     </label>
   </div>
 </template>
 
 <script>
-import IconMedia from '@/assets/svg/ic_media.svg?inline';
+import Gallery from '../../../gallery/Gallery';
 
 export default {
   name: 'MediaContent',
   components: {
-    IconMedia,
+    Gallery,
   },
   props: {
     value: {
@@ -39,23 +31,31 @@ export default {
     return {
       showChoices: true,
       file: null,
-      previewSrc: null,
     };
   },
-  mounted() {
-    if (this.value && this.value.file) {
-      this.previewSrc = this.value.file.path;
-    }
+  computed: {
+    previewSrc() {
+      if (this.value && this.value.file) {
+        return this.value.file.path;
+      }
+      return null;
+    },
   },
   methods: {
+    /*
     previewImg() {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(this.$refs.file.files[0]);
       fileReader.addEventListener('loadend', (e) => this.uploadImg(e));
     },
+    */
+    previewImg() {
+      this.$store.dispatch('memory/addSelectedMedia', this.index);
+      this.showChoices = false;
+    },
 
     async uploadImg(event) {
-      this.previewSrc = event.target.result;
+      // this.previewSrc = event.target.result;
       this.showChoices = false;
       const formData = new FormData();
       formData.append('file', this.$refs.file.files[0]);
@@ -82,6 +82,7 @@ export default {
 }
 
 .media-content__container {
+  padding: 16px;
   width: 100%;
   height: 100%;
   display: flex;

@@ -1,59 +1,63 @@
 <template>
-  <div class="o-page o-page--create">
-    <div class="o-page__header o-page__header-nav">
-      <button class="o-page__header-btn icon" @click="$emit('back')">
-        <IconChevron />
-      </button>
-      <span>Racontez l'histoire de votre instrument</span>
-    </div>
-
-    <form class="o-page__body">
-      <div class="slider">
-        <SlideIntro />
-        <div v-for="(content, i) in contents" :key="i" class="slider__item">
-          <component
-            :is="contentType[content.type].component"
-            :key="i"
-            :value="content"
-            :index="i"
-          />
-          <button type="button" class="slider__close" @click="removeItem(i)">
-            x
-          </button>
-        </div>
-
-        <SliderAdd />
+  <div class="o-page--create-content">
+    <div class="o-page">
+      <div class="o-page__header o-page__header-nav">
+        <button class="u-button--back" @click="$emit('back')">
+          <IconChevron />
+        </button>
+        <button class="u-button--back transparent">
+          <IconVisibility />
+        </button>
       </div>
-    </form>
 
-    <form v-if="showThemes" class="o-page--full themes">
-      <div class="themes__container">
-        <h3>Choisissez votre thème</h3>
-        <div class="themes__grid">
-          <ThemeSelector v-for="(t, i) in themes" :key="i" :theme="t" />
+      <form class="o-page__body o-page__outside">
+        <div class="slider">
+          <SlideIntro />
+          <div v-for="(content, i) in contents" :key="i" class="slider__item">
+            <component
+              :is="contentType[content.type].component"
+              :key="i"
+              :value="content"
+              :index="i"
+            />
+            <button type="button" class="slider__close" @click="removeItem(i)">
+              x
+            </button>
+          </div>
+
+          <SliderAdd />
         </div>
-      </div>
-      <span
-        class="o-page--full themes__background"
-        @click="showThemes = false"
-      ></span>
-    </form>
+      </form>
 
-    <div class="o-page__footer actions">
-      <button
-        type="button"
-        class="button u-button u-button--round actions__theme"
-        @click="showThemes = !showThemes"
-      >
-        <IconBrush />
-      </button>
-      <button
-        type="button"
-        class="button u-button u-button--round actions__submit"
-        @click="$emit(edit ? 'back' : 'next')"
-      >
-        <IconCheck />
-      </button>
+      <form v-if="showThemes" class="o-page--full themes">
+        <div class="themes__container">
+          <h3>Choisissez votre thème</h3>
+          <div class="themes__grid">
+            <ThemeSelector v-for="(t, i) in themes" :key="i" :theme="t" />
+          </div>
+        </div>
+        <span
+          class="o-page--full themes__background"
+          @click="showThemes = false"
+        ></span>
+      </form>
+
+      <div class="o-page__footer actions">
+        <button
+          type="button"
+          class="button u-button u-button--round actions__theme"
+          @click="showThemes = !showThemes"
+        >
+          <IconBrush />
+        </button>
+        <button
+          type="button"
+          class="u-button--round actions__submit"
+          @click="$emit(edit ? 'back' : 'next')"
+        >
+          <IconCheck />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -70,6 +74,7 @@ import MemoryPreview from '@/components/memories/MemoryPreview';
 import IconCheck from '@/assets/svg/ic_check.svg?inline';
 import IconBrush from '@/assets/svg/ic_brush.svg?inline';
 import IconChevron from '@/assets/svg/ic_chevron.svg?inline';
+import IconVisibility from '@/assets/svg/ic_visibility.svg?inline';
 
 import { CONTENT_TYPE } from '@/const/memory';
 
@@ -86,6 +91,7 @@ export default {
     IconCheck,
     IconBrush,
     IconChevron,
+    IconVisibility,
   },
   props: {
     edit: {
@@ -111,6 +117,16 @@ export default {
 </script>
 
 <style lang="scss">
+.o-page--create-content {
+  max-height: calc(100vh - 72px);
+  background-repeat: repeat;
+  background-image: url('~/assets/svg/ic_grid.svg');
+
+  .o-page {
+    background-color: transparent;
+  }
+}
+
 .o-page__footer {
   display: flex;
   justify-content: space-between;
@@ -132,8 +148,10 @@ export default {
 
 .slider {
   display: flex;
+  align-items: center;
   overflow: auto;
-  padding: 8px 24px;
+  padding: 16px 24px;
+  height: 100%;
 
   &::-webkit-scrollbar {
     width: 0;
@@ -145,9 +163,10 @@ export default {
   position: relative;
   //min-width: calc(100vw - 60px);
   //height: calc((100vw - 60px) * (16 / 9));
-  width: 300px;
+  min-width: 300px;
   height: calc(300px * (16 / 9));
-  margin: 20px 12px;
+  //margin: 20px 12px;
+  margin-right: 12px;
   box-shadow: $shadow--first;
   border-radius: $radius;
   background-color: $white;

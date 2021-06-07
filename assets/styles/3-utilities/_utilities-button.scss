@@ -14,12 +14,14 @@
   padding: 0 32px;
   text-align: center;
 
-  @include hover {}
+  @include hover {
+  }
 }
-
+/*
 .u-button + .u-button {
   margin-top: 8px;
 }
+*/
 
 .u-button--primary {
   background-color: $gray-darkest;
@@ -41,12 +43,26 @@
   border: 6px solid $white;
   background-color: $gray;
   box-shadow: $shadow--second;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .u-button--background {
+  position: relative;
   padding: 0;
   height: auto;
   line-height: 1;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+
+  &.dark {
+    color: $white;
+  }
+  &.light {
+    color: $black;
+  }
 }
 
 .u-button--text {
@@ -87,4 +103,46 @@
   box-shadow: $shadow--third;
   border: none;
   border-radius: 50%;
+}
+
+.u-button--back {
+  position: relative;
+  display: block;
+  padding: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: $gray-darkest;
+  border: none;
+
+  svg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  path {
+    fill: $background;
+  }
+}
+
+.u-button--back.light {
+  background-color: $background;
+}
+
+.u-button--back.transparent {
+  background-color: transparent;
+}
+
+.u-button__input-file {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 }

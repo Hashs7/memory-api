@@ -1,16 +1,16 @@
 <template>
   <div class="gallery">
-    <div class="u-button u-button--outline media-content">
+    <CustomButton outline>
       <span>Importer une photo</span>
       <input
         ref="file"
-        class="media-content__input"
+        class="u-button__input-file"
         type="file"
         accept="audio/*,video/*,image/*"
         style="opacity: 0"
         @change="previewImg"
       />
-    </div>
+    </CustomButton>
 
     <div class="gallery__container">
       <GalleryMedia
@@ -26,12 +26,13 @@
 </template>
 
 <script>
+import CustomButton from '../UI/CustomButton';
 import MediaPreview from './MediaPreview';
 import GalleryMedia from './GalleryMedia';
 
 export default {
   name: 'Gallery',
-  components: { GalleryMedia, MediaPreview },
+  components: { CustomButton, GalleryMedia, MediaPreview },
   props: {
     preview: {
       type: Boolean,
@@ -90,6 +91,11 @@ export default {
 </script>
 
 <style>
+.gallery {
+  width: 100%;
+  height: 100%;
+}
+
 .gallery .media-content {
   margin-bottom: 20px;
 }

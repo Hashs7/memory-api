@@ -5,7 +5,7 @@
     class="gallery-media"
     @click="$emit('select')"
   >
-    <img class="gallery-media__img" :src="media.path" alt="" />
+    <img class="gallery-media__img" :src="path" alt="" />
   </div>
 </template>
 
@@ -35,6 +35,11 @@ export default {
     return {
       selected: false,
     };
+  },
+  computed: {
+    path() {
+      return `${this.media.path}?w=100`;
+    },
   },
   methods: {
     selectHandler() {
@@ -79,5 +84,6 @@ export default {
   left: 0;
   right: 0;
   margin: auto;
+  width: 100%;
 }
 </style>

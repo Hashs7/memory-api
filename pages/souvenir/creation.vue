@@ -32,6 +32,7 @@ export default {
     ContentForm,
     Summary,
   },
+  layout: 'none',
   data() {
     return {
       success: false,
