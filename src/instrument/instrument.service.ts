@@ -10,8 +10,6 @@ import { Instrument, OldOwnerInterface } from './instrument.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
-import * as fs from 'fs';
-import * as qrcode from 'qrcode';
 import * as shortid from 'shortid';
 import { User } from '../user/user.schema';
 import { Memory } from './memory/memory.schema';
@@ -21,7 +19,6 @@ import { ContentType } from './memory/content/content.schema';
 import { randomBytes } from 'crypto';
 import { UserService } from '../user/user.service';
 import { OldOwner } from './oldowner/oldowner.schema';
-import { async } from 'rxjs';
 
 @Injectable()
 export class InstrumentService {
@@ -32,34 +29,66 @@ export class InstrumentService {
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
-  search(q: string) {
+  search(q: string, forSale: string, instruTypes: string) {
+    const filters: any = {};
+
+    if (forSale) {
+      filters.forSale = forSale;
+    }
+
+    if (instruTypes) {
+      filters.type = { $in: instruTypes };
+    }
+
     return this.instrumentModel
       .find({
         $or: [
           {
             brand: {
-              $regex: new RegExp(q),
+              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
             },
           },
           {
             modelName: {
-              $regex: new RegExp(q),
+              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
             },
           },
           {
             type: {
-              $regex: new RegExp(q),
+              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
             },
           },
 
           {
             colors: {
-              $regex: new RegExp(q),
+              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
             },
           },
         ],
       })
-      .limit(10);
+      .select('images brand modelName name forSale type owner memories')
+      .limit(10)
+      .find(filters)
+      .populate([
+        'owner',
+        'images',
+        {
+          path: 'owner',
+          select: 'username firstName lastName _id',
+          populate: {
+            path: 'thumbnail',
+          },
+        },
+      ]);
+  }
+
+  searchSerialize(instrumentRes: Instrument[]): Instrument[] {
+    instrumentRes.map((i) => {
+      i.memories = i.memories.filter((m) => {
+        if (m.visibility == 'public') return m;
+      });
+    });
+    return instrumentRes;
   }
 
   private validateInstrumentOwner(instrument, user) {
@@ -124,13 +153,12 @@ export class InstrumentService {
         },
       ]);
 
-    if (!user || !instrument.owner.equals(user._id)) {
-      instrument.memories = instrument.memories.filter((m) => {
-        if (m.visibility == 'Public') {
-          return m;
-        }
-      });
-    }
+    instrument.memories = instrument.memories.filter((m) => {
+      if (m.visibility == 'public') return m;
+      else {
+        if (user._id.equals(m.createdBy)) return m;
+      }
+    });
 
     instrument.owner.thumbnail?.rewritePath();
     instrument.images?.map((i) => i.rewritePath());

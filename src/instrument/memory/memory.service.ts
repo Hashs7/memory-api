@@ -8,7 +8,7 @@ import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
 import { InstrumentService } from '../instrument.service';
 import { UserService } from '../../user/user.service';
-import { Model, ObjectId, Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../../user/user.schema';
 import { ContentType, MemoryContent } from './content/content.schema';
@@ -120,7 +120,6 @@ export class MemoryService {
     updateMemoryDto: UpdateMemoryDto,
   ): Promise<Memory> {
     const memory = await this.memoryModel.findOne({ id });
-    const instrument = await this.instrumentService.findOne(instrumentId);
     const withUsers = (
       await this.userService.findUsers(updateMemoryDto.withUsers)
     ).map((u) => u._id);
@@ -132,8 +131,8 @@ export class MemoryService {
     if (!memory) {
       throw new NotFoundException("Le souvenir n'existe pas");
     }
-    // @ts-ignore
-    if (!instrument.owner.equals(user._id)) {
+
+    if (!user._id.equals(memory.createdBy)) {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }
 
@@ -184,7 +183,9 @@ export class MemoryService {
   async remove(user: User, id: string, instrumentId: string) {
     const instrument = await this.instrumentService.findOne(instrumentId);
 
-    if (!instrument.owner.equals(user._id)) {
+    const memory = await this.memoryModel.findOne({ id });
+
+    if (!user._id.equals(memory.createdBy)) {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
     }
 
@@ -200,29 +201,39 @@ export class MemoryService {
   }
 
   search(q: string, categories: Types.ObjectId[]) {
+    const filters: any = {};
+
+    if (categories) {
+      filters.categories = { $in: categories };
+    }
     // @ts-ignore
     return this.memoryModel
       .find({
         $or: [
           {
             name: {
-              $regex: new RegExp(q),
+              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
             },
           },
           {
             description: {
-              $regex: new RegExp(q),
+              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
             },
           },
         ],
+        $and: [
+          {
+            visibility: 'public',
+          },
+        ],
       })
-      .find({ categories: { $in: categories } })
+      .find(filters)
       .limit(10)
+      .select('-withUsers -createdAt -updatedAt -contents -template')
       .then((memories) => {
         return Promise.all(
           memories.map(async (m) => {
             const instrument = await this.instrumentService.findByMemory(m.id);
-
             if (instrument) {
               return {
                 ...m.toObject(),

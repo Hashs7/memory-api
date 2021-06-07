@@ -18,6 +18,18 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
+  search(q: string) {
+    return this.userModel
+      .find({
+        username: {
+          $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+        },
+      })
+      .limit(10)
+      .select('username')
+      .populate('thumbnail');
+  }
+
   async findUserbyEmail(email: string): Promise<User> {
     return this.userModel.findOne({ email });
   }

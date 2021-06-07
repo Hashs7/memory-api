@@ -1,14 +1,8 @@
-import {
-  HttpStatus,
-  Injectable,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { File } from './file.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { randomBytes } from 'crypto';
 import { User } from '../user/user.schema';
 import * as fs from 'fs';
 import * as sharp from 'sharp';
