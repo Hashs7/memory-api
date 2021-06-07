@@ -59,6 +59,7 @@ export default {
       },
       set(newValue) {
         this.setQuery(newValue);
+        if (newValue.length < 1) this.$store.commit('search/clearResults');
       },
     },
     hasInstruments() {
@@ -75,13 +76,7 @@ export default {
     ...mapMutations('search', ['setActive', 'setQuery']),
     ...mapActions('search', ['search']),
     async submit() {
-      if (this.searchQuery.length < 3) return;
-
-      try {
-        await this.search();
-      } catch (e) {
-        console.log(e);
-      }
+      await this.search();
     },
     onSearchFocus() {
       if (!this.searchActive) {
