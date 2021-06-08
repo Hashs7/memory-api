@@ -25,11 +25,22 @@
     <div class="o-page__body">
       <h1 class="o-page__title">Explorer</h1>
 
+      <section>
+        <ul class="categories-filters">
+          <li v-for="category in categories" :key="category.id">
+            <a href="">{{ category.name }}</a>
+          </li>
+        </ul>
+      </section>
       <section class="o-section">
         <div class="o-section__head">
           <h4 class="o-section__title">Actualités des instruments favoris</h4>
           <button class="u-link">Voir tout</button>
         </div>
+      </section>
+
+      <section>
+        <FeedMemorySection :data="results.memoriesFavInstru" />
       </section>
     </div>
   </div>
@@ -43,13 +54,21 @@
 import { mapMutations, mapState } from 'vuex';
 import SearchBar from '../components/search/SearchBar';
 import SearchModal from '../components/search/SearchModal';
+import FeedMemorySection from '../components/feed/FeedMemorySection';
 
 export default {
-  components: { SearchModal, SearchBar },
-  async fetch() {
+  components: { FeedMemorySection, SearchModal, SearchBar },
+  async asyncData({ $api }) {
     try {
-      const res = await this.$api.getInstruments();
-      this.instruments = res.data;
+      const res = await $api.getInstruments();
+      const results = await $api.fetchFeed();
+      const categories = await $api.fetchAllCategories();
+
+      return {
+        instruments: res.data,
+        results: results.data,
+        categories: categories.data,
+      };
     } catch (e) {
       throw new Error(e);
     }
@@ -69,6 +88,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.categories-filters {
+  display: flex;
+  flex-wrap: wrap;
+}
+.categories-filters li {
+  border: solid 1px $background-darker;
+  padding: 2px 12px;
+  border-radius: 6px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
 .o-page__header {
   display: flex;
   justify-content: space-between;
