@@ -121,11 +121,18 @@ export class InstrumentService {
     return this.instrumentModel.findOne({ id });
   }
 
-  async findMultiple(ids: string[]) {
-    let instrumentRes = await this.instrumentModel.find({
-      id: {
-        $in: ids,
-      },
+  async findFeed(ids: string[]) {
+    let instrumentRes = await this.instrumentModel
+      .find({
+        id: {
+          $in: ids,
+        },
+      })
+      .populate('images');
+
+    instrumentRes.map((i) => {
+      console.log(i);
+      i.images?.map((im) => im.rewritePath());
     });
 
     instrumentRes = this.searchSerialize(instrumentRes);

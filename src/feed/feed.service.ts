@@ -18,12 +18,17 @@ export class FeedService {
     user: User,
     categories?: Types.ObjectId[],
   ): Promise<{ memoriesFavInstru: Object[]; memoriesCat: Object[] }> {
-    const wishList = await this.instrumentService.findMultiple(user.wishList);
+    const wishList = await this.instrumentService.findFeed(user.wishList);
 
     const flatMemories = wishList.reduce((acc, curr) => {
       const memories = curr.memories.map((m) => ({
         ...m.toObject(),
-        instrumentId: curr.id,
+        instrument: {
+          brand: curr.brand,
+          modelName: curr.modelName,
+          name: curr.name,
+          image: curr.images,
+        },
       }));
       return [...acc, ...memories];
     }, []);
