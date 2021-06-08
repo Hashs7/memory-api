@@ -168,7 +168,9 @@ export class InstrumentService {
     instrument.memories = instrument.memories.filter((m) => {
       if (m.visibility == 'public') return m;
       else {
-        if (user._id.equals(m.createdBy)) return m;
+        if (user._id) {
+          if (user._id.equals(m.createdBy)) return m;
+        }
       }
     });
 
