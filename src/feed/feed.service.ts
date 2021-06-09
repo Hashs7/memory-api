@@ -3,8 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.schema';
 import { InstrumentService } from '../instrument/instrument.service';
 import { MemoryService } from '../instrument/memory/memory.service';
-import { UserService } from '../user/user.service';
-import { Instrument } from '../instrument/instrument.schema';
 import { Types } from 'mongoose';
 
 @Injectable()
@@ -12,12 +10,9 @@ export class FeedService {
   constructor(
     private instrumentService: InstrumentService,
     private memoryService: MemoryService,
-    private userService: UserService,
   ) {}
-  public async getFeed(
-    user: User,
-    categories?: Types.ObjectId[],
-  ): Promise<{ memoriesFavInstru: Object[]; memoriesCat: Object[] }> {
+
+  public async getFeedFavMemories(user: User): Promise<any[]> {
     const wishList = await this.instrumentService.findFeed(user.wishList);
 
     const flatMemories = wishList.reduce((acc, curr) => {
@@ -33,16 +28,32 @@ export class FeedService {
       return [...acc, ...memories];
     }, []);
 
-    const memoriesFavInstru = flatMemories.sort(
+    return flatMemories.sort(
       // @ts-ignore
       (a, b) => new Date(b.date) - new Date(a.date),
     );
+  }
 
-    const memoriesCat = await this.memoryService.search('', categories);
+  public async getMemoriesCat(
+    user: User,
+    categories?: Types.ObjectId[],
+  ): Promise<Object> {
+    const memoriesCat = await this.memoryService.search(
+      '',
+      categories,
+      categories.length * 3,
+    );
 
-    return {
-      memoriesFavInstru,
-      memoriesCat,
-    };
+    return memoriesCat.reduce((acc, cur) => {
+      cur.categories.forEach((cat) => {
+        // @ts-ignore
+        const catId = cat._id;
+        if (!(catId in acc)) {
+          acc[catId] = { category: cat, memories: [] };
+        }
+        acc[catId].memories.push(cur);
+      });
+      return acc;
+    }, {});
   }
 }

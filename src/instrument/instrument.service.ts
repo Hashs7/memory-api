@@ -131,7 +131,6 @@ export class InstrumentService {
       .populate('images');
 
     instrumentRes.map((i) => {
-      console.log(i);
       i.images?.map((im) => im.rewritePath());
     });
 

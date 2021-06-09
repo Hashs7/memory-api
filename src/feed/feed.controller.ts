@@ -11,7 +11,12 @@ export class FeedController {
   constructor(private readonly feedService: FeedService) {}
 
   @Get()
-  public async getFeed(
+  public async getFeedFavMemories(@GetUser() user: User) {
+    return await this.feedService.getFeedFavMemories(user);
+  }
+
+  @Get('categories')
+  public async getMemoriesCat(
     @GetUser() user: User,
     @Query('categories') cat: string,
   ) {
@@ -19,6 +24,6 @@ export class FeedController {
     if (cat) {
       categories = cat.split(',').map((c) => Types.ObjectId(c));
     }
-    return await this.feedService.getFeed(user, categories);
+    return await this.feedService.getMemoriesCat(user, categories);
   }
 }
