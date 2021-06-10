@@ -35,6 +35,13 @@ yarn run start:prod
 
 ## MongoDB commands
 
+## Populate BDD
+Categories : 
+
+```bash
+npx nestjs-command create:memory:categories
+```
+
 ### Dump local database
 ```
 mongodump --host localhost:27017 -d {dbname} --out ./dump

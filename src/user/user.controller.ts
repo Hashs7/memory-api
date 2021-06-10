@@ -105,7 +105,7 @@ export class UserController {
   @ApiOperation({ summary: 'Updated user' })
   toggleToWishlist(
     @GetUser() user: User,
-    @Param('instrumentId') instrumentId: ObjectId,
+    @Param('instrumentId') instrumentId: string,
   ) {
     return this.userService.toggleToWishlist(user, instrumentId);
   }

@@ -200,7 +200,7 @@ export class MemoryService {
     return instrument;
   }
 
-  search(q: string, categories: Types.ObjectId[]) {
+  search(q: string, categories: Types.ObjectId[], limit: number) {
     const filters: any = {};
 
     if (categories) {
@@ -228,8 +228,10 @@ export class MemoryService {
         ],
       })
       .find(filters)
-      .limit(10)
-      .select('-withUsers -createdAt -updatedAt -contents -template')
+      .limit(limit)
+      .populate('categories')
+      .select('-withUsers -createdAt -updatedAt -template')
+      .sort({ date: -1 })
       .then((memories) => {
         return Promise.all(
           memories.map(async (m) => {

@@ -122,6 +122,24 @@ export class InstrumentService {
     return this.instrumentModel.findOne({ id });
   }
 
+  async findFeed(ids: string[]) {
+    let instrumentRes = await this.instrumentModel
+      .find({
+        id: {
+          $in: ids,
+        },
+      })
+      .populate('images');
+
+    instrumentRes.map((i) => {
+      i.images?.map((im) => im.rewritePath());
+    });
+
+    instrumentRes = this.searchSerialize(instrumentRes);
+
+    return instrumentRes;
+  }
+
   /**
    * Find one instrument with id
    * @param id
@@ -157,7 +175,9 @@ export class InstrumentService {
     instrument.memories = instrument.memories.filter((m) => {
       if (m.visibility == 'public') return m;
       else {
-        if (user._id.equals(m.createdBy)) return m;
+        if (user._id) {
+          if (user._id.equals(m.createdBy)) return m;
+        }
       }
     });
 

@@ -26,7 +26,7 @@ export class SearchService {
     );
     instrumentRes = this.instrumentService.searchSerialize(instrumentRes);
 
-    const memoryRes = await this.memoryService.search(text, categories);
+    const memoryRes = await this.memoryService.search(text, categories, 100);
 
     const userRes = await this.userService.search(text);
 

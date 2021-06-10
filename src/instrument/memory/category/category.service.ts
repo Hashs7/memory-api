@@ -30,8 +30,11 @@ export class CategoryService {
     });
   }
 
+  /**
+   * Find all instruments
+   */
   findAll() {
-    return `This action returns all category`;
+    return this.memoryCategoryModel.find();
   }
 
   findOne(id: number) {
