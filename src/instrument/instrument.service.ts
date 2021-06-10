@@ -87,6 +87,7 @@ export class InstrumentService {
       i.memories = i.memories.filter((m) => {
         if (m.visibility == 'public') return m;
       });
+      return i;
     });
     return instrumentRes;
   }
@@ -209,7 +210,7 @@ export class InstrumentService {
     }
   }
 
-  rewriteMemories(instrument: Instrument) {
+  rewriteInstrumentMemories(instrument: Instrument) {
     instrument.memories = instrument.memories.map((m) => {
       m.contents = m.contents.map((c) => {
         if (c.type !== ContentType.Text) {
@@ -246,11 +247,11 @@ export class InstrumentService {
       ]);
 
     userInstruments.forEach((ins) => this.filterMemories(ins, user));
-    userInstruments.forEach((ins) => this.rewriteMemories(ins));
+    userInstruments.forEach((ins) => this.rewriteInstrumentMemories(ins));
 
     const oldInstruments = await this.instrumentModel
       .find({
-        oldOwnersUser: { $in: user._id },
+        'oldOwnersUser.user': { $in: user._id },
       })
       .populate('images');
     const wishInstruments = await this.instrumentModel
@@ -366,7 +367,7 @@ export class InstrumentService {
     this.validateInstrumentOwner(instrument, user);
 
     if (!instrument.handoverToken) {
-      instrument.handoverToken = randomBytes(20).toString('hex');
+      instrument.handoverToken = randomBytes(8).toString('hex');
     }
 
     const expire = new Date();

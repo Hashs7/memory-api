@@ -166,7 +166,12 @@ export class AuthService {
       jwtConstants.rSignOptions,
     );
     const decoded = this.decodeToken(accessToken);
-    return { accessToken, refreshToken, user: decoded };
+    const userFilled = await this.userService.findUserByUsername(user.username);
+    return {
+      accessToken,
+      refreshToken,
+      user: userFilled,
+    };
   }
 
   async refreshToken(accessToken: string) {

@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { User } from './user.schema';
@@ -41,6 +42,7 @@ export class UserService {
   async findUserByUsername(username: string): Promise<User> {
     const user = await this.userModel
       .findOne({ username })
+      .select('-password -salt')
       .populate('thumbnail');
     if (!user) {
       throw new NotFoundException('Aucun utilisateur trouvé');
@@ -131,12 +133,22 @@ export class UserService {
   async update(
     user: User,
     updateUserDto: UpdateUserDto,
-    file?: Express.Multer.File,
+    thumbnailFile?: Express.Multer.File,
   ) {
-    let thumbnail;
-    if (file) {
-      thumbnail = await this.fileService.create(file, user._id);
+    let thumbnail, background;
+    if (thumbnailFile) {
+      thumbnail = await this.fileService.create(thumbnailFile, user._id);
     }
+    /*if (files?.length) {
+      await Promise.all(
+        files.map(async (f) => {
+          thumbnail = await this.fileService.create(f, user._id);
+          Logger.log(f);
+        }),
+      );
+      // background = await this.fileService.create(backgroundFile, user._id);
+    }*/
+
     if (
       updateUserDto.username &&
       updateUserDto.username !== user.username &&
@@ -149,7 +161,8 @@ export class UserService {
         { _id: user._id },
         {
           ...updateUserDto,
-          ...(file && { thumbnail: thumbnail._id }),
+          ...(thumbnail && { thumbnail: thumbnail._id }),
+          ...(background && { profileBackground: background._id }),
         },
       )
       .exec();

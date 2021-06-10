@@ -68,3 +68,7 @@ export const FileSchema = SchemaFactory.createForClass(File);
 FileSchema.methods.rewritePath = async function () {
   this.path = rewritePath(this);
 };
+
+FileSchema.post('init', function () {
+  this.path = rewritePath(this);
+});

@@ -59,6 +59,10 @@ export class UpdateUserDto {
   isOnline: boolean;
 
   @IsOptional()
+  @ApiPropertyOptional()
+  description?: string;
+
+  @IsOptional()
   @IsArray()
   @ApiPropertyOptional()
   whistList?: string[];
