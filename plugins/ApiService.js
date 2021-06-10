@@ -136,8 +136,12 @@ class ApiController {
   /**
    * Route : Feed
    */
-  fetchFeed() {
+  fetchFeedFavMemories() {
     return this.$axios.get(`/feed`);
+  }
+
+  fetchMemoriesCat(categories) {
+    return this.$axios.get(`/feed/categories?categories=${categories}`);
   }
 }
 
