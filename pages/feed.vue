@@ -73,8 +73,7 @@ export default {
       const results = await $api.fetchFeedFavMemories();
 
       categories.data = categories.data.map((category, i) => {
-        if (i < 2) category.selected = true;
-        else category.selected = false;
+        category.selected = i < 3;
         return category;
       });
 
@@ -117,9 +116,7 @@ export default {
       category.selected = !category.selected;
       this.fetchMemoriesCat();
     },
-    mounted() {
-      this.fetchMemoriesCat();
-    },
+
     async fetchMemoriesCat() {
       try {
         const { data } = await this.$api.fetchMemoriesCat(
