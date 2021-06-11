@@ -1,5 +1,7 @@
 # Memory api
+<p align="center"><img align="center" style="width:300px" src="./.github/memory-motel.png"/></p><br/>
 
+## Links
 ### Resources
 - 🛣 Memory Motel API Documentation: [memory-api.azurewebsites.net/docs](https://memory-api.azurewebsites.net/docs/)
 - 📘 NestJS Documentation: [docs.nestjs.com](https://docs.nestjs.com/)
@@ -17,7 +19,7 @@
 | [imagemin](https://github.com/imagemin/imagemin)                                      |🏞  Minify images                                                                                              | [![version](https://img.shields.io/npm/v/imagemin?style=flat-square)](https://www.npmjs.com/package/imagemin)                                       |
 
 
-
+## Getting started
 ### Installation
 Memory Motel App :
 [github.com/Hashs7/memory-app](https://github.com/Hashs7/memory-app)
@@ -75,7 +77,7 @@ yarn start
 # generate static project
 yarn generate
 ```
-
+## Dumps
 ### Dump local database
 ```
 mongodump --host localhost:27017 -d {dbname} --out ./dump
