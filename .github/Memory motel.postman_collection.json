@@ -1,0 +1,654 @@
+{
+	"info": {
+		"_postman_id": "8b372a70-3c66-4576-93a8-4d6d66fae141",
+		"name": "Memory motel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Sign up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"Jeanjean\",\n  \"firstName\": \"Jean\",\n  \"lastName\": \"Dupont\",\n  \"email\": \"jean@dupont.com\",\n  \"password\": \"Password98015\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign in",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "clem@clem.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Password98015",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Toggle to wishlist Copy",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Instrument",
+			"item": [
+				{
+					"name": "Get instrument",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/instrument/7GoC0H6LE",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								"7GoC0H6LE"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post instrument",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brand\": \"Gibson\",\n    \"modelName\" : \"Monmodel\"\n    \"buyDate\":\"2012-04-19T18:25:43.511\",\n    \"oldOwnersUser\": [{\n        \"from\":\"2012-04-19T18:25:43.511Z\",\n        \"to\":\"2019-04-23T18:25:43.511Z\",\n        \"user\":\"60b0e134ba9b553d291d978f\"\n    },\n    {\n        \"from\":\"2020-09-23T18:25:43.511Z\",\n        \"to\":\"2021-03-02T18:25:43.511Z\",\n        \"user\":\"60b0e134ba9b553d291d978f\"\n    }],\n\n    \"oldOwners\":{\n        \"user\":{\n            \"firstName\": \"Jean luc\",\n            \"lastName\": \"Poul\"\n        },\n        \"from\":\"2019-04-30T18:25:43.511Z\",\n        \"to\":\"2020-09-23T18:25:43.511Z\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/instrument/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch instrument",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brand\": \"Gibson\",\n    \"oldOwners\": [{\n        \"from\":\"tt\",\n        \"to\":\"EE\",\n        \"user\":\"60b0e134ba9b553d291d978f\"\n    },\n    {\n        \"from\":\"cc\",\n        \"to\":\"dd\",\n        \"user\":\"60b5dbbdfe59212791fc250b\"\n    }]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/instrument/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete instrument",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brand\": \"Gibson\",\n    \"oldOwners\": [{\n        \"from\":\"tt\",\n        \"to\":\"EE\",\n        \"user\":\"60b0e134ba9b553d291d978f\"\n    },\n    {\n        \"from\":\"cc\",\n        \"to\":\"dd\",\n        \"user\":\"60b5dbbdfe59212791fc250b\"\n    }]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/instrument/1YVu5XeXm",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								"1YVu5XeXm"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Handover",
+			"item": [
+				{
+					"name": "Instrument init handhover",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDg0OTYsImV4cCI6MTYyNDE3NjQ5Nn0.TrodtQSlM-JbeRLiHdxtCCNCDZx5j5Jut6OCei1Qe-Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/instrument/2BPuwTjlb/handover",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								"2BPuwTjlb",
+								"handover"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Instrument confirm Handover",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"brand\": \"Gibson\",\n    \"oldOwners\": [{\n        \"from\":\"tt\",\n        \"to\":\"EE\",\n        \"user\":\"60b0e134ba9b553d291d978f\"\n    },\n    {\n        \"from\":\"cc\",\n        \"to\":\"dd\",\n        \"user\":\"60b5dbbdfe59212791fc250b\"\n    }]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/instrument/1YVu5XeXm",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								"1YVu5XeXm"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feed",
+			"item": [
+				{
+					"name": "Feed favorite instruments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDg0OTYsImV4cCI6MTYyNDE3NjQ5Nn0.TrodtQSlM-JbeRLiHdxtCCNCDZx5j5Jut6OCei1Qe-Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"search\":\"Fender\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Feed memories categories",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDg0OTYsImV4cCI6MTYyNDE3NjQ5Nn0.TrodtQSlM-JbeRLiHdxtCCNCDZx5j5Jut6OCei1Qe-Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"search\":\"Fender\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Memory",
+			"item": [
+				{
+					"name": "Get memory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All memories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post memory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDg0OTYsImV4cCI6MTYyNDE3NjQ5Nn0.TrodtQSlM-JbeRLiHdxtCCNCDZx5j5Jut6OCei1Qe-Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"lol\",\n    \"description\":\"mydesc\",\n    \"date\":\"12\",\n    \"categories\":[\"60b4a88d04ebf3065f1a9112\"],\n    \"contents\":[]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/instrument/jLSYICFRn/memory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								"jLSYICFRn",
+								"memory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch memory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDg0OTYsImV4cCI6MTYyNDE3NjQ5Nn0.TrodtQSlM-JbeRLiHdxtCCNCDZx5j5Jut6OCei1Qe-Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Nom test\",\n    \"description\":\"Test la description\",\n    \"date\":\"12\",\n    \"createdBy\":\"60b0e134ba9b553d291d978f\",\n    \"visibility\":\"Private\",\n    \"categories\":[\"60b4a88d04ebf3065f1a9112\",\"60b4a88d04ebf3065f1a9111\"],\n    \"contents\":[]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/instrument/7GoC0H6LE/memory/q1mBIhZzz",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								"7GoC0H6LE",
+								"memory",
+								"q1mBIhZzz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete memory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDg0OTYsImV4cCI6MTYyNDE3NjQ5Nn0.TrodtQSlM-JbeRLiHdxtCCNCDZx5j5Jut6OCei1Qe-Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Test nom\",\n    \"description\":\"TEst la description\",\n    \"date\":\"12\",\n    \"createdBy\":\"60b0e134ba9b553d291d978f\",\n    \"visibility\":\"Private\",\n    \"categories\":[\"60b4a88d04ebf3065f1a9112\",\"60b4a88d04ebf3065f1a9111\"],\n    \"contents\":[]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/instrument/7GoC0H6LE/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"instrument",
+								"7GoC0H6LE",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Search",
+			"item": [
+				{
+					"name": "Search",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "password",
+									"value": "{{token}}",
+									"type": "string"
+								},
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDg0OTYsImV4cCI6MTYyNDE3NjQ5Nn0.TrodtQSlM-JbeRLiHdxtCCNCDZx5j5Jut6OCei1Qe-Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"search\":\"Fender\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDczNjIsImV4cCI6MTYyNDE3NTM2Mn0.RYMu_XaZ0wYobuaTOIPkerkn-0IH9HAhntFDcWAM7jI",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJ1c2VybmFtZSI6IkNsZW0iLCJlbWFpbCI6ImNsZW1AY2xlbS5jb20iLCJpYXQiOjE2MjI0NDg0OTYsImV4cCI6MTYyNDE3NjQ5Nn0"
+		}
+	]
+}

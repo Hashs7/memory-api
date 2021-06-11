@@ -24,6 +24,9 @@
 Memory Motel App :
 [github.com/Hashs7/memory-app](https://github.com/Hashs7/memory-app)
 
+Postman configuration : [Memory motel.postman_collection.json](./.github/Memory motel.postman_collection.json)
+
+
 [Install MongoDB](https://docs.mongodb.com/manual/administration/install-community/) 
 
 ### Create local database
