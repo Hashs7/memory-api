@@ -206,7 +206,7 @@ export class MemoryService {
     if (categories) {
       filters.categories = { $in: categories };
     }
-    // @ts-ignore
+
     return this.memoryModel
       .find({
         $or: [
@@ -229,7 +229,16 @@ export class MemoryService {
       })
       .find(filters)
       .limit(limit)
-      .populate('categories')
+      .populate([
+        {
+          path: 'contents',
+          populate: {
+            path: 'file',
+            model: File.name,
+          },
+        },
+        { path: 'categories' },
+      ])
       .select('-withUsers -createdAt -updatedAt -template')
       .sort({ date: -1 })
       .then((memories) => {
@@ -239,7 +248,7 @@ export class MemoryService {
             if (instrument) {
               return {
                 ...m.toObject(),
-                instrumentId: instrument.id,
+                instrument: instrument,
               };
             }
           }),

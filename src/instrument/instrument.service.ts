@@ -129,7 +129,20 @@ export class InstrumentService {
           $in: ids,
         },
       })
-      .populate('images');
+      .populate([
+        'owner',
+        'images',
+        {
+          path: 'memories',
+          populate: {
+            path: 'contents',
+            populate: {
+              path: 'file',
+              model: File.name,
+            },
+          },
+        },
+      ]);
 
     instrumentRes.map((i) => {
       i.images?.map((im) => im.rewritePath());
@@ -351,7 +364,10 @@ export class InstrumentService {
    * @param memoryId
    */
   async findByMemory(memoryId: string): Promise<Instrument> {
-    return this.instrumentModel.findOne({ 'memories.id': memoryId }).exec();
+    return this.instrumentModel.findOne({ 'memories.id': memoryId }).populate([
+      { path: 'images', select: 'path' },
+      { path: 'owner', select: 'username' },
+    ]);
   }
 
   /**

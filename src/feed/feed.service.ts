@@ -19,10 +19,14 @@ export class FeedService {
       const memories = curr.memories.map((m) => ({
         ...m.toObject(),
         instrument: {
+          id: curr.id,
           brand: curr.brand,
           modelName: curr.modelName,
           name: curr.name,
-          image: curr.images,
+          images: curr.images,
+          owner: {
+            username: curr.owner.username,
+          },
         },
       }));
       return [...acc, ...memories];
@@ -38,11 +42,7 @@ export class FeedService {
     user: User,
     categories?: Types.ObjectId[],
   ): Promise<Object> {
-    const memoriesCat = await this.memoryService.search(
-      '',
-      categories,
-      categories.length * 3,
-    );
+    const memoriesCat = await this.memoryService.search('', categories, 3);
 
     return memoriesCat.reduce((acc, cur) => {
       cur.categories.forEach((cat) => {
