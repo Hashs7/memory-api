@@ -22,7 +22,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UpdateUserDto } from './update-user.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { ObjectId } from 'mongoose';
 
@@ -82,7 +82,7 @@ export class UserController {
 
   @Patch()
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(FileInterceptor('thumbnail', fileInterceptorOptions))
+  @UseInterceptors(FilesInterceptor('thumbnail', 2, fileInterceptorOptions))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Updated user' })
   @ApiResponse({
@@ -105,7 +105,7 @@ export class UserController {
   @ApiOperation({ summary: 'Updated user' })
   toggleToWishlist(
     @GetUser() user: User,
-    @Param('instrumentId') instrumentId: ObjectId,
+    @Param('instrumentId') instrumentId: string,
   ) {
     return this.userService.toggleToWishlist(user, instrumentId);
   }

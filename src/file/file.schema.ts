@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { User, UserSchema } from '../user/user.schema';
-import { rewritePath } from './file.helper';
+import { rewritePath, unwritePath } from './file.helper';
 
 @Schema()
 export class File extends Document {
@@ -43,6 +43,14 @@ export class File extends Document {
   @ApiProperty()
   size: string;
 
+  @Prop()
+  @ApiProperty()
+  width: number;
+
+  @Prop()
+  @ApiProperty()
+  height: number;
+
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',
@@ -53,6 +61,8 @@ export class File extends Document {
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   rewritePath() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  unwritePath() {}
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);
@@ -60,3 +70,11 @@ export const FileSchema = SchemaFactory.createForClass(File);
 FileSchema.methods.rewritePath = async function () {
   this.path = rewritePath(this);
 };
+
+FileSchema.methods.unwritePath = async function () {
+  this.path = unwritePath(this);
+};
+
+FileSchema.post('init', function () {
+  this.path = rewritePath(this);
+});

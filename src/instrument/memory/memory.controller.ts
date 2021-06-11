@@ -6,7 +6,8 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, ValidationPipe,
+  UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MemoryService } from './memory.service';
 import { CreateMemoryDto } from './dto/create-memory.dto';
@@ -16,22 +17,28 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from '../../user/auth/get-user.decorator';
 import { User } from '../../user/user.schema';
 import { AuthGuard } from '@nestjs/passport';
+import { AllowAny } from '../../user/auth/JwtAuthGuard';
 
 @ApiTags('instrument/{id}/memory')
-@Controller('instrument/:instrument')
+@Controller('instrument/:instrument/memory')
 export class MemoryController {
   constructor(private readonly memoryService: MemoryService) {}
 
   @Get()
+  @AllowAny()
   @ApiResponse({
     status: 200,
     type: [Memory],
   })
-  findAll(@Param('instrument') instrument: string, @GetUser() user: User): Promise<Memory[]> {
+  findAll(
+    @Param('instrument') instrument: string,
+    @GetUser() user: User,
+  ): Promise<Memory[]> {
     return this.memoryService.findAll(instrument, user);
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
   @ApiResponse({
     status: 200,
     type: Memory,
@@ -51,7 +58,7 @@ export class MemoryController {
     @Param('instrument') instrument: string,
     @Body(ValidationPipe) createMemoryDto: CreateMemoryDto,
   ): Promise<Memory> {
-    return this.memoryService.create(user._id, instrument, createMemoryDto);
+    return this.memoryService.create(user, instrument, createMemoryDto);
   }
 
   @Patch(':id')

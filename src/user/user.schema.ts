@@ -29,6 +29,10 @@ export class User extends Document {
 
   @Prop()
   @ApiProperty()
+  description: string;
+
+  @Prop()
+  @ApiProperty()
   firstName: string;
 
   @Prop()
@@ -59,13 +63,11 @@ export class User extends Document {
   resetPasswordExpire: Date;
 
   @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: 'Instrument',
     required: false,
     default: [],
   })
-  @ApiProperty({ type: Instrument })
-  wishList?: MongooseSchema.Types.ObjectId[];
+  @ApiProperty()
+  wishList?: string[];
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
@@ -74,6 +76,14 @@ export class User extends Document {
   })
   @ApiProperty({ type: File })
   thumbnail?: File;
+
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: File.name,
+    required: false,
+  })
+  @ApiProperty({ type: File })
+  profileBackground?: File;
 
   validatePassword: ValidatePasswordFunction<boolean>;
 }

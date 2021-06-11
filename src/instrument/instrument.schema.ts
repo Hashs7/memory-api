@@ -6,6 +6,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Memory } from './memory/memory.schema';
 import { IsArray } from 'class-validator';
 import { Exclude } from 'class-transformer';
+import { OldOwner } from './oldowner/oldowner.schema';
 
 @Schema()
 export class Instrument extends Document {
@@ -28,17 +29,29 @@ export class Instrument extends Document {
 
   @Prop()
   @ApiProperty({
+    description: "Liste des couleurs de l'instrument",
+  })
+  colors: string[];
+
+  @Prop()
+  @ApiProperty({
     description: "Date d'obtention de l'instrument (mois prêt)",
   })
   buyDate: Date;
 
+  @Prop()
+  @ApiProperty({
+    description: 'Date de dernière passation',
+  })
+  lastHandoverDate: Date;
+
   @Prop({
-    type: MongooseSchema.Types.ObjectId,
+    type: [MongooseSchema.Types.ObjectId],
     ref: File.name,
-    required: true,
+    required: false,
   })
   @ApiProperty({ type: File })
-  image: File;
+  images: File[];
 
   @Prop()
   @ApiProperty({
@@ -106,33 +119,26 @@ export class Instrument extends Document {
   @ApiProperty({ type: User })
   owner: User;
 
-  @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: User.name,
+  @IsArray()
+  @Prop([OldOwner])
+  @ApiProperty({
+    type: [OldOwner],
   })
-  @ApiProperty({ type: [User] })
-  oldOwners: User[];
-  /*
-  @Prop({
-    type: [MongooseSchema.Types.ObjectId],
-    ref: User.name,
-  })
-  @Prop(
-    raw([
-      {
-        user: { type: MongooseSchema.Types.ObjectId, ref: User.name },
-        date: { type: Date },
-      },
-    ]),
-  )
-  @ApiProperty({ type: [User] })
+  oldOwnersUser: OldOwner[];
+
+  @IsArray()
+  @Prop()
+  @ApiProperty()
   oldOwners: [
     {
-      user: User;
-      date: Date;
+      user: {
+        firstName: string;
+        lastName: string;
+      };
+      from: Date;
+      to: Date;
     },
   ];
-  */
 
   @IsArray()
   @Prop([Memory])
@@ -148,6 +154,15 @@ export class Instrument extends Document {
   @Prop()
   @Exclude()
   handoverExpire: Date;
+}
+
+export interface OldOwnerInterface {
+  user: {
+    firstName;
+    lastName;
+  };
+  from;
+  to;
 }
 
 export const InstrumentSchema = SchemaFactory.createForClass(Instrument);

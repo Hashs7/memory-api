@@ -1,7 +1,14 @@
-import {ApiProperty, ApiPropertyOptional, PartialType} from '@nestjs/swagger';
-import {IsDate, IsEnum, IsNotEmpty, IsOptional, IsString} from 'class-validator';
-import {MemoryContent} from '../content/content.schema';
-import {MemoryVisibility} from "../memory.schema";
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { MemoryContent } from '../content/content.schema';
+import { MemoryVisibility } from '../memory.schema';
+import { MemoryCategory } from '../category/category.schema';
 
 export class UpdateMemoryDto {
   @ApiPropertyOptional()
@@ -28,13 +35,6 @@ export class UpdateMemoryDto {
   @ApiPropertyOptional()
   date?: Date;
 
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional({
-    // enum: Object.values(MemoryType),
-  })
-  type?: string;
-
   @IsOptional()
   @IsString()
   @IsEnum(MemoryVisibility)
@@ -53,5 +53,17 @@ export class UpdateMemoryDto {
 
   @IsOptional()
   @ApiPropertyOptional()
+  preview?: MemoryContent;
+
+  @IsOptional()
+  @ApiPropertyOptional()
   contents?: MemoryContent[];
+
+  @IsNotEmpty()
+  @ApiProperty({
+    title: 'Category ObjectId',
+    example: '606300aa1642981aa1aaaa8e',
+    type: String,
+  })
+  categories?: string[];
 }

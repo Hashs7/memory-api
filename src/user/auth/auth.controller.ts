@@ -5,12 +5,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthResetDto } from './dto/auth-reset.dto';
 import { AuthForgotDto } from './dto/auth-forgot.dto';
+import { AllowAny } from './JwtAuthGuard';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @AllowAny()
   @Post('/signup')
   async signUp(
     @Body(ValidationPipe) createUserDTO: CreateUserDto,
@@ -18,14 +20,15 @@ export class AuthController {
     return await this.authService.signUp(createUserDTO);
   }
 
+  @AllowAny()
   @Post('/signin')
   async signIn(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
   ): Promise<{ accessToken: string }> {
-    Logger.log(authCredentialsDto.password);
     return await this.authService.signIn(authCredentialsDto);
   }
 
+  @AllowAny()
   @Post('/forgot-password')
   async forgotPassword(
     @Body(ValidationPipe) authForgotDto: AuthForgotDto,
@@ -33,6 +36,7 @@ export class AuthController {
     return await this.authService.askResetPassword(authForgotDto);
   }
 
+  @AllowAny()
   @Post('/reset')
   async reset(
     @Body(ValidationPipe) authResetDto: AuthResetDto,

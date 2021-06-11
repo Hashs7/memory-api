@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './user.schema';
 import * as shortid from 'shortid';
 import { CreateUserDto } from './auth/dto/create-user.dto';
@@ -14,13 +19,30 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
+  search(q: string) {
+    return this.userModel
+      .find({
+        username: {
+          $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+        },
+      })
+      .limit(10)
+      .select('username')
+      .populate('thumbnail');
+  }
+
   async findUserbyEmail(email: string): Promise<User> {
     return this.userModel.findOne({ email });
+  }
+
+  async usernameExist(username: string): Promise<boolean> {
+    return !!(await this.userModel.findOne({ username }));
   }
 
   async findUserByUsername(username: string): Promise<User> {
     const user = await this.userModel
       .findOne({ username })
+      .select('-password -salt')
       .populate('thumbnail');
     if (!user) {
       throw new NotFoundException('Aucun utilisateur trouvé');
@@ -47,8 +69,18 @@ export class UserService {
     return this.userModel.findOne({ resetPasswordToken });
   }
 
-  findUsers(ids: string[]): Promise<User[]> {
-    return this.userModel.find({ _id: { $in: ids } }).exec();
+  async findUsers(ids: string[]): Promise<User[]> {
+    const users = await this.userModel
+      .find({ _id: { $in: ids } })
+      .populate('thumbnail');
+    return users.map((u) => {
+      u.thumbnail?.rewritePath();
+      u.salt = null;
+      u.password = null;
+      u.resetPasswordToken = null;
+      u.resetPasswordExpire = null;
+      return u;
+    });
   }
 
   async saveUser(user: User): Promise<User> {
@@ -101,22 +133,42 @@ export class UserService {
   async update(
     user: User,
     updateUserDto: UpdateUserDto,
-    file: Express.Multer.File,
+    thumbnailFile?: Express.Multer.File,
   ) {
-    const thumbnail = await this.fileService.create(file, user._id);
+    let thumbnail, background;
+    if (thumbnailFile) {
+      thumbnail = await this.fileService.create(thumbnailFile, user._id);
+    }
+    /*if (files?.length) {
+      await Promise.all(
+        files.map(async (f) => {
+          thumbnail = await this.fileService.create(f, user._id);
+          Logger.log(f);
+        }),
+      );
+      // background = await this.fileService.create(backgroundFile, user._id);
+    }*/
+
+    if (
+      updateUserDto.username &&
+      updateUserDto.username !== user.username &&
+      (await this.usernameExist(updateUserDto.username))
+    ) {
+      throw new BadRequestException("Le nom d'utilisateur est déjà utilisé");
+    }
     return this.userModel
       .findOneAndUpdate(
         { _id: user._id },
         {
           ...updateUserDto,
-          thumbnail: thumbnail._id,
+          ...(thumbnail && { thumbnail: thumbnail._id }),
+          ...(background && { profileBackground: background._id }),
         },
-        { new: true },
       )
       .exec();
   }
 
-  async toggleToWishlist(user: User, instrumentId: ObjectId) {
+  async toggleToWishlist(user: User, instrumentId: string) {
     const index = user.wishList.indexOf(instrumentId);
     if (index === -1) {
       user.wishList.push(instrumentId);

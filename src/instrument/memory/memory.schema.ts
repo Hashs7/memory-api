@@ -1,27 +1,22 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {ApiProperty} from '@nestjs/swagger';
-import {Schema as MongooseSchema, Types} from 'mongoose';
-import {CreateMemoryDto} from './dto/create-memory.dto';
-import {User} from '../../user/user.schema';
-import {IsArray} from 'class-validator';
-import {MemoryContent} from './content/content.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ApiProperty } from '@nestjs/swagger';
+import { Schema as MongooseSchema, Types } from 'mongoose';
+import { User } from '../../user/user.schema';
+import { IsArray } from 'class-validator';
+import { MemoryContent } from './content/content.schema';
+import { MemoryCategory } from './category/category.schema';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const timestamps2 = require('mongoose-timestamp2');
 
-export enum MemoryType {
-  Concert = 'Concert',
-  Rehearsal = 'Rehearsal',
-}
-
 export enum MemoryVisibility {
-  Private = 'Private',
-  UrlOnly = 'UrlOnly',
-  Public = 'Public',
+  Private = 'private',
+  Unlisted = 'unlisted',
+  Public = 'public',
 }
 
 @Schema()
 export class Memory extends Types.Subdocument {
-  @Prop({required: true})
+  @Prop({ required: true })
   id: string;
 
   @Prop()
@@ -38,36 +33,16 @@ export class Memory extends Types.Subdocument {
   @ApiProperty()
   template: string;
 
-  @Prop({type: Date})
+  @Prop({ type: Date })
   @ApiProperty()
   date: Date;
 
-  @Prop({
-    required: false,
-  })
-  @ApiProperty({
-    enum: Object.values(MemoryType),
-  })
-  type?: string;
-
-  @Prop()
+  @Prop({ default: MemoryVisibility.Private })
   @ApiProperty({
     enum: Object.values(MemoryVisibility),
     default: MemoryVisibility.Private,
   })
   visibility: string;
-
-  /*
-  @Prop({
-    type: String,
-    enum: Object.values(MemoryType),
-    required: true,
-  })
-  @ApiProperty({
-    enum: Object.values(MemoryType),
-  })
-  type: string;
-  */
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
@@ -89,12 +64,28 @@ export class Memory extends Types.Subdocument {
   })
   withUsers?: MongooseSchema.Types.ObjectId[];
 
+  @Prop(MemoryContent)
+  @ApiProperty({
+    type: MemoryContent,
+  })
+  preview: MemoryContent;
+
   @IsArray()
   @Prop([MemoryContent])
   @ApiProperty({
     type: [MemoryContent],
   })
   contents: MemoryContent[];
+
+  @Prop({
+    type: [MongooseSchema.Types.ObjectId],
+    ref: MemoryCategory.name,
+    required: false,
+  })
+  @ApiProperty({
+    type: [MemoryCategory],
+  })
+  categories?: MongooseSchema.Types.ObjectId[];
 }
 
 export const MemorySchema = SchemaFactory.createForClass(Memory).plugin(

@@ -1,4 +1,4 @@
-import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsDate,
   IsEnum,
@@ -6,8 +6,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import {MemoryContent} from '../content/content.schema';
-import {MemoryVisibility} from "../memory.schema";
+import { MemoryContent } from '../content/content.schema';
+import { MemoryVisibility } from '../memory.schema';
 
 export class CreateMemoryDto {
   @IsNotEmpty()
@@ -31,28 +31,11 @@ export class CreateMemoryDto {
 
   @IsOptional()
   @IsString()
-  // @IsEnum(MemoryType)
-  @ApiProperty({
-    // enum: Object.values(MemoryType),
-  })
-  type?: string;
-
-  @IsOptional()
-  @IsString()
   @IsEnum(MemoryVisibility)
   @ApiPropertyOptional({
     enum: Object.values(MemoryVisibility),
   })
   visibility?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    title: 'User ObjectId',
-    example: '606300aa1642981aa1aaaa8e',
-    type: String,
-  })
-  createdBy: string;
 
   @IsOptional()
   @ApiProperty({
@@ -62,7 +45,19 @@ export class CreateMemoryDto {
   })
   withUsers?: string[];
 
+  // @IsOptional()
+  @ApiProperty()
+  preview: MemoryContent;
+
   @IsOptional()
   @ApiProperty()
   contents?: MemoryContent[];
+
+  @IsOptional()
+  @ApiProperty({
+    title: 'Array of Categories ObjectId',
+    example: ['606300aa1642981aa1aaaa8e'],
+    type: [String],
+  })
+  categories?: string[];
 }

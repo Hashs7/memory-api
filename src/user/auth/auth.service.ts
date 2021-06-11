@@ -34,7 +34,7 @@ export class AuthService {
   async signUp(createUserDto: CreateUserDto) {
     const { email, password, username } = createUserDto;
     const existEmail = await this.userService.findUserbyEmail(email);
-    const existUsername = await this.userService.findUserByUsername(username);
+    const existUsername = await this.userService.usernameExist(username);
 
     if (existEmail) {
       throw new BadRequestException("L'email est déjà utilisé");
@@ -63,12 +63,9 @@ export class AuthService {
    * @param hashed
    */
   async signIn(authUserDTO: AuthCredentialsDto, hashed = false) {
-    Logger.log(authUserDTO.password);
-
     const user = await this.userService.findByUsernameOrEmail(
       authUserDTO.username,
     );
-    console.log('user', user);
 
     if (!user) {
       throw new UnauthorizedException('Utilisateur non trouvé');
@@ -169,7 +166,12 @@ export class AuthService {
       jwtConstants.rSignOptions,
     );
     const decoded = this.decodeToken(accessToken);
-    return { accessToken, refreshToken, user: decoded };
+    const userFilled = await this.userService.findUserByUsername(user.username);
+    return {
+      accessToken,
+      refreshToken,
+      user: userFilled,
+    };
   }
 
   async refreshToken(accessToken: string) {

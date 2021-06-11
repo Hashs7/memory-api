@@ -11,6 +11,11 @@ import { Memory, MemorySchema } from './memory.schema';
 import { MemoryContent, MemoryContentSchema } from './content/content.schema';
 import { FileService } from '../../file/file.service';
 import { File, FileSchema } from '../../file/file.schema';
+import {
+  MemoryCategory,
+  MemoryCategorySchema,
+} from './category/category.schema';
+import { CategoryService } from './category/category.service';
 
 @Module({
   imports: [
@@ -21,9 +26,17 @@ import { File, FileSchema } from '../../file/file.schema';
       { name: File.name, schema: FileSchema },
       { name: Instrument.name, schema: InstrumentSchema },
       { name: MemoryContent.name, schema: MemoryContentSchema },
+      { name: MemoryCategory.name, schema: MemoryCategorySchema },
     ]),
   ],
   controllers: [MemoryController],
-  providers: [MemoryService, InstrumentService, UserService, FileService],
+  providers: [
+    MemoryService,
+    InstrumentService,
+    UserService,
+    CategoryService,
+    FileService,
+  ],
+  exports: [MemoryService],
 })
 export class MemoryModule {}

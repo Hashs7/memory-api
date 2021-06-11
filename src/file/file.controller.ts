@@ -9,9 +9,10 @@ import {
   Param,
   HttpStatus,
   BadRequestException,
-  Logger,
   UseGuards,
   Delete,
+  Query,
+  Logger,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
@@ -21,13 +22,14 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { randomBytes } from 'crypto';
 import got from 'got';
 import { FileService } from './file.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Instrument } from '../instrument/instrument.schema';
 import { GetUser } from '../user/auth/get-user.decorator';
 import { User } from '../user/user.schema';
+import { AllowAny } from '../user/auth/JwtAuthGuard';
+import * as fs from 'fs';
 
 // process.env.NODE_ENV = 'production';
 
@@ -56,6 +58,7 @@ export class FileController {
     }
 
     const data = await this.fileService.create(file, user._id);
+    data.rewritePath();
 
     return {
       status: HttpStatus.OK,
@@ -107,14 +110,22 @@ export class FileController {
     return this.fileService.findForUser(user);
   }
 
+  @AllowAny()
   @Get(':imageName')
-  getImage(@Param('imageName') image, @Res() res) {
-    const response = res.sendFile(image, { root: './uploads' });
-
-    return {
-      status: HttpStatus.OK,
-      response,
-    };
+  async getImage(
+    @Res() res,
+    @Param('imageName') image: string,
+    @Query('download') download?: boolean,
+    @Query('w') width?: string,
+    @Query('h') height?: string,
+  ) {
+    return this.fileService.getFileHandler(
+      res,
+      image,
+      download,
+      width ? Number(width) : null,
+      height ? Number(height) : null,
+    );
   }
 
   /**
@@ -122,6 +133,7 @@ export class FileController {
    * @param id
    * @param res
    */
+  @AllowAny()
   @Get('id/:id')
   async getImageById(@Param('id') id, @Res() res) {
     let response;
@@ -133,7 +145,6 @@ export class FileController {
       // const url = `${process.env.AZURE_STORAGE_URL}/production/telechargement.jpeg${process.env.AZURE_STORAGE_SAS_KEY}`;
       const url = `${process.env.AZURE_STORAGE_URL}${image.path}/${image.originalname}${process.env.AZURE_STORAGE_SAS_KEY}`;
       const getFile = await got(url).buffer();
-      // res.set('Content-Type', 'image/png');
       res.set('Content-Type', image.mimetype);
       response = res.send(getFile);
     }
