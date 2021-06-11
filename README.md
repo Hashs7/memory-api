@@ -24,6 +24,9 @@
 Memory Motel App :
 [github.com/Hashs7/memory-app](https://github.com/Hashs7/memory-app)
 
+Postman configuration : <a href="./.github/Memory motel.postman_collection.json">Memory motel.postman_collection.json</a>
+
+
 [Install MongoDB](https://docs.mongodb.com/manual/administration/install-community/) 
 
 ### Create local database
@@ -41,6 +44,13 @@ cp .env.example .env
 # install dependencies
 yarn install
 ``` 
+
+### HTTPS Configuration
+- Refer to [the documentation of memory-app](https://github.com/Hashs7/memory-app#https-configuration) to see full HTTPS configuration steps on  the app.
+- Copy the `cert.pem` and `key.pem` you generated in the `/cert` folder
+  of the app to the `/cert` folder in the api.
+
+
 ### Populate BDD
 
 ```bash
