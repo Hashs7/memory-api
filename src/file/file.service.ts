@@ -9,6 +9,10 @@ import * as sharp from 'sharp';
 import * as path from 'path';
 import * as mime from 'mime-types';
 import { unwritePath } from './file.helper';
+import {
+  AzureStorageService,
+  UploadedFileMetadata,
+} from '@nestjs/azure-storage';
 
 @Injectable()
 export class FileService {
@@ -16,7 +20,7 @@ export class FileService {
 
   constructor(
     private configService: ConfigService,
-    // private azureStorage: AzureStorageService,
+    private azureStorage: AzureStorageService,
     @InjectModel(File.name) private fileModel: Model<File>,
   ) {
     this.root = './uploads';
@@ -32,21 +36,29 @@ export class FileService {
 
   async create(file: Express.Multer.File, userId: string): Promise<File> {
     const { originalname } = file;
+    file.path = file.path.split('/')[1];
+
+    return this.fileModel.create({
+      ...file,
+      date: new Date(),
+      name: originalname,
+      user: userId,
+    });
+  }
+
+  async createAzure(file: UploadedFileMetadata, userId: string): Promise<File> {
+    const { originalname } = file;
     // const generatedName = randomBytes(10).toString('hex');
     // const filetype = file.mimetype.split('/').shift();
     // Logger.log(`file ${filetype} ${file.mimetype} ${file.size}`);
 
-    if (process.env.NODE_ENV !== 'production') {
-      // Store image locally
-      file.path = file.path.split('/')[1];
-    } else {
-      // Store image on azure
-      /*const path = await this.azureStorage.upload(file);
-      file.path = path.split(process.env.AZURE_STORAGE_SAS_KEY).shift();*/
-    }
+    // Store image on azure
+    let path = await this.azureStorage.upload(file);
+    path = path.split(process.env.AZURE_STORAGE_SAS_KEY).shift();
 
     return this.fileModel.create({
       ...file,
+      path,
       date: new Date(),
       name: originalname,
       user: userId,
@@ -106,6 +118,12 @@ export class FileService {
   }
 
   async remove(id: string, user: User) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new UnauthorizedException(
+        "Vous n'êtes pas autorisé à supprimer en production",
+      );
+    }
+
     const file = await this.fileModel.findOne({ _id: id });
 
     if (!user._id.equals(file.user)) {
@@ -120,8 +138,6 @@ export class FileService {
       const filePath = `${path.resolve('./')}/uploads/${file.path}`;
       fs.unlinkSync(filePath);
       await file.delete();
-    } else {
-      // Delete image on azure
     }
   }
 }

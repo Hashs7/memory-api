@@ -19,35 +19,17 @@ require('dotenv').config();
       { name: User.name, schema: UserSchema },
       { name: File.name, schema: FileSchema },
     ]),
-    /*AzureStorageModule.withConfig({
+    AzureStorageModule.withConfig({
       sasKey: process.env.AZURE_STORAGE_SAS_KEY,
       accountName: process.env.AZURE_STORAGE_ACCOUNT,
       containerName: process.env.NODE_ENV,
-    }),*/
+    }),
     MulterModule.register({
       dest: './uploads',
     }),
-    /*...(process.env.NODE_ENV !== 'production'
-      ? [
-          MulterModule.register({
-            dest: './uploads',
-          }),
-        ]
-      : []),*/
-    /*...(process.env.NODE_ENV === 'production' ? [
-      AzureStorageModule.withConfig({
-        sasKey: process.env.AZURE_STORAGE_SAS_KEY,
-        accountName: process.env.AZURE_STORAGE_ACCOUNT,
-        containerName: 'production',
-      }),
-    ] : [
-      MulterModule.register({
-        dest: './uploads',
-      }),
-    ]),*/
   ],
   controllers: [FileController],
   providers: [FileService],
-  exports: [FileService],
+  exports: [FileService, AzureStorageModule],
 })
 export class FileModule {}
