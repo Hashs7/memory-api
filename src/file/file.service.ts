@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as sharp from 'sharp';
 import * as path from 'path';
 import * as mime from 'mime-types';
+import { unwritePath } from './file.helper';
 
 @Injectable()
 export class FileService {
@@ -22,17 +23,11 @@ export class FileService {
   }
 
   async findOne(id: string) {
-    const file = await this.fileModel.findOne({ _id: id });
-    file.rewritePath();
-    return file;
+    return this.fileModel.findOne({ _id: id });
   }
 
   async findForUser(user: User) {
-    const files = await this.fileModel.find({ user: user._id });
-    return files.map((f) => {
-      f.rewritePath();
-      return f;
-    });
+    return this.fileModel.find({ user: user._id });
   }
 
   async create(file: Express.Multer.File, userId: string): Promise<File> {
@@ -50,15 +45,11 @@ export class FileService {
       file.path = path.split(process.env.AZURE_STORAGE_SAS_KEY).shift();*/
     }
 
-    const fileDoc = await this.fileModel.create({
+    return this.fileModel.create({
       ...file,
       name: originalname,
       user: userId,
     });
-
-    fileDoc.rewritePath();
-
-    return fileDoc;
   }
 
   async getFileHandler(
@@ -121,6 +112,8 @@ export class FileService {
         "Vous n'êtes pas propriétaire du fichier",
       );
     }
+
+    file.unwritePath();
 
     if (process.env.NODE_ENV !== 'production') {
       const filePath = `${path.resolve('./')}/uploads/${file.path}`;
