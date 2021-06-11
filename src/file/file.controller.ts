@@ -58,6 +58,7 @@ export class FileController {
     }
 
     const data = await this.fileService.create(file, user._id);
+    data.rewritePath();
 
     return {
       status: HttpStatus.OK,
