@@ -47,6 +47,7 @@ export class FileService {
 
     return this.fileModel.create({
       ...file,
+      date: new Date(),
       name: originalname,
       user: userId,
     });

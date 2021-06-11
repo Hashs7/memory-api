@@ -51,6 +51,10 @@ export class File extends Document {
   @ApiProperty()
   height: number;
 
+  @Prop()
+  @ApiProperty()
+  date: Date;
+
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'User',
