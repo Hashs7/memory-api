@@ -4,11 +4,18 @@ import { AppModule } from './app.module';
 import * as compression from 'compression';
 import * as fs from 'fs';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
+
 async function bootstrap() {
-  const httpsOptions = {
-    key: fs.readFileSync('./cert/key.pem'),
-    cert: fs.readFileSync('./cert/cert.pem'),
-  };
+  let httpsOptions = {};
+  console.log(process.env.NODE_ENV);
+  if (process.env.NODE_ENV === 'development') {
+    httpsOptions = {
+      key: fs.readFileSync('./cert/key.pem'),
+      cert: fs.readFileSync('./cert/cert.pem'),
+    };
+  }
 
   const app = await NestFactory.create(AppModule, { httpsOptions });
 
