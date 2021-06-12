@@ -9,7 +9,6 @@ require('dotenv').config();
 
 async function bootstrap() {
   let httpsOptions = {};
-  console.log(process.env.NODE_ENV);
   if (process.env.NODE_ENV === 'development') {
     httpsOptions = {
       key: fs.readFileSync('./cert/key.pem'),
