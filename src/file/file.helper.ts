@@ -10,5 +10,8 @@ export function rewritePath(file: File): string {
 }
 
 export function unwritePath(file: File): string {
+  if (process.env.NODE_ENV === 'production') {
+    return file.path;
+  }
   return file.path.split(`${process.env.API_BASE_URL}/file/`)[1];
 }
