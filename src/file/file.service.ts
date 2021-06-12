@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { File } from './file.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,6 +18,7 @@ import {
   AzureStorageService,
   UploadedFileMetadata,
 } from '@nestjs/azure-storage';
+import got from 'got';
 
 @Injectable()
 export class FileService {
@@ -82,12 +88,21 @@ export class FileService {
   }
 
   async filterImage(res, image, options) {
-    const filePath = `${this.root}/${image}`;
-    const file = fs.readFileSync(filePath);
+    let file;
+    let mimetype;
+    if (process.env.NODE_ENV !== 'production') {
+      // Local image storage
+      const filePath = `${this.root}/${image}`;
+      file = fs.readFileSync(filePath);
+      mimetype = mime.contentType(path.extname(filePath));
+    } else {
+      // Azure image storage
+      // TODO not passing
+      file = await got(image.path).buffer();
+    }
+
     const sharpFile = await sharp(file).resize(options).toBuffer();
-    res.set({
-      'Content-Type': mime.contentType(path.extname(filePath)),
-    });
+    res.set({ 'Content-Type': mimetype });
     const response = res.end(sharpFile);
 
     return {
