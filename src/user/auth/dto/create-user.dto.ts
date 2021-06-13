@@ -6,7 +6,6 @@ import {
   Matches,
   IsPhoneNumber,
   IsOptional,
-  Length,
   IsArray,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';

@@ -14,10 +14,10 @@ import { CreateMemoryDto } from './dto/create-memory.dto';
 import { UpdateMemoryDto } from './dto/update-memory.dto';
 import { Memory } from './memory.schema';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { GetUser } from '../../user/auth/get-user.decorator';
+import { GetUser } from '../../user/auth/helpers/get-user.decorator';
 import { User } from '../../user/user.schema';
 import { AuthGuard } from '@nestjs/passport';
-import { AllowAny } from '../../user/auth/JwtAuthGuard';
+import { AllowAny } from '../../user/auth/helpers/JwtAuthGuard';
 
 @ApiTags('instrument/{id}/memory')
 @Controller('instrument/:instrument/memory')

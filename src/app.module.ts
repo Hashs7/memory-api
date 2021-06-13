@@ -12,7 +12,7 @@ import { AuthModule } from './user/auth/auth.module';
 import { CategoryModule } from './instrument/memory/category/category.module';
 import { CommandModule } from 'nestjs-command';
 import { APP_GUARD, Reflector } from '@nestjs/core';
-import { JwtAuthGuard } from './user/auth/JwtAuthGuard';
+import { JwtAuthGuard } from './user/auth/helpers/JwtAuthGuard';
 import { SearchModule } from './search/search.module';
 import { FeedModule } from './feed/feed.module';
 

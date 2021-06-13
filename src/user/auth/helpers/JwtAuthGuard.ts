@@ -19,4 +19,5 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     throw new UnauthorizedException();
   }
 }
+
 export const AllowAny = () => SetMetadata('allow-any', true);

@@ -25,12 +25,13 @@ import got from 'got';
 import { FileService } from './file.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Instrument } from '../instrument/instrument.schema';
-import { GetUser } from '../user/auth/get-user.decorator';
+import { GetUser } from '../user/auth/helpers/get-user.decorator';
 import { User } from '../user/user.schema';
-import { AllowAny } from '../user/auth/JwtAuthGuard';
-import * as fs from 'fs';
-
-// process.env.NODE_ENV = 'production';
+import { AllowAny } from '../user/auth/helpers/JwtAuthGuard';
+import {
+  AzureStorageFileInterceptor,
+  UploadedFileMetadata,
+} from '@nestjs/azure-storage';
 
 @ApiTags('file')
 @Controller('file')
@@ -44,14 +45,11 @@ export class FileController {
    */
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(
-    /*process.env.NODE_ENV !== 'production'
-      ? FileInterceptor('file', fileInterceptorOptions)
-      : AzureStorageFileInterceptor('file'),
-    */
-    FileInterceptor('file', fileInterceptorOptions),
-  )
-  async uploadedFile(@GetUser() user: User, @UploadedFile() file) {
+  @UseInterceptors(FileInterceptor('file', fileInterceptorOptions))
+  async uploadedFile(
+    @GetUser() user: User,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     if (!file) {
       throw new BadRequestException('Aucun fichier reçu');
     }
@@ -67,19 +65,38 @@ export class FileController {
   }
 
   /**
+   * Upload file to Azure storage
+   * @param user
+   * @param file
+   */
+  @Post('azure')
+  @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(AzureStorageFileInterceptor('file'))
+  async uploadedFileAzure(
+    @GetUser() user: User,
+    @UploadedFile() file: UploadedFileMetadata,
+  ) {
+    if (!file) {
+      throw new BadRequestException('Aucun fichier reçu');
+    }
+
+    const data = await this.fileService.createAzure(file, user._id);
+    data.rewritePath();
+
+    return {
+      status: HttpStatus.OK,
+      message: 'Image uploaded successfully',
+      response: data,
+    };
+  }
+
+  /**
    * Upload multiple files
    * @param files
    */
   @Post('multiple')
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(
-    /*
-    process.env.NODE_ENV !== 'production'
-      ? FilesInterceptor('file', 10, fileInterceptorOptions)
-      : AzureStorageFileInterceptor('file'),
-    */
-    FilesInterceptor('file', 10, fileInterceptorOptions),
-  )
+  @UseInterceptors(FilesInterceptor('file', 10, fileInterceptorOptions))
   async uploadMultipleFiles(@GetUser() user: User, @UploadedFiles() files) {
     const response = [];
     if (!files) {
