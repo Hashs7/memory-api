@@ -12,7 +12,6 @@ import {
   UseGuards,
   Delete,
   Query,
-  Logger,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';

@@ -1,6 +1,5 @@
 import {
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -66,7 +65,7 @@ export class InstrumentService {
           },
         ],
       })
-      .select('images brand modelName name forSale type owner memories')
+      .select('images id brand modelName name forSale type owner memories')
       .limit(10)
       .find(filters)
       .populate([
@@ -418,6 +417,11 @@ export class InstrumentService {
     };
   }
 
+  /**
+   * Confirm instrument handover
+   * @param token
+   * @param user
+   */
   async confirmHandover(token: string, user: User): Promise<Instrument> {
     const instrument = await this.instrumentModel.findOne({
       handoverToken: token,

@@ -6,7 +6,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { SendMessageDto } from './dto/send-message.dto';
 import { User } from '../user/user.schema';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Instrument } from '../instrument/instrument.schema';
 import { Conversation } from './schema/conversation.schema';
 
 @ApiTags('chat')
@@ -49,7 +48,7 @@ export class ChatController {
   })
   sendMessage(
     @GetUser() user: User,
-    @Body() sendMessageDto: SendMessageDto
+    @Body() sendMessageDto: SendMessageDto,
   ): Promise<Conversation> {
     return this.chatService.sendMessage(user._id, sendMessageDto);
   }

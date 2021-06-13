@@ -21,8 +21,10 @@ export class ChatService {
    * @param userId
    */
   getUserConversations(userId: Schema.Types.ObjectId): Promise<Conversation[]> {
-    return this.conversationModel.find({ users: userId })
-      .populate('users', 'username').exec();
+    return this.conversationModel
+      .find({ users: userId })
+      .populate('users', 'username')
+      .exec();
   }
 
   /**
@@ -40,7 +42,7 @@ export class ChatService {
    */
   async createConversation(
     sender: Schema.Types.ObjectId,
-    userIds: string[]
+    userIds: string[],
   ): Promise<Conversation> {
     const users = await this.userService.findUsers(userIds);
     const validUserIds = users.map(({ _id }) => _id);
@@ -71,7 +73,7 @@ export class ChatService {
 
     this.chatGateway.wss.emit('newMessage', {
       conversation: conversation._id,
-      message
+      message,
     });
     return conversation;
   }

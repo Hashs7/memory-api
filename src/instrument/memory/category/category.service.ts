@@ -37,15 +37,7 @@ export class CategoryService {
     return this.memoryCategoryModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
-
   findCategories(ids: string[]): Promise<MemoryCategory[]> {
     return this.memoryCategoryModel.find({ _id: { $in: ids } }).exec();
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} category`;
   }
 }
