@@ -51,8 +51,8 @@ export class AuthService {
       hashPassword,
     );
 
-    const token = Math.floor(1000 + Math.random() * 9000).toString();
-    await this.mailService.sendUserConfirmation(user, token);
+    // const token = Math.floor(1000 + Math.random() * 9000).toString();
+    // await this.mailService.sendUserConfirmation(user, token);
 
     return this.generateAuthSuccessResponse(user);
   }

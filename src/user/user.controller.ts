@@ -82,7 +82,7 @@ export class UserController {
 
   @Patch()
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(FilesInterceptor('thumbnail', 2, fileInterceptorOptions))
+  @UseInterceptors(FileInterceptor('thumbnail', fileInterceptorOptions))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Updated user' })
   @ApiResponse({
