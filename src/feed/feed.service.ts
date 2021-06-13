@@ -15,6 +15,7 @@ export class FeedService {
   public async getFeedFavMemories(user: User): Promise<any[]> {
     const wishList = await this.instrumentService.findFeed(user.wishList);
 
+    //Add memory's instrument to the memory object
     const flatMemories = wishList.reduce((acc, curr) => {
       const memories = curr.memories.map((m) => ({
         ...m.toObject(),

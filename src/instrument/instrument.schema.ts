@@ -41,6 +41,12 @@ export class Instrument extends Document {
 
   @Prop()
   @ApiProperty({
+    description: 'Date de la prochaine passation',
+  })
+  nextHandoverDate: Date;
+
+  @Prop()
+  @ApiProperty({
     description: 'Date de dernière passation',
   })
   lastHandoverDate: Date;

@@ -9,7 +9,6 @@ require('dotenv').config();
 
 async function bootstrap() {
   let httpsOptions = {};
-  console.log(process.env.NODE_ENV);
   if (process.env.NODE_ENV === 'development') {
     httpsOptions = {
       key: fs.readFileSync('./cert/key.pem'),
@@ -24,7 +23,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Memory API')
-    .setVersion('1.0')
+    .setVersion('0.0.1')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

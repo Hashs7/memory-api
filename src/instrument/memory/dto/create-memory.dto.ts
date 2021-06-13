@@ -49,9 +49,8 @@ export class CreateMemoryDto {
   @ApiProperty()
   preview: MemoryContent;
 
-  @IsOptional()
   @ApiProperty()
-  contents?: MemoryContent[];
+  contents: MemoryContent[];
 
   @IsOptional()
   @ApiProperty({

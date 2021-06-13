@@ -14,10 +14,15 @@ import { FileService } from '../file/file.service';
 
 @Injectable()
 export class UserService {
+  userSelectFields: string;
+
   constructor(
     private readonly fileService: FileService,
     @InjectModel(User.name) private userModel: Model<User>,
-  ) {}
+  ) {
+    this.userSelectFields =
+      '-password -salt -resetPasswordToken -resetPasswordExpire';
+  }
 
   search(q: string) {
     return this.userModel
@@ -35,14 +40,15 @@ export class UserService {
     return this.userModel.findOne({ email });
   }
 
-  async usernameExist(username: string): Promise<boolean> {
+  async usernameExist(name: string): Promise<boolean> {
+    const username = name.toLowerCase();
     return !!(await this.userModel.findOne({ username }));
   }
 
   async findUserByUsername(username: string): Promise<User> {
     const user = await this.userModel
       .findOne({ username })
-      .select('-password -salt')
+      .select(this.userSelectFields)
       .populate('thumbnail');
     if (!user) {
       throw new NotFoundException('Aucun utilisateur trouvé');
@@ -54,15 +60,10 @@ export class UserService {
   }
 
   async findUser(id: string): Promise<User> {
-    const user = await this.userModel
+    return this.userModel
       .findOne({ _id: id })
+      .select(this.userSelectFields)
       .populate('thumbnail');
-    user.thumbnail?.rewritePath();
-    user.salt = null;
-    user.password = null;
-    user.resetPasswordToken = null;
-    user.resetPasswordExpire = null;
-    return user;
   }
 
   async findUserWithResetToken(resetPasswordToken: string): Promise<User> {
@@ -70,17 +71,10 @@ export class UserService {
   }
 
   async findUsers(ids: string[]): Promise<User[]> {
-    const users = await this.userModel
+    return this.userModel
       .find({ _id: { $in: ids } })
+      .select(this.userSelectFields)
       .populate('thumbnail');
-    return users.map((u) => {
-      u.thumbnail?.rewritePath();
-      u.salt = null;
-      u.password = null;
-      u.resetPasswordToken = null;
-      u.resetPasswordExpire = null;
-      return u;
-    });
   }
 
   async saveUser(user: User): Promise<User> {
@@ -93,20 +87,13 @@ export class UserService {
     createUserDTO: CreateUserDto,
     salt: string,
     hashPassword: string,
-  ) {
-    const { email, username, firstName, lastName, phoneNumber } = createUserDTO;
-
-    const user = new this.userModel();
-    user.id = shortid.generate();
-    user.email = email;
-    user.username = username;
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.phoneNumber = phoneNumber;
-    user.salt = salt;
-    user.password = hashPassword;
-
-    return user.save();
+  ): Promise<User> {
+    return this.userModel.create({
+      ...createUserDTO,
+      username: createUserDTO.username.toLowerCase(),
+      password: hashPassword,
+      salt,
+    });
   }
 
   handleNewConnection(user: User) {
@@ -134,20 +121,11 @@ export class UserService {
     user: User,
     updateUserDto: UpdateUserDto,
     thumbnailFile?: Express.Multer.File,
-  ) {
-    let thumbnail, background;
+  ): Promise<User> {
+    let thumbnail;
     if (thumbnailFile) {
       thumbnail = await this.fileService.create(thumbnailFile, user._id);
     }
-    /*if (files?.length) {
-      await Promise.all(
-        files.map(async (f) => {
-          thumbnail = await this.fileService.create(f, user._id);
-          Logger.log(f);
-        }),
-      );
-      // background = await this.fileService.create(backgroundFile, user._id);
-    }*/
 
     if (
       updateUserDto.username &&
@@ -156,19 +134,22 @@ export class UserService {
     ) {
       throw new BadRequestException("Le nom d'utilisateur est déjà utilisé");
     }
+
     return this.userModel
       .findOneAndUpdate(
         { _id: user._id },
         {
           ...updateUserDto,
-          ...(thumbnail && { thumbnail: thumbnail._id }),
-          ...(background && { profileBackground: background._id }),
+          ...(thumbnailFile && { thumbnail: thumbnail._id }),
+        },
+        {
+          useFindAndModify: false,
         },
       )
-      .exec();
+      .select(this.userSelectFields);
   }
 
-  async toggleToWishlist(user: User, instrumentId: string) {
+  async toggleToWishlist(user: User, instrumentId: string): Promise<User> {
     const index = user.wishList.indexOf(instrumentId);
     if (index === -1) {
       user.wishList.push(instrumentId);

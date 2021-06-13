@@ -4,7 +4,6 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 import { File } from '../file/file.schema';
-import { Instrument } from '../instrument/instrument.schema';
 
 type ValidatePasswordFunction<T> = (password: string) => T;
 

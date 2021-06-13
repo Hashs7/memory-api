@@ -9,5 +9,5 @@ export class CreateConversationDto {
     example: ['606300aa1642981aa1aaaa8e'],
     type: [String],
   })
-  users: string[]
+  users: string[];
 }
