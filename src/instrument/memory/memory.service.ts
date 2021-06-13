@@ -242,6 +242,7 @@ export class MemoryService {
       .select('-withUsers -createdAt -updatedAt -template')
       .sort({ date: -1 })
       .then((memories) => {
+        //Add memory's instrument inside response
         return Promise.all(
           memories.map(async (m) => {
             const instrument = await this.instrumentService.findByMemory(m.id);
