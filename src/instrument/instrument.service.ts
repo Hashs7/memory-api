@@ -455,6 +455,10 @@ export class InstrumentService {
       handoverToken: token,
     });
 
+    if (!instrument) {
+      throw new UnauthorizedException('La passation a expirée');
+    }
+
     if (instrument.owner.equals(user._id)) {
       throw new UnauthorizedException('Passation à vous même');
     }
