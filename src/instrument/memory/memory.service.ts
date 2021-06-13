@@ -206,18 +206,17 @@ export class MemoryService {
     if (categories) {
       filters.categories = { $in: categories };
     }
-
     return this.memoryModel
       .find({
         $or: [
           {
             name: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
           {
             description: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
         ],

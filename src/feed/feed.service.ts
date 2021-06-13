@@ -45,6 +45,7 @@ export class FeedService {
   ): Promise<Object> {
     const memoriesCat = await this.memoryService.search('', categories, 3);
 
+    //Return objects by category
     return memoriesCat.reduce((acc, cur) => {
       cur.categories.forEach((cat) => {
         // @ts-ignore
