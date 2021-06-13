@@ -398,7 +398,11 @@ export class InstrumentService {
    * @param id
    * @param user
    */
-  async initHandover(id: string, user: User): Promise<{ token: string }> {
+  async initHandover(
+    id: string,
+    date: Date,
+    user: User,
+  ): Promise<{ token: string }> {
     const instrument = await this.instrumentModel.findOne({ id });
     this.validateInstrumentOwner(instrument, user);
 
@@ -410,6 +414,7 @@ export class InstrumentService {
     // Expire in 7 days
     expire.setDate(expire.getDate() + 7);
     instrument.handoverExpire = expire;
+    instrument.nextHandoverDate = date;
 
     await instrument.save();
 
@@ -427,20 +432,19 @@ export class InstrumentService {
       throw new UnauthorizedException('Passation à vous même');
     }
 
-    instrument.handoverToken = null;
-    instrument.handoverExpire = null;
-
     // @ts-ignore
     const oldOwner: OldOwner = {
       user: instrument.owner,
       from: instrument.lastHandoverDate,
-      to: new Date(),
+      to: instrument.nextHandoverDate,
     };
 
-    instrument.oldOwnersUser.push(oldOwner);
-
-    instrument.lastHandoverDate = new Date();
     instrument.owner = user._id;
+    instrument.oldOwnersUser.push(oldOwner);
+    instrument.lastHandoverDate = new Date();
+    instrument.handoverToken = null;
+    instrument.handoverExpire = null;
+    instrument.nextHandoverDate = null;
 
     await instrument.save();
 
