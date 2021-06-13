@@ -3,6 +3,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as compression from 'compression';
 import * as fs from 'fs';
+import { Logger } from '@nestjs/common';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -29,5 +30,6 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(parseInt(process.env.PORT) | 3000);
+  Logger.log(await app.getUrl());
 }
 bootstrap();
