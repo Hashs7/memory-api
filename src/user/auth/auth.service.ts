@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -16,8 +15,7 @@ import { MailService } from 'src/mail/mail.service';
 import { AuthResetDto } from './dto/auth-reset.dto';
 import { randomBytes } from 'crypto';
 import { AuthForgotDto } from './dto/auth-forgot.dto';
-
-// TODO create interface for auth response
+import { IAuthResponse } from './helpers/auth-response.interface';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +29,7 @@ export class AuthService {
    * Create new user
    * @param createUserDto
    */
-  async signUp(createUserDto: CreateUserDto) {
+  async signUp(createUserDto: CreateUserDto): Promise<IAuthResponse> {
     const { email, password, username } = createUserDto;
     const existEmail = await this.userService.findUserbyEmail(email);
     const existUsername = await this.userService.usernameExist(username);
@@ -51,9 +49,6 @@ export class AuthService {
       hashPassword,
     );
 
-    // const token = Math.floor(1000 + Math.random() * 9000).toString();
-    // await this.mailService.sendUserConfirmation(user, token);
-
     return this.generateAuthSuccessResponse(user);
   }
 
@@ -62,7 +57,10 @@ export class AuthService {
    * @param authUserDTO
    * @param hashed
    */
-  async signIn(authUserDTO: AuthCredentialsDto, hashed = false) {
+  async signIn(
+    authUserDTO: AuthCredentialsDto,
+    hashed = false,
+  ): Promise<IAuthResponse> {
     const user = await this.userService.findByUsernameOrEmail(
       authUserDTO.username,
     );
@@ -83,6 +81,11 @@ export class AuthService {
     return this.generateAuthSuccessResponse(user);
   }
 
+  /**
+   * Generate reset password token
+   * Available for the next hour
+   * @param authForgotDto
+   */
   async askResetPassword(authForgotDto: AuthForgotDto) {
     const user = await this.userService.findByUsernameOrEmail(
       authForgotDto.username,
@@ -107,6 +110,11 @@ export class AuthService {
     };
   }
 
+  /**
+   * Validate reset token
+   * Update user password
+   * @param authResetDto
+   */
   async resetPassword(authResetDto: AuthResetDto) {
     const user = await this.userService.findUserWithResetToken(
       authResetDto.token,
@@ -155,7 +163,10 @@ export class AuthService {
    * @param user
    * @param isRefresh
    */
-  async generateAuthSuccessResponse(user: User, isRefresh = false) {
+  private async generateAuthSuccessResponse(
+    user: User,
+    isRefresh = false,
+  ): Promise<IAuthResponse> {
     const payload = {
       username: user.username,
       email: user.email,
@@ -165,8 +176,9 @@ export class AuthService {
       payload,
       jwtConstants.rSignOptions,
     );
-    const decoded = this.decodeToken(accessToken);
+    // const decoded = this.decodeToken(accessToken);
     const userFilled = await this.userService.findUserByUsername(user.username);
+
     return {
       accessToken,
       refreshToken,

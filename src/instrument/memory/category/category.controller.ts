@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { AllowAny } from '../../../user/auth/JwtAuthGuard';
+import { AllowAny } from '../../../user/auth/helpers/JwtAuthGuard';
 import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('category')

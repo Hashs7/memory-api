@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { ChatService } from './chat.service';
-import { GetUser } from '../user/auth/get-user.decorator';
+import { GetUser } from '../user/auth/helpers/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { SendMessageDto } from './dto/send-message.dto';
 import { User } from '../user/user.schema';
@@ -49,7 +49,7 @@ export class ChatController {
   })
   sendMessage(
     @GetUser() user: User,
-    @Body() sendMessageDto: SendMessageDto
+    @Body() sendMessageDto: SendMessageDto,
   ): Promise<Conversation> {
     return this.chatService.sendMessage(user._id, sendMessageDto);
   }

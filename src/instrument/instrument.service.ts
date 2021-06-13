@@ -29,6 +29,12 @@ export class InstrumentService {
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
+  /**
+   * Search query instruments
+   * @param q
+   * @param forSale
+   * @param instruTypes
+   */
   search(q: string, forSale: string, instruTypes: string) {
     const filters: any = {};
 
@@ -82,6 +88,10 @@ export class InstrumentService {
       ]);
   }
 
+  /**
+   * Filter only visible memories
+   * @param instrumentRes
+   */
   searchSerialize(instrumentRes: Instrument[]): Instrument[] {
     instrumentRes.map((i) => {
       i.memories = i.memories.filter((m) => {
@@ -92,6 +102,12 @@ export class InstrumentService {
     return instrumentRes;
   }
 
+  /**
+   * Guard modify to only owner
+   * @param instrument
+   * @param user
+   * @private
+   */
   private validateInstrumentOwner(instrument, user) {
     if (!instrument.owner.equals(user._id)) {
       throw new UnauthorizedException("Utilisateur n'est pas propriétaire");
@@ -118,6 +134,10 @@ export class InstrumentService {
       ]);
   }
 
+  /**
+   * Find one instrument with id
+   * @param id
+   */
   async findOne(id: string) {
     return this.instrumentModel.findOne({ id });
   }
@@ -219,12 +239,17 @@ export class InstrumentService {
       oldOwnersUser,
       instrument.oldOwners,
     );
-    instrument.oldOwners = undefined;
+    instrument.oldOwners = null;
 
     return instrument;
   }
 
-  sortOldowners(oldOwnersUser, oldOwners: OldOwnerInterface[]) {
+  /**
+   * Sort old owners by most recent
+   * @param oldOwnersUser
+   * @param oldOwners
+   */
+  sortOldowners(oldOwnersUser, oldOwners: OldOwnerInterface[]): OldOwner[] {
     const oldOwnersConcat = oldOwnersUser.concat(oldOwners);
 
     // @ts-ignore
@@ -233,6 +258,11 @@ export class InstrumentService {
     return oldOwnersConcat;
   }
 
+  /**
+   * Filter memories by visibility
+   * @param instrument
+   * @param user
+   */
   filterMemories(instrument: Instrument, user: User) {
     if (!user || !instrument.owner.equals(user._id)) {
       instrument.memories = instrument.memories.filter((m) => {
@@ -241,18 +271,6 @@ export class InstrumentService {
         }
       });
     }
-  }
-
-  rewriteInstrumentMemories(instrument: Instrument) {
-    instrument.memories = instrument.memories.map((m) => {
-      m.contents = m.contents.map((c) => {
-        if (c.type !== ContentType.Text) {
-          c.file?.rewritePath();
-        }
-        return c;
-      });
-      return m;
-    });
   }
 
   /**
@@ -280,7 +298,6 @@ export class InstrumentService {
       ]);
 
     userInstruments.forEach((ins) => this.filterMemories(ins, user));
-    userInstruments.forEach((ins) => this.rewriteInstrumentMemories(ins));
 
     const oldInstruments = await this.instrumentModel
       .find({
@@ -380,7 +397,7 @@ export class InstrumentService {
     id: string,
     user: User,
     updateInstrumentDto: UpdateInstrumentDto,
-  ) {
+  ): Promise<Instrument> {
     const instrument = await this.instrumentModel.findOne({ id });
     if (!instrument) {
       throw new NotFoundException("L'instrument n'existe pas");
@@ -394,8 +411,11 @@ export class InstrumentService {
   }
 
   /**
-   * Init instrument handover
+   * Generate instrument handover token
+   * set handover date
+   * Expire in 7 days
    * @param id
+   * @param date
    * @param user
    */
   async initHandover(
@@ -423,6 +443,13 @@ export class InstrumentService {
     };
   }
 
+  /**
+   * Confirm handover token
+   * associate instrument to new owner
+   * set old owner
+   * @param token
+   * @param user
+   */
   async confirmHandover(token: string, user: User): Promise<Instrument> {
     const instrument = await this.instrumentModel.findOne({
       handoverToken: token,

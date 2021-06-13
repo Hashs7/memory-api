@@ -25,9 +25,9 @@ import got from 'got';
 import { FileService } from './file.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Instrument } from '../instrument/instrument.schema';
-import { GetUser } from '../user/auth/get-user.decorator';
+import { GetUser } from '../user/auth/helpers/get-user.decorator';
 import { User } from '../user/user.schema';
-import { AllowAny } from '../user/auth/JwtAuthGuard';
+import { AllowAny } from '../user/auth/helpers/JwtAuthGuard';
 import {
   AzureStorageFileInterceptor,
   UploadedFileMetadata,

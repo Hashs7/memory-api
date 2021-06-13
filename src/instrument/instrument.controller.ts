@@ -15,7 +15,7 @@ import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../user/auth/get-user.decorator';
+import { GetUser } from '../user/auth/helpers/get-user.decorator';
 import { User } from '../user/user.schema';
 import {
   ApiResponse,
@@ -26,13 +26,16 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { Instrument } from './instrument.schema';
-import { AllowAny } from '../user/auth/JwtAuthGuard';
+import { AllowAny } from '../user/auth/helpers/JwtAuthGuard';
 
 @ApiTags('instrument')
 @Controller('instrument')
 export class InstrumentController {
   constructor(private readonly instrumentService: InstrumentService) {}
 
+  /**
+   * Get all public instruments
+   */
   @Get()
   @ApiOperation({ summary: 'All public instruments' })
   @ApiResponse({
@@ -43,6 +46,11 @@ export class InstrumentController {
     return this.instrumentService.findAll();
   }
 
+  /**
+   * Get user instruments
+   * @param user
+   * @param username
+   */
   @Get('user')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -57,6 +65,11 @@ export class InstrumentController {
     return this.instrumentService.findForUser(user);
   }
 
+  /**
+   * Get specific instrument with id
+   * @param id
+   * @param user
+   */
   @Get(':id')
   @AllowAny()
   @ApiResponse({
@@ -67,6 +80,11 @@ export class InstrumentController {
     return this.instrumentService.findOnePopulate(id, user);
   }
 
+  /**
+   * Create new instrument
+   * @param user
+   * @param createInstrumentDto
+   */
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -79,18 +97,32 @@ export class InstrumentController {
   create(
     @GetUser() user: User,
     @Body() createInstrumentDto: CreateInstrumentDto,
-  ) {
+  ): Promise<Instrument> {
     return this.instrumentService.create(user, createInstrumentDto);
   }
 
+  /**
+   * New owner confirm handover with token
+   * @param token
+   * @param user
+   */
   @Patch('confirm-handover')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Start handover instrument' })
-  confirmHandover(@Query('token') token: string, @GetUser() user: User) {
+  confirmHandover(
+    @Query('token') token: string,
+    @GetUser() user: User,
+  ): Promise<Instrument> {
     return this.instrumentService.confirmHandover(token, user);
   }
 
+  /**
+   * Update instrument props
+   * @param id
+   * @param user
+   * @param updateInstrumentDto
+   */
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -105,10 +137,16 @@ export class InstrumentController {
     @Param('id') id: string,
     @GetUser() user: User,
     @Body() updateInstrumentDto: UpdateInstrumentDto,
-  ) {
+  ): Promise<Instrument> {
     return this.instrumentService.update(id, user, updateInstrumentDto);
   }
 
+  /**
+   * Old owner start new pending handover
+   * @param id
+   * @param date
+   * @param user
+   */
   @Patch(':id/handover/:date')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -117,10 +155,15 @@ export class InstrumentController {
     @Param('id') id: string,
     @Param('date') date: string,
     @GetUser() user: User,
-  ) {
+  ): Promise<{ token: string }> {
     return this.instrumentService.initHandover(id, new Date(date), user);
   }
 
+  /**
+   * Delete instrument
+   * @param id
+   * @param user
+   */
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Delete instrument with shortId' })

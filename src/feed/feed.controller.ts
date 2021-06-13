@@ -1,7 +1,7 @@
 import { ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Query } from '@nestjs/common';
 import { FeedService } from './feed.service';
-import { GetUser } from '../user/auth/get-user.decorator';
+import { GetUser } from '../user/auth/helpers/get-user.decorator';
 import { User } from '../user/user.schema';
 import { Types } from 'mongoose';
 

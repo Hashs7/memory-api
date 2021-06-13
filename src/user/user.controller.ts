@@ -12,7 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { GetUser } from './auth/get-user.decorator';
+import { GetUser } from './auth/helpers/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from './user.schema';
 import {
