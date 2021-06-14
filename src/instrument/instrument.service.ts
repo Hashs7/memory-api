@@ -66,7 +66,7 @@ export class InstrumentService {
 
           {
             colors: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
         ],

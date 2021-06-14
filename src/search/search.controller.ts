@@ -1,7 +1,7 @@
 import { ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Query } from '@nestjs/common';
 import { SearchService } from './search.service';
-import { Types, Schema } from 'mongoose';
+import { Types } from 'mongoose';
 
 @ApiTags('search')
 @Controller('search')

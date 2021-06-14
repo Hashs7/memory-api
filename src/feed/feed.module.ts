@@ -14,7 +14,6 @@ import {
   MemoryContentSchema,
 } from '../instrument/memory/content/content.schema';
 import { InstrumentService } from '../instrument/instrument.service';
-import { UserService } from '../user/user.service';
 import { UserModule } from '../user/user.module';
 import { CategoryService } from '../instrument/memory/category/category.service';
 import { MemoryService } from '../instrument/memory/memory.service';

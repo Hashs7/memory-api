@@ -199,7 +199,12 @@ export class MemoryService {
 
     return instrument;
   }
-
+  /**
+   * Search query memories
+   * @param q
+   * @param categories
+   * @param limit
+   */
   search(q: string, categories: Types.ObjectId[], limit: number) {
     const filters: any = {};
 
