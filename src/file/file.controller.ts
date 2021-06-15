@@ -12,9 +12,11 @@ import {
   UseGuards,
   Delete,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
+import { File } from './file.schema';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -169,6 +171,16 @@ export class FileController {
       status: HttpStatus.OK,
       response,
     };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':id/:newName')
+  renameImage(
+    @GetUser() user: User,
+    @Param('id') id: string,
+    @Param('newName') name: string,
+  ): Promise<File> {
+    return this.fileService.renameFile(user, id, name);
   }
 
   @Delete(':id')
