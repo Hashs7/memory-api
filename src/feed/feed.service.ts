@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { User } from '../user/user.schema';
 import { InstrumentService } from '../instrument/instrument.service';
 import { MemoryService } from '../instrument/memory/memory.service';
-import { Types } from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
 @Injectable()
 export class FeedService {
@@ -45,14 +45,21 @@ export class FeedService {
   ): Promise<Object> {
     const memoriesCat = await this.memoryService.search('', categories, 3);
 
+    //Return objects by category
     return memoriesCat.reduce((acc, cur) => {
       cur.categories.forEach((cat) => {
         // @ts-ignore
         const catId = cat._id;
-        if (!(catId in acc)) {
-          acc[catId] = { category: cat, memories: [] };
+        const isInArray = categories.some((c) => {
+          return c.equals(catId);
+        });
+
+        if (isInArray) {
+          if (!(catId in acc)) {
+            acc[catId] = { category: cat, memories: [] };
+          }
+          acc[catId].memories.push(cur);
         }
-        acc[catId].memories.push(cur);
       });
       return acc;
     }, {});

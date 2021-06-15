@@ -13,6 +13,14 @@ export class SearchService {
     private memoryService: MemoryService,
     private userService: UserService,
   ) {}
+
+  /**
+   * Search query instruments
+   * @param text
+   * @param categories
+   * @param forSale
+   * @param instruTypes
+   */
   public async search(
     text: string,
     categories?: Types.ObjectId[],

@@ -50,23 +50,23 @@ export class InstrumentService {
         $or: [
           {
             brand: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
           {
             modelName: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
           {
             type: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
 
           {
             colors: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
         ],
@@ -143,11 +143,14 @@ export class InstrumentService {
 
   async findFeed(ids: string[]) {
     let instrumentRes = await this.instrumentModel
-      .find({
-        id: {
-          $in: ids,
+      .find(
+        {
+          id: {
+            $in: ids,
+          },
         },
-      })
+        { memories: { $slice: -3 } },
+      )
       .populate([
         'owner',
         'images',

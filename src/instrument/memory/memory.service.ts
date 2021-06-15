@@ -199,25 +199,29 @@ export class MemoryService {
 
     return instrument;
   }
-
+  /**
+   * Search query memories
+   * @param q
+   * @param categories
+   * @param limit
+   */
   search(q: string, categories: Types.ObjectId[], limit: number) {
     const filters: any = {};
 
     if (categories) {
       filters.categories = { $in: categories };
     }
-
     return this.memoryModel
       .find({
         $or: [
           {
             name: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
           {
             description: {
-              $regex: new RegExp('^' + q.toLowerCase(), 'i'),
+              $regex: new RegExp('^' + q, 'i'),
             },
           },
         ],
