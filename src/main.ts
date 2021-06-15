@@ -16,6 +16,7 @@ async function bootstrap() {
       cert: fs.readFileSync('./cert/cert.pem'),
     };
   }
+  Logger.log(process.env.PORT);
 
   const app = await NestFactory.create(AppModule, { httpsOptions });
 
