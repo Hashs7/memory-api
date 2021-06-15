@@ -16,7 +16,6 @@ async function bootstrap() {
       cert: fs.readFileSync('./cert/cert.pem'),
     };
   }
-  Logger.log(process.env.PORT);
 
   const app = await NestFactory.create(AppModule, { httpsOptions });
 
@@ -30,7 +29,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(parseInt(process.env.PORT) | 3000);
+  Logger.log(`PORT = ${process.env.PORT}`);
+  await app.listen(process.env.NODE_ENV === 'development' ? 3000 : 8080);
   Logger.log(await app.getUrl());
 }
 bootstrap();
