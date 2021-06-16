@@ -93,12 +93,12 @@ export class Instrument extends Document {
   })
   specification: string;
 
-  @Prop()
-  @ApiProperty({
-    example: 'Son claquant',
-    description: "Sonorité de l'instrument",
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: File.name,
   })
-  sonority: string;
+  @ApiProperty({ type: File })
+  file: File;
 
   @Prop()
   @ApiProperty({
