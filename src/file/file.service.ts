@@ -111,6 +111,18 @@ export class FileService {
     };
   }
 
+  async renameFile(user: User, _id: string, name: string): Promise<File> {
+    const file = await this.fileModel.findOne({ _id });
+    if (!user._id.equals(file.user)) {
+      throw new UnauthorizedException(
+        "Vous n'êtes pas propriétaire du fichier",
+      );
+    }
+    file.name = name;
+    file.save();
+    return file;
+  }
+
   serveFromFolder(res, image) {
     const response = res.sendFile(image, { root: this.root });
 
