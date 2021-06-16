@@ -1,9 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
-
+import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.schema';
 import { InstrumentService } from '../instrument/instrument.service';
 import { MemoryService } from '../instrument/memory/memory.service';
-import { Schema, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class FeedService {

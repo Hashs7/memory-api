@@ -22,9 +22,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UpdateUserDto } from './update-user.dto';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
-import { ObjectId } from 'mongoose';
 
 @ApiTags('user')
 @Controller('user')
