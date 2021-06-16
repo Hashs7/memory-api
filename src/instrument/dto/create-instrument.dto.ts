@@ -13,6 +13,7 @@ import {
 
 export class CreateInstrumentDto {
   @IsString()
+  @IsOptional()
   @ApiProperty()
   brand: string;
 

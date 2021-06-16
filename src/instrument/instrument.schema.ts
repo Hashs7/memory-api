@@ -13,7 +13,7 @@ export class Instrument extends Document {
   @Prop({ required: true })
   id: string;
 
-  @Prop({ required: true })
+  @Prop()
   @ApiProperty({
     example: 'Gibson',
     description: "Marque de l'instrument",

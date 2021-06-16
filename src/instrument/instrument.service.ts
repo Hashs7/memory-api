@@ -298,7 +298,6 @@ export class InstrumentService {
           },
         },
       ]);
-
     userInstruments.forEach((ins) => this.filterMemories(ins, user));
 
     const oldInstruments = await this.instrumentModel
@@ -306,6 +305,7 @@ export class InstrumentService {
         'oldOwnersUser.user': { $in: user._id },
       })
       .populate('images');
+
     const wishInstruments = await this.instrumentModel
       .find({
         _id: { $in: user.wishList },
