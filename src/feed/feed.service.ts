@@ -1,9 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
-
+import { Injectable } from '@nestjs/common';
 import { User } from '../user/user.schema';
 import { InstrumentService } from '../instrument/instrument.service';
 import { MemoryService } from '../instrument/memory/memory.service';
-import { Schema, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class FeedService {
@@ -14,7 +13,6 @@ export class FeedService {
 
   public async getFeedFavMemories(user: User): Promise<any[]> {
     const wishList = await this.instrumentService.findFeed(user.wishList);
-
     //Add memory's instrument to the memory object
     const flatMemories = wishList.reduce((acc, curr) => {
       const memories = curr.memories.map((m) => ({

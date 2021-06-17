@@ -9,7 +9,6 @@ import {
   UseGuards,
   UseInterceptors,
   Query,
-  Logger,
 } from '@nestjs/common';
 import { InstrumentService } from './instrument.service';
 import { CreateInstrumentDto } from './dto/create-instrument.dto';
@@ -52,7 +51,7 @@ export class InstrumentController {
    * @param username
    */
   @Get('user')
-  @UseGuards(AuthGuard('jwt'))
+  @AllowAny()
   @ApiBearerAuth()
   @ApiResponse({
     status: 200,
@@ -60,9 +59,9 @@ export class InstrumentController {
   })
   findForUser(@GetUser() user: User, @Query('username') username: string) {
     if (username) {
-      return this.instrumentService.findForUsername(username);
+      return this.instrumentService.findForUsername(username, user);
     }
-    return this.instrumentService.findForUser(user);
+    return this.instrumentService.findForUser(user, user);
   }
 
   /**

@@ -61,11 +61,6 @@ image?: string;
   @IsString()
   @IsOptional()
   @ApiPropertyOptional()
-  sonority?: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiPropertyOptional()
   musicStyle?: string;
 
   @IsString()

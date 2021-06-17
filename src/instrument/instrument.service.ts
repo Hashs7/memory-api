@@ -11,7 +11,7 @@ import { CreateInstrumentDto } from './dto/create-instrument.dto';
 import { UpdateInstrumentDto } from './dto/update-instrument.dto';
 import * as shortid from 'shortid';
 import { User } from '../user/user.schema';
-import { Memory } from './memory/memory.schema';
+import { Memory, MemoryVisibility } from './memory/memory.schema';
 import { FileService } from '../file/file.service';
 import { File } from '../file/file.schema';
 import { ContentType } from './memory/content/content.schema';
@@ -25,6 +25,7 @@ export class InstrumentService {
     private configService: ConfigService,
     private fileService: FileService,
     private userService: UserService,
+    @InjectModel(Memory.name) private memoryModel: Model<Memory>,
     @InjectModel(Instrument.name) private instrumentModel: Model<Instrument>,
   ) {}
 
@@ -265,21 +266,32 @@ export class InstrumentService {
    * @param instrument
    * @param user
    */
-  filterMemories(instrument: Instrument, user: User) {
-    if (!user || !instrument.owner.equals(user._id)) {
-      instrument.memories = instrument.memories.filter((m) => {
-        if (m.visibility == 'Public') {
-          return m;
-        }
-      });
-    }
+  filterInstrumentMemories(instrument: Instrument, user: User) {
+    instrument.memories = instrument.memories.filter(
+      (m) =>
+        // m.createdBy === user?._id ||
+        // @ts-ignore
+        m.createdBy.equals(user?._id) ||
+        m.visibility == MemoryVisibility.Public,
+    );
+  }
+
+  filterMemories(memories: Memory[], user: User) {
+    return memories.filter(
+      (m) =>
+        // m.createdBy === user._id ||
+        // @ts-ignore
+        m.createdBy.equals(user._id) ||
+        m.visibility === MemoryVisibility.Public,
+    );
   }
 
   /**
    * Find user instruments
    * @param user
+   * @param reqUser
    */
-  async findForUser(user: User) {
+  async findForUser(user: User, reqUser?: User) {
     const userInstruments = await this.instrumentModel
       .find({
         owner: user._id,
@@ -299,7 +311,7 @@ export class InstrumentService {
         },
       ]);
 
-    userInstruments.forEach((ins) => this.filterMemories(ins, user));
+    userInstruments.forEach((ins) => this.filterInstrumentMemories(ins, user));
 
     const oldInstruments = await this.instrumentModel
       .find({
@@ -307,31 +319,49 @@ export class InstrumentService {
       })
       .populate('images');
     const wishInstruments = await this.instrumentModel
-      .find({
-        _id: { $in: user.wishList },
-      })
+      .find({ id: { $in: user.wishList } })
       .populate('images');
 
-    [userInstruments, oldInstruments, wishInstruments].forEach((arr) => {
-      arr.forEach((instrument) => {
-        instrument.images?.map((i) => i?.rewritePath());
+    let memories = await this.memoryModel
+      .find({ createdBy: user._id })
+      .populate({
+        path: 'contents',
+        populate: {
+          path: 'file',
+          model: File.name,
+        },
       });
+
+    memories = this.filterMemories(memories, reqUser);
+
+    const flatInstruments = [...userInstruments, ...oldInstruments];
+    const memoriesWithIds = memories.map((m) => {
+      const instrument = flatInstruments.find((ins) => {
+        return !!ins.memories.find((insMemory) => insMemory.id === m.id);
+      });
+
+      return {
+        ...m.toObject(),
+        instrumentId: instrument?.id,
+      };
     });
 
     return {
       userInstruments,
       oldInstruments,
       wishInstruments,
+      memories: memoriesWithIds,
     };
   }
 
   /**
    * Find user instruments
    * @param username
+   * @param user
    */
-  async findForUsername(username: string) {
-    const user = await this.userService.findUserByUsername(username);
-    return this.findForUser(user);
+  async findForUsername(username: string, user?: User) {
+    const profile = await this.userService.findUserByUsername(username);
+    return this.findForUser(profile, user);
   }
 
   /**
