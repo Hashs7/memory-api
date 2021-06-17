@@ -4,7 +4,9 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 // Allow only images
 export const imageFileFilter = (req, file: Express.Multer.File, callback) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif|mp4|mov|avi|mp3|wav)$/)) {
+  if (
+    !file.originalname.match(/\.(jpg|jpeg|png|gif|mp4|MOV|mov|avi|mp3|wav)$/)
+  ) {
     return callback(
       new HttpException(
         'Only jpg|jpeg|png|gif|mp4|mov|avi|mp3|wav files are allowed',

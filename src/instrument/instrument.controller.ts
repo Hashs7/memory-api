@@ -61,7 +61,7 @@ export class InstrumentController {
     if (username) {
       return this.instrumentService.findForUsername(username, user);
     }
-    return this.instrumentService.findForUser(user);
+    return this.instrumentService.findForUser(user, user);
   }
 
   /**

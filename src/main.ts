@@ -30,7 +30,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   Logger.log(`PORT = ${process.env.PORT}`);
-  await app.listen(process.env.NODE_ENV === 'development' ? 3000 : 8080);
+  await app.listen(process.env.PORT ? Number(process.env.PORT) : 3000);
   Logger.log(await app.getUrl());
 }
 bootstrap();

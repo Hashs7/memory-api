@@ -4,6 +4,7 @@ import { FeedService } from './feed.service';
 import { GetUser } from '../user/auth/helpers/get-user.decorator';
 import { User } from '../user/user.schema';
 import { Types } from 'mongoose';
+import { AllowAny } from '../user/auth/helpers/JwtAuthGuard';
 
 @ApiTags('feed')
 @Controller('feed')
@@ -15,6 +16,7 @@ export class FeedController {
     return await this.feedService.getFeedFavMemories(user);
   }
 
+  @AllowAny()
   @Get('categories')
   public async getMemoriesCat(
     @GetUser() user: User,

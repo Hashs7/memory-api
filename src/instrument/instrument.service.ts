@@ -269,8 +269,9 @@ export class InstrumentService {
   filterInstrumentMemories(instrument: Instrument, user: User) {
     instrument.memories = instrument.memories.filter(
       (m) =>
-        m.createdBy === user?._id ||
-        // m.createdBy.equals(user?._id) ||
+        // m.createdBy === user?._id ||
+        // @ts-ignore
+        m.createdBy.equals(user?._id) ||
         m.visibility == MemoryVisibility.Public,
     );
   }
@@ -278,8 +279,9 @@ export class InstrumentService {
   filterMemories(memories: Memory[], user: User) {
     return memories.filter(
       (m) =>
-        m.createdBy === user._id ||
-        // m.createdBy.equals(user._id) ||
+        // m.createdBy === user._id ||
+        // @ts-ignore
+        m.createdBy.equals(user._id) ||
         m.visibility === MemoryVisibility.Public,
     );
   }
@@ -317,9 +319,7 @@ export class InstrumentService {
       })
       .populate('images');
     const wishInstruments = await this.instrumentModel
-      .find({
-        _id: { $in: user.wishList },
-      })
+      .find({ id: { $in: user.wishList } })
       .populate('images');
 
     let memories = await this.memoryModel
@@ -357,6 +357,7 @@ export class InstrumentService {
   /**
    * Find user instruments
    * @param username
+   * @param user
    */
   async findForUsername(username: string, user?: User) {
     const profile = await this.userService.findUserByUsername(username);
