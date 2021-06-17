@@ -59,7 +59,11 @@ export class CreateInstrumentDto {
 
   @IsString()
   @IsOptional()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    title: 'File ObjectId',
+    example: '606300aa1642981aa1aaaa8e',
+    type: String,
+  })
   sonority?: string;
 
   @IsString()

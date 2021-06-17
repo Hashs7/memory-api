@@ -96,9 +96,10 @@ export class Instrument extends Document {
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: File.name,
+    required: false,
   })
   @ApiProperty({ type: File })
-  file: File;
+  sonority: File;
 
   @Prop()
   @ApiProperty({
