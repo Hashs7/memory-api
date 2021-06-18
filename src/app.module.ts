@@ -15,6 +15,7 @@ import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtAuthGuard } from './user/auth/helpers/JwtAuthGuard';
 import { SearchModule } from './search/search.module';
 import { FeedModule } from './feed/feed.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { FeedModule } from './feed/feed.module';
     SearchModule,
     FeedModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
