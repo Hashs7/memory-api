@@ -244,6 +244,38 @@ export class InstrumentService {
     );
     instrument.oldOwners = null;
 
+    instrument.timeline = [];
+
+    const memoriesTimeline = instrument.memories.map((m) => {
+      return { type: 'memory', data: m };
+    });
+
+    const sortedMemories = memoriesTimeline.sort(
+      // @ts-ignore
+      (a, b) => new Date(a.data.date) - new Date(b.data.date),
+    );
+
+    const handovers = instrument.oldOwnersUser.map((o, i) => {
+      const handover = { date: null, oldUser: null, newUser: null };
+      if (i === instrument.oldOwnersUser.length - 1) {
+        handover.date = o.to;
+        handover.oldUser = o.user;
+        handover.newUser = instrument.owner;
+      } else {
+        handover.date = o.to;
+        handover.oldUser = o.user;
+        handover.newUser = instrument.oldOwnersUser[i + 1];
+      }
+
+      return { type: 'handover', data: handover };
+    });
+
+    instrument.timeline = sortedMemories
+      // @ts-ignore
+      .concat(handovers)
+      // @ts-ignore
+      .sort((a, b) => a.data.date - b.data.date);
+
     return instrument;
   }
 
@@ -256,7 +288,7 @@ export class InstrumentService {
     const oldOwnersConcat = oldOwnersUser.concat(oldOwners);
 
     // @ts-ignore
-    oldOwnersConcat.sort((a, b) => new Date(b.to) - new Date(a.to));
+    oldOwnersConcat.sort((a, b) => new Date(a.to) - new Date(b.to));
 
     return oldOwnersConcat;
   }

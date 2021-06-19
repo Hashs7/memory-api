@@ -161,6 +161,9 @@ export class Instrument extends Document {
   @Prop()
   @Exclude()
   handoverExpire: Date;
+
+  @Prop()
+  timeline: any[];
 }
 
 export interface OldOwnerInterface {
