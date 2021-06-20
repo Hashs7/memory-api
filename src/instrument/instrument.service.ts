@@ -238,10 +238,12 @@ export class InstrumentService {
       })),
     );
 
-    instrument.oldOwnersUser = this.sortOldowners(
-      oldOwnersUser,
-      instrument.oldOwners,
-    );
+    if (instrument.oldOwnersUser.length) {
+      instrument.oldOwnersUser = this.sortOldowners(
+        oldOwnersUser,
+        instrument.oldOwners,
+      );
+    }
     instrument.oldOwners = null;
 
     instrument.timeline = [];
@@ -299,13 +301,15 @@ export class InstrumentService {
    * @param user
    */
   filterInstrumentMemories(instrument: Instrument, user: User) {
-    instrument.memories = instrument.memories.filter(
-      (m) =>
-        // m.createdBy === user?._id ||
-        // @ts-ignore
-        m.createdBy.equals(user?._id) ||
-        m.visibility == MemoryVisibility.Public,
-    );
+    if (instrument.memories) {
+      instrument.memories = instrument.memories.filter(
+        (m) =>
+          // m.createdBy === user?._id ||
+          // @ts-ignore
+          m.createdBy.equals(user?._id) ||
+          m.visibility == MemoryVisibility.Public,
+      );
+    }
   }
 
   filterMemories(memories: Memory[], user: User) {
