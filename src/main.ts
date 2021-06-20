@@ -24,13 +24,18 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Memory API')
-    .setVersion('0.0.1')
+    .setVersion('0.0.2')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
   Logger.log(`PORT = ${process.env.PORT}`);
-  await app.listen(process.env.PORT ? Number(process.env.PORT) : 3000);
+
+  await app.listen(
+    process.env.PORT ? Number(process.env.PORT) : 3000,
+    '0.0.0.0',
+  );
+
   Logger.log(await app.getUrl());
 }
 bootstrap();

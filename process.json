@@ -1,0 +1,10 @@
+{
+  "script": "start:prod",
+  "env": {
+    "PM2_SERVE_PATH": "./dist"
+  },
+  "env_production" : {
+    "PM2_SERVE_PATH": "./dist"
+  },
+  "args": "--no-daemon"
+}
