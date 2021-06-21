@@ -59,4 +59,13 @@ export class CreateMemoryDto {
     type: [String],
   })
   categories?: string[];
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional({
+    title: 'File ObjectId',
+    example: '606300aa1642981aa1aaaa8e',
+    type: String,
+  })
+  music?: string;
 }
