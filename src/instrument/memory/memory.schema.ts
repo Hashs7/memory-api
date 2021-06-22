@@ -5,6 +5,7 @@ import { User } from '../../user/user.schema';
 import { IsArray } from 'class-validator';
 import { MemoryContent } from './content/content.schema';
 import { MemoryCategory } from './category/category.schema';
+import { File } from '../../file/file.schema';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const timestamps2 = require('mongoose-timestamp2');
 
@@ -86,6 +87,14 @@ export class Memory extends Types.Subdocument {
     type: [MemoryCategory],
   })
   categories?: MongooseSchema.Types.ObjectId[];
+
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: File.name,
+    required: false,
+  })
+  @ApiProperty({ type: File })
+  music: File;
 }
 
 export const MemorySchema = SchemaFactory.createForClass(Memory).plugin(
