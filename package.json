@@ -5,11 +5,16 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "main": "dist/main.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "rm -rf dist && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "gcp-build": "npm run build",
+    "start": "npm run start:prod",
     "start:dev": "NODE_ENV=development nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "NODE_ENV=production node dist/main",

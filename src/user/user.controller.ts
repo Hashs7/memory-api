@@ -24,6 +24,7 @@ import {
 import { UpdateUserDto } from './update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileInterceptorOptions } from '../utils/file-upload.utils';
+import { AllowAny } from './auth/helpers/JwtAuthGuard';
 
 @ApiTags('user')
 @Controller('user')
@@ -54,6 +55,7 @@ export class UserController {
   */
 
   @Get()
+  @AllowAny()
   @ApiResponse({
     status: 200,
     type: [User],

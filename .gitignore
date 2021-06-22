@@ -5,6 +5,7 @@
 /uploads/*
 .env
 .env.prod
+app.yaml
 
 # Logs
 logs

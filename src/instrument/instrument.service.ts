@@ -186,6 +186,7 @@ export class InstrumentService {
       .findOne({ id })
       .select('-__v')
       .populate([
+        'sonority',
         'owner',
         'images',
         {

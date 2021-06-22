@@ -34,6 +34,7 @@ import {
   AzureStorageFileInterceptor,
   UploadedFileMetadata,
 } from '@nestjs/azure-storage';
+import { randomBytes } from 'crypto';
 
 @ApiTags('file')
 @Controller('file')
@@ -81,6 +82,13 @@ export class FileController {
     if (!file) {
       throw new BadRequestException('Aucun fichier reçu');
     }
+
+    const originalname = randomBytes(16).toString('hex') + file.originalname;
+
+    file = {
+      ...file,
+      originalname,
+    };
 
     const data = await this.fileService.createAzure(file, user._id);
     data.rewritePath();

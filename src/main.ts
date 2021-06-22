@@ -10,14 +10,17 @@ require('dotenv').config();
 
 async function bootstrap() {
   let httpsOptions = {};
+  let app;
+
   if (process.env.NODE_ENV === 'development') {
     httpsOptions = {
       key: fs.readFileSync('./cert/key.pem'),
       cert: fs.readFileSync('./cert/cert.pem'),
     };
+    app = await NestFactory.create(AppModule, { httpsOptions });
+  } else {
+    const app = await NestFactory.create(AppModule);
   }
-
-  const app = await NestFactory.create(AppModule, { httpsOptions });
 
   app.enableCors();
   app.use(compression());
@@ -28,13 +31,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
-
-  Logger.log(`PORT = ${process.env.PORT}`);
-
-  await app.listen(
-    process.env.PORT ? Number(process.env.PORT) : 3000,
-    '0.0.0.0',
-  );
+  
+  await app.listen(process.env.PORT ? Number(process.env.PORT) : 3000);
 
   Logger.log(await app.getUrl());
 }
