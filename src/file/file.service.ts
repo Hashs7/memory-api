@@ -1,7 +1,6 @@
 import {
   HttpStatus,
   Injectable,
-  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { File } from './file.schema';
@@ -13,7 +12,6 @@ import * as fs from 'fs';
 import * as sharp from 'sharp';
 import * as path from 'path';
 import * as mime from 'mime-types';
-import { unwritePath } from './file.helper';
 import {
   AzureStorageService,
   UploadedFileMetadata,

@@ -23,7 +23,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { fileInterceptorOptions } from '../utils/file-upload.utils';
+// import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { Instrument } from './instrument.schema';
 import { AllowAny } from '../user/auth/helpers/JwtAuthGuard';
 
@@ -125,7 +125,7 @@ export class InstrumentController {
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @UseInterceptors(FileInterceptor('image', fileInterceptorOptions))
+  // @UseInterceptors(FileInterceptor('image', fileInterceptorOptions))
   @ApiOperation({ summary: 'Update instrument with shortId' })
   @ApiResponse({
     status: 200,

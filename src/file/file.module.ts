@@ -22,9 +22,11 @@ require('dotenv').config();
       accountName: process.env.AZURE_STORAGE_ACCOUNT,
       containerName: process.env.NODE_ENV,
     }),
+    /*
     MulterModule.register({
       dest: './uploads',
     }),
+    */
   ],
   controllers: [FileController],
   providers: [FileService],

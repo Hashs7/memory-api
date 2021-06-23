@@ -14,8 +14,8 @@ import {
   Query,
   Patch,
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { fileInterceptorOptions } from '../utils/file-upload.utils';
+// import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+// import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { File } from './file.schema';
 import {
   ApiBearerAuth,
@@ -46,6 +46,7 @@ export class FileController {
    * @param user
    * @param file
    */
+  /*
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('file', fileInterceptorOptions))
@@ -66,6 +67,7 @@ export class FileController {
       response: data,
     };
   }
+  */
 
   /**
    * Upload file to Azure storage
@@ -104,6 +106,7 @@ export class FileController {
    * Upload multiple files
    * @param files
    */
+  /*
   @Post('multiple')
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FilesInterceptor('file', 10, fileInterceptorOptions))
@@ -124,6 +127,7 @@ export class FileController {
       response,
     };
   }
+  */
 
   @Get('user')
   @UseGuards(AuthGuard('jwt'))

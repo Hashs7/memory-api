@@ -23,7 +23,7 @@ import {
 } from '@nestjs/swagger';
 import { UpdateUserDto } from './update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { fileInterceptorOptions } from '../utils/file-upload.utils';
+// import { fileInterceptorOptions } from '../utils/file-upload.utils';
 import { AllowAny } from './auth/helpers/JwtAuthGuard';
 
 @ApiTags('user')
@@ -83,7 +83,7 @@ export class UserController {
 
   @Patch()
   @UseGuards(AuthGuard('jwt'))
-  @UseInterceptors(FileInterceptor('thumbnail', fileInterceptorOptions))
+  // @UseInterceptors(FileInterceptor('thumbnail', fileInterceptorOptions))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Updated user' })
   @ApiResponse({

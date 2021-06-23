@@ -25,9 +25,11 @@ import { AppController } from './app.controller';
     CommandModule,
     InstrumentModule,
     FileModule,
+    /*
     MulterModule.register({
       dest: './uploads',
     }),
+    */
     UserModule,
     ChatModule,
     MailModule,

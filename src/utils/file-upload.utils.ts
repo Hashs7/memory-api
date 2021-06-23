@@ -1,5 +1,5 @@
 import { extname } from 'path';
-import { diskStorage } from 'multer';
+// import { diskStorage } from 'multer';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 // Allow only images
@@ -28,6 +28,7 @@ export const editFileName = (req, file: Express.Multer.File, callback) => {
   callback(null, `${name}${randomName}${fileExtName}`);
 };
 
+/*
 export const fileInterceptorOptions = {
   storage: diskStorage({
     destination: './uploads',
@@ -35,3 +36,4 @@ export const fileInterceptorOptions = {
   }),
   fileFilter: imageFileFilter,
 };
+*/

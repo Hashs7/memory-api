@@ -19,7 +19,7 @@ async function bootstrap() {
     };
     app = await NestFactory.create(AppModule, { httpsOptions });
   } else {
-    const app = await NestFactory.create(AppModule);
+    app = await NestFactory.create(AppModule);
   }
 
   app.enableCors();
